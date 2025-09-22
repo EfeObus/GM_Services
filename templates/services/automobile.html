@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Automobile Services - GM Services{% endblock %}
+
+{% block content %}
+<!-- Automobile Services Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-car text-danger me-3"></i>Automobile <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Complete automotive solutions from dealerships to maintenance services across Nigeria.
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=1" 
+                         alt="Automobile Services" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Categories -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Automobile Services</h2>
+            <p class="text-gray">Professional automotive solutions for individuals and businesses</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=2" class="card-img-top" alt="Car Sales">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-car-side text-danger me-2"></i>Vehicle Sales</h5>
+                        <p class="text-gray">Brand new and certified pre-owned vehicles from trusted dealerships.</p>
+                        <ul class="text-gray small">
+                            <li>New car sales</li>
+                            <li>Used car certification</li>
+                            <li>Trade-in services</li>
+                            <li>Financing options</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦2,500,000</span>
+                            <a href="{{ url_for('services.automobile_vehicles') }}" class="btn btn-danger btn-sm">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=3" class="card-img-top" alt="Car Maintenance">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-tools text-danger me-2"></i>Maintenance Services</h5>
+                        <p class="text-gray">Professional automotive maintenance and repair services.</p>
+                        <ul class="text-gray small">
+                            <li>Regular maintenance</li>
+                            <li>Engine diagnostics</li>
+                            <li>Brake services</li>
+                            <li>Air conditioning</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦15,000</span>
+                            <a href="{{ url_for('services.maintenance_request') }}" class="btn btn-danger btn-sm">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=4" class="card-img-top" alt="Car Insurance">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-shield-alt text-danger me-2"></i>Insurance Services</h5>
+                        <p class="text-gray">Comprehensive automotive insurance solutions and claims support.</p>
+                        <ul class="text-gray small">
+                            <li>Comprehensive coverage</li>
+                            <li>Third-party insurance</li>
+                            <li>Claims processing</li>
+                            <li>Emergency roadside</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦25,000/year</span>
+                            <a href="{{ url_for('services.insurance_request') }}" class="btn btn-danger btn-sm">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Request Section -->
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3 class="text-white mb-3">Ready to Get Started?</h3>
+                <p class="text-gray mb-4">
+                    Contact us today for professional automobile services. Our experienced team is ready to help you with all your automotive needs.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('contact') }}" class="btn btn-danger">
+                        <i class="fas fa-phone me-2"></i>Contact Us
+                    </a>
+                    <a href="{{ url_for('contact') }}" class="btn btn-outline-success">
+                        <i class="fas fa-file-alt me-2"></i>Request Service
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://picsum.photos/600/400?random=5" 
+                     alt="Automobile Services Contact" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="text-white mb-3">Why Choose Our Automobile Services?</h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-certificate text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">Certified Technicians</h5>
+                    <p class="text-gray">Professional automotive experts with industry certifications.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-clock text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">Quick Service</h5>
+                    <p class="text-gray">Fast turnaround times without compromising quality.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-tools text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">Modern Equipment</h5>
+                    <p class="text-gray">State-of-the-art diagnostic and repair equipment.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-handshake text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">Trusted Service</h5>
+                    <p class="text-gray">Reliable service backed by customer satisfaction guarantee.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

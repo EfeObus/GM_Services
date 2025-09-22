@@ -1,0 +1,444 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service_title }} Booking - GM Services{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>
+                        {{ service_title }} Booking Request
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Customer Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-user me-2"></i>Customer Information
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ form.customer_name.label(class="form-label") }}
+                                {{ form.customer_name(class="form-control") }}
+                                {% if form.customer_name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.customer_email.label(class="form-label") }}
+                                {{ form.customer_email(class="form-control") }}
+                                {% if form.customer_email.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.customer_phone.label(class="form-label") }}
+                                {{ form.customer_phone(class="form-control") }}
+                                {% if form.customer_phone.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_phone.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Vehicle Information -->
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-car me-2"></i>Vehicle Information
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                {{ form.vehicle_make.label(class="form-label") }}
+                                {{ form.vehicle_make(class="form-control") }}
+                                {% if form.vehicle_make.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.vehicle_make.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                {{ form.vehicle_model.label(class="form-label") }}
+                                {{ form.vehicle_model(class="form-control") }}
+                                {% if form.vehicle_model.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.vehicle_model.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                {{ form.vehicle_year.label(class="form-label") }}
+                                {{ form.vehicle_year(class="form-control") }}
+                                {% if form.vehicle_year.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.vehicle_year.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                {{ form.registration_number.label(class="form-label") }}
+                                {{ form.registration_number(class="form-control") }}
+                                {% if form.registration_number.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.registration_number.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.current_mileage.label(class="form-label") }}
+                                {{ form.current_mileage(class="form-control") }}
+                                {% if form.current_mileage.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.current_mileage.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Service Preferences -->
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-tools me-2"></i>Service Preferences
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ form.preferred_date.label(class="form-label") }}
+                                {{ form.preferred_date(class="form-control", type="date") }}
+                                {% if form.preferred_date.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.preferred_date.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.preferred_time.label(class="form-label") }}
+                                {{ form.preferred_time(class="form-control") }}
+                                {% if form.preferred_time.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.preferred_time.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.service_location.label(class="form-label") }}
+                                {{ form.service_location(class="form-control") }}
+                                {% if form.service_location.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.service_location.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Brake & Suspension Issues -->
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Current Issues/Symptoms
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.brake_issues.label(class="form-label") }}
+                                {{ form.brake_issues(class="form-control") }}
+                                {% if form.brake_issues.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.brake_issues.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.suspension_issues.label(class="form-label") }}
+                                {{ form.suspension_issues(class="form-control") }}
+                                {% if form.suspension_issues.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.suspension_issues.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Additional Services -->
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-plus-circle me-2"></i>Requested Services
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="form-check">
+                                    {{ form.brake_pad_replacement(class="form-check-input") }}
+                                    {{ form.brake_pad_replacement.label(class="form-check-label") }}
+                                </div>
+                                <div class="form-check">
+                                    {{ form.brake_rotor_service(class="form-check-input") }}
+                                    {{ form.brake_rotor_service.label(class="form-check-label") }}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="form-check">
+                                    {{ form.brake_fluid_change(class="form-check-input") }}
+                                    {{ form.brake_fluid_change.label(class="form-check-label") }}
+                                </div>
+                                <div class="form-check">
+                                    {{ form.suspension_struts(class="form-check-input") }}
+                                    {{ form.suspension_struts.label(class="form-check-label") }}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="form-check">
+                                    {{ form.wheel_alignment(class="form-check-input") }}
+                                    {{ form.wheel_alignment.label(class="form-check-label") }}
+                                </div>
+                                <div class="form-check">
+                                    {{ form.wheel_balancing(class="form-check-input") }}
+                                    {{ form.wheel_balancing.label(class="form-check-label") }}
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="form-check">
+                                    {{ form.tire_rotation(class="form-check-input") }}
+                                    {{ form.tire_rotation.label(class="form-check-label") }}
+                                </div>
+                                <div class="form-check">
+                                    {{ form.safety_inspection(class="form-check-input") }}
+                                    {{ form.safety_inspection.label(class="form-check-label") }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service History -->
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-history me-2"></i>Service History
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.last_brake_service.label(class="form-label") }}
+                                {{ form.last_brake_service(class="form-control", type="date") }}
+                                {% if form.last_brake_service.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.last_brake_service.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.last_alignment.label(class="form-label") }}
+                                {{ form.last_alignment(class="form-control", type="date") }}
+                                {% if form.last_alignment.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.last_alignment.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Customer Input -->
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-comment me-2"></i>Additional Information
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_complaints.label(class="form-label") }}
+                                {{ form.customer_complaints(class="form-control", rows="3") }}
+                                {% if form.customer_complaints.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_complaints.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.special_instructions.label(class="form-label") }}
+                                {{ form.special_instructions(class="form-control", rows="3") }}
+                                {% if form.special_instructions.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.special_instructions.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.budget_range.label(class="form-label") }}
+                                {{ form.budget_range(class="form-control") }}
+                                {% if form.budget_range.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.budget_range.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Emergency Contact -->
+                        <div class="row mb-4 mt-4">
+                            <div class="col-12">
+                                <h5 class="text-danger border-bottom pb-2">
+                                    <i class="fas fa-phone me-2"></i>Emergency Contact (Optional)
+                                </h5>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.emergency_contact_name.label(class="form-label") }}
+                                {{ form.emergency_contact_name(class="form-control") }}
+                                {% if form.emergency_contact_name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.emergency_contact_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.emergency_contact_phone.label(class="form-label") }}
+                                {{ form.emergency_contact_phone(class="form-control") }}
+                                {% if form.emergency_contact_phone.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.emergency_contact_phone.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="mb-3 form-check">
+                            {{ form.terms_accepted(class="form-check-input") }}
+                            {{ form.terms_accepted.label(class="form-check-label") }}
+                            {% if form.terms_accepted.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.terms_accepted.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit Service Request
+                            </button>
+                            <a href="{{ url_for('services.car_services') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Back to Car Services
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Set minimum date to today for service dates
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    const preferredDate = document.getElementById('preferred_date');
+    const lastBrakeService = document.getElementById('last_brake_service');
+    const lastAlignment = document.getElementById('last_alignment');
+    
+    if (preferredDate) {
+        preferredDate.min = today;
+    }
+    
+    if (lastBrakeService) {
+        lastBrakeService.max = today;
+    }
+    
+    if (lastAlignment) {
+        lastAlignment.max = today;
+    }
+});
+</script>
+{% endblock %}

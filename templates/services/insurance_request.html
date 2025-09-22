@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}Insurance Request - GM Services{% endblock %}
+
+{% block content %}
+<!-- Insurance Request Hero -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-shield-alt text-danger me-3"></i>Insurance <span class="text-gold">Request</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Get comprehensive automotive insurance coverage with competitive rates.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Request Form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Insurance Request Form</h3>
+                        
+                        <form method="POST">
+                            <!-- Vehicle Information -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-car me-2"></i>Vehicle Information</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vehicle_make" class="form-label text-gray">Vehicle Make *</label>
+                                        <input type="text" class="form-control" id="vehicle_make" name="vehicle_make" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vehicle_model" class="form-label text-gray">Vehicle Model *</label>
+                                        <input type="text" class="form-control" id="vehicle_model" name="vehicle_model" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vehicle_year" class="form-label text-gray">Year *</label>
+                                        <input type="number" class="form-control" id="vehicle_year" name="vehicle_year" 
+                                               min="1990" max="2025" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="license_plate" class="form-label text-gray">License Plate</label>
+                                        <input type="text" class="form-control" id="license_plate" name="license_plate">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vin" class="form-label text-gray">VIN (Vehicle Identification Number)</label>
+                                        <input type="text" class="form-control" id="vin" name="vin" maxlength="17">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vehicle_value" class="form-label text-gray">Estimated Vehicle Value (₦)</label>
+                                        <input type="number" class="form-control" id="vehicle_value" name="vehicle_value" min="0" step="1000">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Insurance Details -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-shield-alt me-2"></i>Insurance Details</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="insurance_type" class="form-label text-gray">Insurance Type *</label>
+                                        <select class="form-select" id="insurance_type" name="insurance_type" required>
+                                            <option value="">Select Insurance Type</option>
+                                            <option value="comprehensive">Comprehensive Coverage</option>
+                                            <option value="third_party">Third Party</option>
+                                            <option value="commercial">Commercial Vehicle</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="coverage_type" class="form-label text-gray">Coverage Type *</label>
+                                        <select class="form-select" id="coverage_type" name="coverage_type" required>
+                                            <option value="">Select Coverage Type</option>
+                                            <option value="new_policy">New Policy</option>
+                                            <option value="renewal">Policy Renewal</option>
+                                            <option value="claim">Claim Processing</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="current_insurer" class="form-label text-gray">Current Insurer (if any)</label>
+                                        <input type="text" class="form-control" id="current_insurer" name="current_insurer">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="current_policy_number" class="form-label text-gray">Current Policy Number</label>
+                                        <input type="text" class="form-control" id="current_policy_number" name="current_policy_number">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="coverage_amount" class="form-label text-gray">Desired Coverage Amount (₦)</label>
+                                        <input type="number" class="form-control" id="coverage_amount" name="coverage_amount" min="0" step="100000">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="deductible_preference" class="form-label text-gray">Preferred Deductible (₦)</label>
+                                        <select class="form-select" id="deductible_preference" name="deductible_preference">
+                                            <option value="">Select Deductible</option>
+                                            <option value="50000">₦50,000</option>
+                                            <option value="100000">₦100,000</option>
+                                            <option value="200000">₦200,000</option>
+                                            <option value="500000">₦500,000</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!-- Additional Coverage -->
+                                <div class="mb-3">
+                                    <label class="form-label text-gray">Additional Coverage Options</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="roadside_assistance" name="additional_coverage" value="roadside_assistance">
+                                                <label class="form-check-label text-gray" for="roadside_assistance">
+                                                    Roadside Assistance
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="rental_coverage" name="additional_coverage" value="rental_coverage">
+                                                <label class="form-check-label text-gray" for="rental_coverage">
+                                                    Rental Car Coverage
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="gap_coverage" name="additional_coverage" value="gap_coverage">
+                                                <label class="form-check-label text-gray" for="gap_coverage">
+                                                    GAP Coverage
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="personal_injury" name="additional_coverage" value="personal_injury">
+                                                <label class="form-check-label text-gray" for="personal_injury">
+                                                    Personal Injury Protection
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="uninsured_motorist" name="additional_coverage" value="uninsured_motorist">
+                                                <label class="form-check-label text-gray" for="uninsured_motorist">
+                                                    Uninsured Motorist
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="theft_protection" name="additional_coverage" value="theft_protection">
+                                                <label class="form-check-label text-gray" for="theft_protection">
+                                                    Theft Protection
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Claims History -->
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="previous_claims" name="previous_claims" onchange="toggleClaimsSection()">
+                                            <label class="form-check-label text-gray" for="previous_claims">
+                                                I have had previous insurance claims
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Driver Information -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-id-card me-2"></i>Driver Information</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="driver_license_number" class="form-label text-gray">Driver's License Number</label>
+                                        <input type="text" class="form-control" id="driver_license_number" name="driver_license_number">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="years_of_experience" class="form-label text-gray">Years of Driving Experience</label>
+                                        <input type="number" class="form-control" id="years_of_experience" name="years_of_experience" min="0" max="60">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="age" class="form-label text-gray">Age</label>
+                                        <input type="number" class="form-control" id="age" name="age" min="18" max="100">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="previous_accidents" name="previous_accidents" onchange="toggleAccidentDetails()">
+                                            <label class="form-check-label text-gray" for="previous_accidents">
+                                                I have been in previous accidents
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3" id="accident_details_group" style="display: none;">
+                                    <label for="accident_details" class="form-label text-gray">Accident Details</label>
+                                    <textarea class="form-control" id="accident_details" name="accident_details" rows="3" 
+                                              placeholder="Please provide details about previous accidents..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-phone me-2"></i>Contact Information</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="contact_phone" class="form-label text-gray">Phone Number *</label>
+                                        <input type="tel" class="form-control" id="contact_phone" name="contact_phone" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="contact_email" class="form-label text-gray">Email Address</label>
+                                        <input type="email" class="form-control" id="contact_email" name="contact_email">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="preferred_contact_method" class="form-label text-gray">Preferred Contact Method</label>
+                                        <select class="form-select" id="preferred_contact_method" name="preferred_contact_method">
+                                            <option value="phone">Phone</option>
+                                            <option value="email">Email</option>
+                                            <option value="sms">SMS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Payment Preferences -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-credit-card me-2"></i>Payment Preferences</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="payment_frequency" class="form-label text-gray">Payment Frequency</label>
+                                        <select class="form-select" id="payment_frequency" name="payment_frequency">
+                                            <option value="annually">Annually (Best Rate)</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="monthly">Monthly</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('services.automobile') }}" class="btn btn-outline-secondary me-md-2">
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Insurance Information -->
+                <div class="gm-card mt-4">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-3">Insurance Process</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-file-alt text-primary fa-2x mb-2"></i>
+                                    <h6 class="text-white">1. Application</h6>
+                                    <p class="text-gray small">Submit your insurance request with vehicle details.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-calculator text-warning fa-2x mb-2"></i>
+                                    <h6 class="text-white">2. Quote</h6>
+                                    <p class="text-gray small">Receive competitive quotes from multiple insurers.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-handshake text-success fa-2x mb-2"></i>
+                                    <h6 class="text-white">3. Selection</h6>
+                                    <p class="text-gray small">Choose the best policy for your needs.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-shield-alt text-danger fa-2x mb-2"></i>
+                                    <h6 class="text-white">4. Coverage</h6>
+                                    <p class="text-gray small">Your vehicle is protected with comprehensive coverage.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coverage Types Info -->
+                <div class="gm-card mt-4">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-3">Coverage Types Explained</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <h6 class="text-gold">Comprehensive Coverage</h6>
+                                <p class="text-gray small">
+                                    Full protection including theft, fire, vandalism, and collision coverage.
+                                </p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h6 class="text-gold">Third Party</h6>
+                                <p class="text-gray small">
+                                    Basic coverage for damages to other vehicles and property (legally required).
+                                </p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <h6 class="text-gold">Commercial Vehicle</h6>
+                                <p class="text-gray small">
+                                    Specialized coverage for business vehicles and commercial operations.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Toggle accident details section
+function toggleAccidentDetails() {
+    const checkbox = document.getElementById('previous_accidents');
+    const detailsGroup = document.getElementById('accident_details_group');
+    const detailsField = document.getElementById('accident_details');
+    
+    if (checkbox.checked) {
+        detailsGroup.style.display = 'block';
+        detailsField.required = true;
+    } else {
+        detailsGroup.style.display = 'none';
+        detailsField.required = false;
+        detailsField.value = '';
+    }
+}
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('input[required], select[required], textarea[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields.');
+    }
+});
+
+// Remove invalid class on input
+document.querySelectorAll('input, select, textarea').forEach(field => {
+    field.addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+});
+
+// VIN validation
+document.getElementById('vin').addEventListener('input', function() {
+    const vin = this.value.toUpperCase();
+    this.value = vin;
+    
+    if (vin.length > 0 && vin.length !== 17) {
+        this.setCustomValidity('VIN must be exactly 17 characters');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+</script>
+{% endblock %}

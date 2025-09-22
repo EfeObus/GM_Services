@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Jewelry Quote Request - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-calculator text-warning me-3"></i>Jewelry <span class="text-gold">Quote</span>
+            </h1>
+            <p class="lead text-gray mb-4">Get professional quotes for jewelry purchases, repairs, appraisals, and custom designs.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Request a Jewelry Quote</h3>
+                        
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Personal Information -->
+                            <div class="row mb-4">
+                                <div class="col-12 mb-3">
+                                    <h5 class="text-warning mb-3">Personal Information</h5>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.full_name.label(class="form-label text-white") }}
+                                    {{ form.full_name(class="form-control") }}
+                                    {% if form.full_name.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.full_name.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.email.label(class="form-label text-white") }}
+                                    {{ form.email(class="form-control") }}
+                                    {% if form.email.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.email.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.phone.label(class="form-label text-white") }}
+                                    {{ form.phone(class="form-control") }}
+                                    {% if form.phone.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.phone.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Quote Type -->
+                            <div class="row mb-4">
+                                <div class="col-12 mb-3">
+                                    <h5 class="text-warning mb-3">Quote Details</h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.quote_type.label(class="form-label text-white") }}
+                                    {{ form.quote_type(class="form-select") }}
+                                    {% if form.quote_type.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.quote_type.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.urgency.label(class="form-label text-white") }}
+                                    {{ form.urgency(class="form-select") }}
+                                </div>
+                            </div>
+                            
+                            <!-- Item Description -->
+                            <div class="mb-4">
+                                {{ form.item_description.label(class="form-label text-white") }}
+                                {{ form.item_description(class="form-control", rows="4") }}
+                                {% if form.item_description.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.item_description.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text text-gray">Please provide a detailed description of the jewelry item</div>
+                            </div>
+                            
+                            <!-- Material Specifications -->
+                            <div class="row mb-4">
+                                <div class="col-12 mb-3">
+                                    <h5 class="text-warning mb-3">Material Specifications</h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.metal_type.label(class="form-label text-white") }}
+                                    {{ form.metal_type(class="form-select") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.weight_grams.label(class="form-label text-white") }}
+                                    {{ form.weight_grams(class="form-control") }}
+                                    <div class="form-text text-gray">Approximate weight in grams (if known)</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gemstone and Dimensions -->
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.gemstone_details.label(class="form-label text-white") }}
+                                    {{ form.gemstone_details(class="form-control", rows="3") }}
+                                    <div class="form-text text-gray">Type, size, quality of gemstones (if any)</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.dimensions.label(class="form-label text-white") }}
+                                    {{ form.dimensions(class="form-control") }}
+                                    <div class="form-text text-gray">Length x Width x Height (if applicable)</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Image Upload -->
+                            <div class="mb-4">
+                                {{ form.item_images.label(class="form-label text-white") }}
+                                {{ form.item_images(class="form-control") }}
+                                <div class="form-text text-gray">Upload clear images of the jewelry item for accurate quoting</div>
+                                {% if form.item_images.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.item_images.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Additional Information -->
+                            <div class="mb-4">
+                                {{ form.additional_info.label(class="form-label text-white") }}
+                                {{ form.additional_info(class="form-control", rows="3") }}
+                                <div class="form-text text-gray">Any additional details that might affect the quote</div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-calculator me-2"></i>Request Quote
+                                </button>
+                                <a href="{{ url_for('services.jewelry') }}" class="btn btn-outline-secondary btn-lg ms-3">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Jewelry
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quote Types Information -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="text-white mb-3">Quote Types</h3>
+            <p class="text-gray">We provide professional quotes for various jewelry services</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <i class="fas fa-shopping-cart fa-3x text-warning mb-3"></i>
+                        <h5 class="text-white">Purchase Quote</h5>
+                        <p class="text-gray small">Get pricing for new jewelry pieces from our collections or custom designs.</p>
+                        <ul class="text-gray small text-start">
+                            <li>Detailed pricing breakdown</li>
+                            <li>Material cost analysis</li>
+                            <li>Payment options</li>
+                            <li>Delivery timeline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <i class="fas fa-palette fa-3x text-warning mb-3"></i>
+                        <h5 class="text-white">Custom Design</h5>
+                        <p class="text-gray small">Pricing for bespoke jewelry designed specifically for your requirements.</p>
+                        <ul class="text-gray small text-start">
+                            <li>Design consultation fee</li>
+                            <li>Material costs</li>
+                            <li>Labor and craftsmanship</li>
+                            <li>Project timeline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <i class="fas fa-tools fa-3x text-warning mb-3"></i>
+                        <h5 class="text-white">Repair Services</h5>
+                        <p class="text-gray small">Professional repair quotes to restore your precious jewelry pieces.</p>
+                        <ul class="text-gray small text-start">
+                            <li>Damage assessment</li>
+                            <li>Repair methodology</li>
+                            <li>Parts and materials</li>
+                            <li>Restoration timeline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <i class="fas fa-search fa-3x text-warning mb-3"></i>
+                        <h5 class="text-white">Appraisal</h5>
+                        <p class="text-gray small">Professional appraisal services for insurance, resale, or legal purposes.</p>
+                        <ul class="text-gray small text-start">
+                            <li>Certified appraisal</li>
+                            <li>Market value assessment</li>
+                            <li>Insurance documentation</li>
+                            <li>Authentication report</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Pre-fill service type if passed in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const service = urlParams.get('service');
+    if (service) {
+        const quoteType = document.getElementById('quote_type');
+        if (service === 'appraisal') {
+            quoteType.value = 'appraisal';
+        } else if (service === 'repair') {
+            quoteType.value = 'repair';
+        }
+    }
+    
+    // Pre-fill item if passed in URL
+    const itemId = urlParams.get('item_id');
+    if (itemId) {
+        document.getElementById('quote_type').value = 'purchase';
+        document.getElementById('additional_info').value = 'Quote requested for item ID: ' + itemId;
+    }
+});
+</script>
+{% endblock %}

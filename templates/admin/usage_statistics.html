@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}Usage Statistics - GM Services{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2><i class="fas fa-chart-bar"></i> Usage Statistics & Analytics</h2>
+                    <p class="text-muted">Comprehensive usage statistics and trends analysis</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('admin.monitoring') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                    <div class="btn-group" role="group">
+                        <a href="{{ url_for('admin.usage_statistics', days=7) }}" 
+                           class="btn btn-outline-primary {{ 'active' if days == 7 else '' }}">7 Days</a>
+                        <a href="{{ url_for('admin.usage_statistics', days=30) }}" 
+                           class="btn btn-outline-primary {{ 'active' if days == 30 else '' }}">30 Days</a>
+                        <a href="{{ url_for('admin.usage_statistics', days=90) }}" 
+                           class="btn btn-outline-primary {{ 'active' if days == 90 else '' }}">90 Days</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h4>{{ total_stats.total_users }}</h4>
+                    <small>Total Users</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-plus fa-2x mb-2"></i>
+                    <h4>{{ total_stats.total_registrations }}</h4>
+                    <small>New Registrations</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-sign-in-alt fa-2x mb-2"></i>
+                    <h4>{{ total_stats.total_logins }}</h4>
+                    <small>Total Logins</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-2x mb-2"></i>
+                    <h4>{{ total_stats.total_activities }}</h4>
+                    <small>Total Activities</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-secondary text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-tachometer-alt fa-2x mb-2"></i>
+                    <h4>{{ total_stats.avg_response_time|round(0) }}ms</h4>
+                    <small>Avg Response</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar fa-2x mb-2"></i>
+                    <h4>{{ days }}</h4>
+                    <small>Days Period</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> Daily Activity Trends</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="dailyTrendsChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-pie"></i> Registration Methods</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="registrationMethodsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Most Active Users -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-trophy"></i> Most Active Users (Last {{ days }} Days)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Activity Count</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in most_active_users %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ 
+                                            'danger' if user.role == 'admin' else
+                                            'warning' if user.role == 'staff' else
+                                            'primary'
+                                        }}">
+                                            {{ user.role.title() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success badge-lg">
+                                            {{ user.activity_count }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('admin.monitor_user_detailed', user_id=user.id) }}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Statistics Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-table"></i> Daily Usage Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Active Users</th>
+                                    <th>New Registrations</th>
+                                    <th>Total Logins</th>
+                                    <th>Total Activities</th>
+                                    <th>Avg Response Time</th>
+                                    <th>Peak Activity Hour</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for stat in daily_stats|reverse %}
+                                <tr>
+                                    <td>{{ stat.date.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <span class="badge badge-primary">
+                                            {{ stat.active_users or 0 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-success">
+                                            {{ stat.new_registrations or 0 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-info">
+                                            {{ stat.total_logins or 0 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-warning">
+                                            {{ stat.total_activities or 0 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if stat.avg_response_time_ms %}
+                                            <span class="badge badge-{{ 'success' if stat.avg_response_time_ms < 500 else 'warning' if stat.avg_response_time_ms < 1000 else 'danger' }}">
+                                                {{ stat.avg_response_time_ms|round(0) }}ms
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if stat.peak_activity_hour is not none %}
+                                            {{ stat.peak_activity_hour }}:00
+                                        {% else %}
+                                            <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js for visualizations -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Daily Trends Chart
+const dailyTrendsCtx = document.getElementById('dailyTrendsChart').getContext('2d');
+const dailyTrendsChart = new Chart(dailyTrendsCtx, {
+    type: 'line',
+    data: {
+        labels: [{% for stat in daily_stats %}'{{ stat.date.strftime("%m/%d") }}'{{ ',' if not loop.last }}{% endfor %}],
+        datasets: [{
+            label: 'Active Users',
+            data: [{% for stat in daily_stats %}{{ stat.active_users or 0 }}{{ ',' if not loop.last }}{% endfor %}],
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+            fill: true
+        }, {
+            label: 'Total Activities',
+            data: [{% for stat in daily_stats %}{{ stat.total_activities or 0 }}{{ ',' if not loop.last }}{% endfor %}],
+            borderColor: '#ffc107',
+            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+            fill: true
+        }, {
+            label: 'New Registrations',
+            data: [{% for stat in daily_stats %}{{ stat.new_registrations or 0 }}{{ ',' if not loop.last }}{% endfor %}],
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        interaction: {
+            intersect: false,
+            mode: 'index'
+        }
+    }
+});
+
+// Registration Methods Pie Chart
+const registrationMethodsCtx = document.getElementById('registrationMethodsChart').getContext('2d');
+const registrationMethodsChart = new Chart(registrationMethodsCtx, {
+    type: 'pie',
+    data: {
+        labels: {{ registration_methods.keys() | list | tojson }},
+        datasets: [{
+            data: {{ registration_methods.values() | list | tojson }},
+            backgroundColor: [
+                '#007bff',  // form
+                '#dc3545',  // google
+                '#28a745',  // apple
+                '#ffc107',  // other
+                '#6c757d'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        legend: {
+            position: 'bottom'
+        }
+    }
+});
+</script>
+{% endblock %}

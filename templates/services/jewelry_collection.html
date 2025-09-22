@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}{{ collection_info.name }} - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-gem text-warning me-3"></i>{{ collection_info.name }}
+            </h1>
+            <p class="lead text-gray mb-4">{{ collection_info.description }}</p>
+            
+            {% if collection_info.features %}
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8">
+                    <div class="row">
+                        {% for feature in collection_info.features %}
+                        <div class="col-md-6 col-lg-3 mb-2">
+                            <div class="badge bg-warning text-dark px-3 py-2">
+                                <i class="fas fa-check me-1"></i>{{ feature }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-white">Available Items</h2>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('services.jewelry_consultation') }}" class="btn btn-warning">
+                    <i class="fas fa-palette me-2"></i>Custom Design
+                </a>
+                <a href="{{ url_for('services.jewelry_quote_request') }}" class="btn btn-outline-warning">
+                    <i class="fas fa-calculator me-2"></i>Get Quote
+                </a>
+            </div>
+        </div>
+        
+        {% if jewelry_items %}
+        <div class="row">
+            {% for item in jewelry_items %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="gm-card h-100">
+                    {% if item.primary_image %}
+                    <img src="{{ item.primary_image }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <img src="https://picsum.photos/300/200?random={{ loop.index }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    
+                    <div class="gm-card-body">
+                        <h6 class="text-white mb-2">{{ item.name }}</h6>
+                        
+                        {% if item.description %}
+                        <p class="text-gray small mb-2">{{ item.description[:100] }}{% if item.description|length > 100 %}...{% endif %}</p>
+                        {% endif %}
+                        
+                        <div class="mb-2">
+                            {% if item.primary_material %}
+                            <span class="badge bg-secondary me-1">{{ item.primary_material.name }}</span>
+                            {% endif %}
+                            {% if item.primary_gemstone %}
+                            <span class="badge bg-info me-1">{{ item.primary_gemstone }}</span>
+                            {% endif %}
+                            {% if item.is_featured %}
+                            <span class="badge bg-warning text-dark">Featured</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                {% if item.current_price %}
+                                <span class="text-success fw-bold">₦{{ "{:,.0f}".format(item.current_price) }}</span>
+                                {% if item.is_on_sale %}
+                                <br><small class="text-muted text-decoration-line-through">₦{{ "{:,.0f}".format(item.base_price) }}</small>
+                                {% endif %}
+                                {% else %}
+                                <span class="text-warning">Contact for Price</span>
+                                {% endif %}
+                            </div>
+                            <div class="btn-group-vertical btn-group-sm">
+                                <button class="btn btn-warning btn-sm" onclick="viewItemDetails({{ item.id }})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                {% if current_user.is_authenticated %}
+                                <button class="btn btn-outline-warning btn-sm" onclick="addToWishlist({{ item.id }})">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        {% if item.is_customizable %}
+                        <div class="mt-2">
+                            <small class="text-info">
+                                <i class="fas fa-cog me-1"></i>Customizable
+                            </small>
+                        </div>
+                        {% endif %}
+                        
+                        {% if item.is_in_stock %}
+                        <div class="mt-2">
+                            <small class="text-success">
+                                <i class="fas fa-check-circle me-1"></i>In Stock
+                            </small>
+                        </div>
+                        {% else %}
+                        <div class="mt-2">
+                            <small class="text-warning">
+                                <i class="fas fa-clock me-1"></i>Made to Order
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <i class="fas fa-gem text-warning display-4 mb-3"></i>
+                    <h4 class="text-white mb-3">Collection Coming Soon</h4>
+                    <p class="text-gray mb-4">We're curating an exquisite collection of {{ collection_type }} jewelry pieces. Check back soon or contact us for custom designs.</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{{ url_for('services.jewelry_consultation') }}" class="btn btn-warning">
+                            <i class="fas fa-palette me-2"></i>Custom Design Consultation
+                        </a>
+                        <a href="{{ url_for('services.jewelry') }}" class="btn btn-outline-warning">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Jewelry Services
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="text-center">
+            <h3 class="text-white mb-4">Why Choose Our Jewelry?</h3>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="text-center">
+                        <i class="fas fa-certificate text-warning display-6 mb-3"></i>
+                        <h5 class="text-white">Certified Quality</h5>
+                        <p class="text-gray small">All our jewelry comes with authenticity certificates</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="text-center">
+                        <i class="fas fa-palette text-warning display-6 mb-3"></i>
+                        <h5 class="text-white">Custom Design</h5>
+                        <p class="text-gray small">Bespoke jewelry tailored to your preferences</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="text-center">
+                        <i class="fas fa-shield-alt text-warning display-6 mb-3"></i>
+                        <h5 class="text-white">Warranty</h5>
+                        <p class="text-gray small">Comprehensive warranty on all our pieces</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="text-center">
+                        <i class="fas fa-handshake text-warning display-6 mb-3"></i>
+                        <h5 class="text-white">Expert Service</h5>
+                        <p class="text-gray small">Professional consultation and after-sales service</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Item Details Modal -->
+<div class="modal fade" id="itemDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-white">Jewelry Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="itemDetailsContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function viewItemDetails(itemId) {
+    // Show modal with loading
+    const modal = new bootstrap.Modal(document.getElementById('itemDetailsModal'));
+    document.getElementById('itemDetailsContent').innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-warning"></i> Loading...</div>';
+    modal.show();
+    
+    // In a real implementation, you would fetch item details from an API
+    // For now, show a placeholder
+    setTimeout(() => {
+        document.getElementById('itemDetailsContent').innerHTML = `
+            <div class="text-center">
+                <img src="https://picsum.photos/400/300?random=${itemId}" class="img-fluid rounded mb-3" alt="Jewelry Item">
+                <h5 class="text-white">Jewelry Item Details</h5>
+                <p class="text-gray">Detailed information about this jewelry piece would be shown here.</p>
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <a href="{{ url_for('services.jewelry_consultation') }}" class="btn btn-warning">Custom Order</a>
+                    <a href="{{ url_for('services.jewelry_quote_request') }}" class="btn btn-outline-warning">Get Quote</a>
+                </div>
+            </div>
+        `;
+    }, 500);
+}
+
+function addToWishlist(itemId) {
+    // In a real implementation, you would add to wishlist via API
+    alert('Item added to wishlist! (This would be implemented with a proper API call)');
+}
+</script>
+{% endblock %}

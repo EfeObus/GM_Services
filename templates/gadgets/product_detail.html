@@ -1,0 +1,583 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - GM Services{% endblock %}
+
+{% block content %}
+<!-- Product Detail Header -->
+<section class="py-4 bg-surface-100">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{{ url_for('gadgets.index') }}" class="text-danger">Shop</a></li>
+                <li class="breadcrumb-item">
+                    {% if product.category.slug == 'smartphones' %}
+                        <a href="{{ url_for('gadgets.smartphones') }}" class="text-danger">Smartphones</a>
+                    {% elif product.category.slug == 'laptops' %}
+                        <a href="{{ url_for('gadgets.laptops') }}" class="text-danger">Laptops</a>
+                    {% elif product.category.slug == 'accessories' %}
+                        <a href="{{ url_for('gadgets.accessories') }}" class="text-danger">Accessories</a>
+                    {% endif %}
+                </li>
+                <li class="breadcrumb-item active text-gray">{{ product.name[:30] }}...</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Product Images -->
+            <div class="col-lg-6 mb-4">
+                <div class="product-gallery">
+                    <!-- Main Image -->
+                    <div class="main-image mb-3">
+                        {% if product.images and product.images|length > 0 %}
+                            <img id="mainImage" src="{{ product.images[0] }}" class="img-fluid rounded shadow" alt="{{ product.name }}">
+                        {% else %}
+                            <img id="mainImage" src="https://picsum.photos/600/400?random={{ product.id }}" class="img-fluid rounded shadow" alt="{{ product.name }}">
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Thumbnail Images -->
+                    {% if product.images and product.images|length > 1 %}
+                    <div class="thumbnail-images">
+                        <div class="row">
+                            {% for image in product.images[:5] %}
+                            <div class="col-2">
+                                <img src="{{ image }}" class="img-fluid rounded thumbnail-img {{ 'active' if loop.first else '' }}" 
+                                     alt="{{ product.name }}" onclick="changeMainImage('{{ image }}', this)">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Product Information -->
+            <div class="col-lg-6">
+                <div class="product-info">
+                    {% if product.brand %}
+                    <small class="text-danger fw-bold">{{ product.brand.name }}</small>
+                    {% endif %}
+                    
+                    <h1 class="text-white mb-3">{{ product.name }}</h1>
+                    
+                    {% if product.short_description %}
+                    <p class="text-gray mb-3">{{ product.short_description }}</p>
+                    {% endif %}
+                    
+                    <!-- Rating and Reviews -->
+                    {% if product.average_rating > 0 %}
+                    <div class="rating mb-3">
+                        {% for i in range(5) %}
+                            {% if i < product.average_rating %}
+                            <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                            <i class="far fa-star text-muted"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="text-gray ms-2">({{ product.review_count }} reviews)</span>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Price -->
+                    <div class="price mb-4">
+                        {% if product.compare_price %}
+                        <span class="text-muted text-decoration-line-through h5">₦{{ "{:,.0f}".format(product.compare_price) }}</span>
+                        <span class="text-danger ms-2 small">Save ₦{{ "{:,.0f}".format(product.compare_price - product.price) }}</span>
+                        {% endif %}
+                        <div class="text-success h3 fw-bold">₦{{ "{:,.0f}".format(product.price) }}</div>
+                    </div>
+                    
+                    <!-- Stock Status -->
+                    <div class="stock-status mb-4">
+                        {% if product.is_in_stock %}
+                            {% if product.is_low_stock %}
+                            <div class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i> Only {{ product.stock_quantity }} left in stock!
+                            </div>
+                            {% else %}
+                            <div class="text-success">
+                                <i class="fas fa-check-circle"></i> In Stock
+                            </div>
+                            {% endif %}
+                        {% else %}
+                        <div class="text-danger">
+                            <i class="fas fa-times-circle"></i> Out of Stock
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Add to Cart Form -->
+                    <form class="add-to-cart-form mb-4">
+                        <div class="row align-items-end">
+                            <div class="col-md-3">
+                                <label class="text-gray small">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" value="1" min="1" max="10">
+                            </div>
+                            <div class="col-md-9">
+                                {% if product.is_in_stock %}
+                                <button type="submit" class="btn btn-danger btn-lg me-2" id="addToCartBtn">
+                                    <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-lg">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                {% else %}
+                                <button type="button" class="btn btn-secondary btn-lg" disabled>
+                                    Out of Stock
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <!-- Key Features -->
+                    {% if product.features %}
+                    <div class="key-features mb-4">
+                        <h6 class="text-white mb-2">Key Features:</h6>
+                        <ul class="list-unstyled">
+                            {% for feature in product.features[:5] %}
+                            <li class="text-gray small mb-1">
+                                <i class="fas fa-check text-success me-2"></i>{{ feature }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Warranty -->
+                    {% if product.warranty_period %}
+                    <div class="warranty mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-shield-alt text-success me-2"></i>
+                            <span class="text-gray">{{ product.warranty_period }} Warranty</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Tabs -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" 
+                                data-bs-target="#description" type="button" role="tab">Description</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="specifications-tab" data-bs-toggle="tab" 
+                                data-bs-target="#specifications" type="button" role="tab">Specifications</button>
+                    </li>
+                    {% if product.whats_in_box %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="box-tab" data-bs-toggle="tab" 
+                                data-bs-target="#box" type="button" role="tab">What's in the Box</button>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" 
+                                data-bs-target="#reviews" type="button" role="tab">Reviews</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content mt-4" id="productTabsContent">
+                    <!-- Description Tab -->
+                    <div class="tab-pane fade show active" id="description" role="tabpanel">
+                        <div class="gm-card">
+                            <div class="gm-card-body">
+                                <h5 class="text-white mb-3">Product Description</h5>
+                                {% if product.description %}
+                                <p class="text-gray">{{ product.description }}</p>
+                                {% else %}
+                                <p class="text-gray">{{ product.short_description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Specifications Tab -->
+                    <div class="tab-pane fade" id="specifications" role="tabpanel">
+                        <div class="gm-card">
+                            <div class="gm-card-body">
+                                <h5 class="text-white mb-3">Technical Specifications</h5>
+                                
+                                <!-- Smartphone Specifications -->
+                                {% if smartphone_details %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-dark table-borderless">
+                                            <tr><td class="text-gray">Operating System</td><td class="text-white">{{ smartphone_details.operating_system or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">RAM</td><td class="text-white">{{ smartphone_details.ram or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Storage</td><td class="text-white">{{ smartphone_details.storage_options|join(', ') if smartphone_details.storage_options else 'N/A' }}GB</td></tr>
+                                            <tr><td class="text-gray">Screen Size</td><td class="text-white">{{ smartphone_details.screen_size or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Battery</td><td class="text-white">{{ smartphone_details.battery_capacity or 'N/A' }}</td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-dark table-borderless">
+                                            <tr><td class="text-gray">Rear Camera</td><td class="text-white">{{ smartphone_details.rear_camera or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Front Camera</td><td class="text-white">{{ smartphone_details.front_camera or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Processor</td><td class="text-white">{{ smartphone_details.processor or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Network</td><td class="text-white">{{ smartphone_details.network_support|join(', ') if smartphone_details.network_support else 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Water Resistance</td><td class="text-white">{{ smartphone_details.water_resistance or 'N/A' }}</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Laptop Specifications -->
+                                {% if laptop_details %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-dark table-borderless">
+                                            <tr><td class="text-gray">Processor</td><td class="text-white">{{ laptop_details.processor_model or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">RAM</td><td class="text-white">{{ laptop_details.ram_size or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Storage</td><td class="text-white">{{ laptop_details.storage_capacity or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Graphics</td><td class="text-white">{{ laptop_details.graphics_card or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Display</td><td class="text-white">{{ laptop_details.screen_size or 'N/A' }}</td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-dark table-borderless">
+                                            <tr><td class="text-gray">Operating System</td><td class="text-white">{{ laptop_details.operating_system or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Battery</td><td class="text-white">{{ laptop_details.battery_life or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Weight</td><td class="text-white">{{ product.weight or 'N/A' }}kg</td></tr>
+                                            <tr><td class="text-gray">Use Case</td><td class="text-white">{{ laptop_details.primary_use_case|title or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">WiFi</td><td class="text-white">{{ laptop_details.wifi_standard or 'N/A' }}</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Accessory Specifications -->
+                                {% if accessory_details %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-dark table-borderless">
+                                            <tr><td class="text-gray">Type</td><td class="text-white">{{ accessory_details.accessory_type|title or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Material</td><td class="text-white">{{ accessory_details.material or 'N/A' }}</td></tr>
+                                            <tr><td class="text-gray">Compatibility</td><td class="text-white">{{ accessory_details.compatibility_type or 'N/A' }}</td></tr>
+                                            {% if accessory_details.battery_capacity %}
+                                            <tr><td class="text-gray">Battery</td><td class="text-white">{{ accessory_details.battery_capacity }}</td></tr>
+                                            {% endif %}
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if accessory_details.special_features %}
+                                        <h6 class="text-white">Special Features:</h6>
+                                        <ul class="list-unstyled">
+                                            {% for feature in accessory_details.special_features %}
+                                            <li class="text-gray">• {{ feature }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <!-- General Specifications -->
+                                {% if product.specifications %}
+                                <div class="mt-3">
+                                    <h6 class="text-white">Additional Specifications:</h6>
+                                    <div class="row">
+                                        {% for key, value in product.specifications.items() %}
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-between border-bottom border-gray py-1">
+                                                <span class="text-gray">{{ key|title }}</span>
+                                                <span class="text-white">{{ value }}</span>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- What's in the Box Tab -->
+                    {% if product.whats_in_box %}
+                    <div class="tab-pane fade" id="box" role="tabpanel">
+                        <div class="gm-card">
+                            <div class="gm-card-body">
+                                <h5 class="text-white mb-3">What's in the Box</h5>
+                                <ul class="list-unstyled">
+                                    {% for item in product.whats_in_box %}
+                                    <li class="text-gray mb-2">
+                                        <i class="fas fa-box text-danger me-2"></i>{{ item }}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Reviews Tab -->
+                    <div class="tab-pane fade" id="reviews" role="tabpanel">
+                        <div class="gm-card">
+                            <div class="gm-card-body">
+                                <h5 class="text-white mb-3">Customer Reviews</h5>
+                                {% if product.review_count > 0 %}
+                                <p class="text-gray">{{ product.review_count }} reviews with an average rating of {{ "%.1f"|format(product.average_rating) }} stars</p>
+                                {% else %}
+                                <p class="text-gray">No reviews yet. Be the first to review this product!</p>
+                                {% endif %}
+                                
+                                {% if current_user.is_authenticated %}
+                                <button class="btn btn-outline-danger">Write a Review</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Products -->
+        {% if related_products %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3 class="text-white mb-4">Related Products</h3>
+                <div class="row">
+                    {% for related_product in related_products %}
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="gm-card product-card">
+                            {% if related_product.images and related_product.images|length > 0 %}
+                                <img src="{{ related_product.images[0] }}" class="card-img-top product-image" alt="{{ related_product.name }}">
+                            {% else %}
+                                <img src="https://picsum.photos/300/200?random={{ related_product.id }}" class="card-img-top product-image" alt="{{ related_product.name }}">
+                            {% endif %}
+                            
+                            <div class="gm-card-body">
+                                <h6 class="text-white mb-2">{{ related_product.name }}</h6>
+                                <div class="text-success fw-bold">₦{{ "{:,.0f}".format(related_product.price) }}</div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <a href="{{ url_for('gadgets.product_detail', product_id=related_product.id) }}" 
+                                       class="btn btn-sm btn-outline-danger">View</a>
+                                    {% if related_product.is_in_stock %}
+                                    <button class="btn btn-sm btn-danger add-to-cart-btn" 
+                                            data-product-id="{{ related_product.id }}">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Shopping Cart Float Button -->
+<div class="floating-cart">
+    <a href="{{ url_for('gadgets.view_cart') }}" class="btn btn-danger cart-float-btn">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">{{ cart_count }}</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.thumbnail-img {
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.thumbnail-img:hover,
+.thumbnail-img.active {
+    border-color: #dc2626;
+}
+
+.product-card {
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(220, 38, 127, 0.2);
+}
+
+.product-image {
+    height: 150px;
+    object-fit: cover;
+}
+
+.floating-cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.cart-float-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(220, 38, 127, 0.3);
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function changeMainImage(src, element) {
+    document.getElementById('mainImage').src = src;
+    
+    // Remove active class from all thumbnails
+    document.querySelectorAll('.thumbnail-img').forEach(img => {
+        img.classList.remove('active');
+    });
+    
+    // Add active class to clicked thumbnail
+    element.classList.add('active');
+}
+
+$(document).ready(function() {
+    // Add to cart form submission
+    $('.add-to-cart-form').submit(function(e) {
+        e.preventDefault();
+        
+        const quantity = parseInt($('#quantity').val());
+        const button = $('#addToCartBtn');
+        const originalText = button.html();
+        
+        // Show loading state
+        button.html('<i class="fas fa-spinner fa-spin me-2"></i>Adding...');
+        button.prop('disabled', true);
+        
+        $.ajax({
+            url: "{{ url_for('gadgets.add_to_cart') }}",
+            method: 'POST',
+            data: {
+                product_id: {{ product.id }},
+                quantity: quantity
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update cart count
+                    $('#cartCount').text(response.cart_count);
+                    
+                    // Show success message
+                    button.html('<i class="fas fa-check me-2"></i>Added to Cart!');
+                    button.removeClass('btn-danger').addClass('btn-success');
+                    
+                    // Show toast notification
+                    showToast('success', response.message);
+                    
+                    setTimeout(function() {
+                        button.html(originalText);
+                        button.removeClass('btn-success').addClass('btn-danger');
+                        button.prop('disabled', false);
+                    }, 3000);
+                } else {
+                    showToast('error', response.message);
+                    button.html(originalText);
+                    button.prop('disabled', false);
+                }
+            },
+            error: function() {
+                showToast('error', 'Error adding product to cart');
+                button.html(originalText);
+                button.prop('disabled', false);
+            }
+        });
+    });
+    
+    // Related products add to cart
+    $('.add-to-cart-btn').click(function(e) {
+        e.preventDefault();
+        
+        const productId = $(this).data('product-id');
+        const button = $(this);
+        const originalText = button.html();
+        
+        // Show loading state
+        button.html('<i class="fas fa-spinner fa-spin"></i>');
+        button.prop('disabled', true);
+        
+        $.ajax({
+            url: "{{ url_for('gadgets.add_to_cart') }}",
+            method: 'POST',
+            data: {
+                product_id: productId,
+                quantity: 1
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update cart count
+                    $('#cartCount').text(response.cart_count);
+                    
+                    // Show success message
+                    button.html('<i class="fas fa-check"></i>');
+                    button.removeClass('btn-danger').addClass('btn-success');
+                    
+                    showToast('success', response.message);
+                    
+                    setTimeout(function() {
+                        button.html(originalText);
+                        button.removeClass('btn-success').addClass('btn-danger');
+                        button.prop('disabled', false);
+                    }, 2000);
+                } else {
+                    showToast('error', response.message);
+                    button.html(originalText);
+                    button.prop('disabled', false);
+                }
+            },
+            error: function() {
+                showToast('error', 'Error adding product to cart');
+                button.html(originalText);
+                button.prop('disabled', false);
+            }
+        });
+    });
+});
+
+function showToast(type, message) {
+    const toastClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const toast = `
+        <div class="alert ${toastClass} alert-dismissible fade show position-fixed" 
+             style="top: 20px; right: 20px; z-index: 9999;">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    $('body').append(toast);
+    
+    setTimeout(function() {
+        $('.alert').fadeOut();
+    }, 3000);
+}
+</script>
+{% endblock %}

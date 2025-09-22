@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}Document Services - GM Services{% endblock %}
+
+{% block content %}
+<!-- Document Services Hero -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-file-alt me-3"></i>Document <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Professional documentation and paperwork assistance for all your legal and administrative needs.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Document Services Overview -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-passport fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="text-white">Visa Applications</h5>
+                        <p class="text-gray">Complete visa application assistance for all countries</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Application form completion</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Document verification</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Appointment scheduling</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Status tracking</li>
+                        </ul>
+                        <a href="{{ url_for('services.document_request_service', service_type='visa') }}" class="btn btn-primary w-100">
+                            Get Visa Help
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-balance-scale fa-3x text-success"></i>
+                        </div>
+                        <h5 class="text-white">Legal Documents</h5>
+                        <p class="text-gray">Professional legal document preparation and review</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Contract drafting</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Agreement review</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Legal consultation</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Document authentication</li>
+                        </ul>
+                        <a href="{{ url_for('services.document_request_service', service_type='legal') }}" class="btn btn-success w-100">
+                            Legal Document Help
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-stamp fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="text-white">Notarization</h5>
+                        <p class="text-gray">Certified notarization services for all document types</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Document notarization</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Oath administration</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Certified copies</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Apostille services</li>
+                        </ul>
+                        <a href="{{ url_for('services.document_request_service', service_type='notarization') }}" class="btn btn-warning w-100">
+                            Get Notarization
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-certificate fa-3x text-danger"></i>
+                        </div>
+                        <h5 class="text-white">Document Certification</h5>
+                        <p class="text-gray">Official document certification and authentication</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Educational certificates</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Professional credentials</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Translation services</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Document verification</li>
+                        </ul>
+                        <a href="{{ url_for('services.document_request_service', service_type='certification') }}" class="btn btn-danger w-100">
+                            Get Certification
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Process Overview -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Document Processing Steps</h2>
+            <p class="text-gray">Simple and efficient process to handle all your document needs</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">1</div>
+                    <h5 class="text-white mt-3">Submit Request</h5>
+                    <p class="text-gray">Fill out our detailed request form with your requirements</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">2</div>
+                    <h5 class="text-white mt-3">Document Review</h5>
+                    <p class="text-gray">Our experts review your documents and requirements</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">3</div>
+                    <h5 class="text-white mt-3">Processing</h5>
+                    <p class="text-gray">We handle all the paperwork and processing steps</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">4</div>
+                    <h5 class="text-white mt-3">Delivery</h5>
+                    <p class="text-gray">Receive your completed documents securely</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Document Types We Handle -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Document Types We Handle</h2>
+            <p class="text-gray">We process a wide variety of documents for personal and business use</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="document-type-card">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-graduation-cap text-primary me-2"></i>Educational Documents
+                    </h5>
+                    <ul class="list-unstyled text-gray">
+                        <li>• Transcript verification</li>
+                        <li>• Degree authentication</li>
+                        <li>• Academic record processing</li>
+                        <li>• Scholarship applications</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="document-type-card">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-briefcase text-success me-2"></i>Business Documents
+                    </h5>
+                    <ul class="list-unstyled text-gray">
+                        <li>• Company registration</li>
+                        <li>• Business permits</li>
+                        <li>• Tax documentation</li>
+                        <li>• Import/export licenses</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="document-type-card">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-user text-warning me-2"></i>Personal Documents
+                    </h5>
+                    <ul class="list-unstyled text-gray">
+                        <li>• Identity verification</li>
+                        <li>• Birth certificates</li>
+                        <li>• Marriage certificates</li>
+                        <li>• Immigration documents</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="text-white mb-3">Need Help with Your Documents?</h2>
+            <p class="text-gray mb-4">Our document experts are ready to assist you with any paperwork needs</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a href="tel:+2348123456789" class="btn btn-primary">
+                            <i class="fas fa-phone me-2"></i>Call Expert
+                        </a>
+                        <a href="{{ url_for('services.service_request_form') }}" class="btn btn-outline-light">
+                            <i class="fas fa-envelope me-2"></i>Send Message
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.bg-dark-alt {
+    background-color: #0a0a0a !important;
+}
+
+.step-card {
+    transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin: 0 auto;
+}
+
+.document-type-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.document-type-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.service-icon {
+    transition: transform 0.3s ease;
+}
+
+.service-icon:hover {
+    transform: scale(1.1);
+}
+</style>
+{% endblock %}

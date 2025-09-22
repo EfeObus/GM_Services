@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Creative Services - GM Services{% endblock %}
+
+{% block content %}
+<!-- Creative Services Hero -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-paint-brush me-3"></i>Creative <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Professional design and development services to bring your creative vision to life.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Creative Services Overview -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-palette fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="text-white">Graphic Design</h5>
+                        <p class="text-gray">Professional graphic design for all your visual needs</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Poster design</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Flyer creation</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Business cards</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Marketing materials</li>
+                        </ul>
+                        <a href="{{ url_for('services.creative_request_service', service_type='graphic_design') }}" class="btn btn-primary w-100">
+                            Get Graphic Design
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-crown fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="text-white">Logo Design</h5>
+                        <p class="text-gray">Custom logo design that represents your brand identity</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Custom logos</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Brand symbols</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Icon design</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Logo variations</li>
+                        </ul>
+                        <a href="{{ url_for('services.creative_request_service', service_type='logo_design') }}" class="btn btn-warning w-100">
+                            Create Logo
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-tags fa-3x text-success"></i>
+                        </div>
+                        <h5 class="text-white">Brand Identity</h5>
+                        <p class="text-gray">Complete brand identity and visual identity systems</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Brand guidelines</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Color schemes</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Typography</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Brand assets</li>
+                        </ul>
+                        <a href="{{ url_for('services.creative_request_service', service_type='branding') }}" class="btn btn-success w-100">
+                            Build Brand
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-globe fa-3x text-info"></i>
+                        </div>
+                        <h5 class="text-white">Web Design</h5>
+                        <p class="text-gray">Modern, responsive website design and user experience</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Responsive design</li>
+                            <li><i class="fas fa-check text-success me-2"></i>UI/UX design</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Landing pages</li>
+                            <li><i class="fas fa-check text-success me-2"></i>E-commerce sites</li>
+                        </ul>
+                        <a href="{{ url_for('services.creative_request_service', service_type='web_design') }}" class="btn btn-info w-100">
+                            Design Website
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-code fa-3x text-danger"></i>
+                        </div>
+                        <h5 class="text-white">Web Development</h5>
+                        <p class="text-gray">Full-stack web development and custom applications</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Custom websites</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Web applications</li>
+                            <li><i class="fas fa-check text-success me-2"></i>CMS development</li>
+                            <li><i class="fas fa-check text-success me-2"></i>API integration</li>
+                        </ul>
+                        <a href="{{ url_for('services.creative_request_service', service_type='web_development') }}" class="btn btn-danger w-100">
+                            Build Website
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card text-center h-100">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-print fa-3x text-secondary"></i>
+                        </div>
+                        <h5 class="text-white">Print Design</h5>
+                        <p class="text-gray">Professional print design for marketing and business materials</p>
+                        <ul class="list-unstyled text-gray text-start">
+                            <li><i class="fas fa-check text-success me-2"></i>Brochures</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Banners</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Packaging design</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Stationery</li>
+                        </ul>
+                        <a href="{{ url_for('services.creative_request_service', service_type='print_design') }}" class="btn btn-secondary w-100">
+                            Create Print Design
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Section -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Creative Work</h2>
+            <p class="text-gray">See examples of our creative projects and designs</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="portfolio-item">
+                    <img src="https://via.placeholder.com/400x300/1a1a1a/FFFFFF?text=Logo+Design" class="img-fluid rounded" alt="Logo Design">
+                    <div class="portfolio-overlay">
+                        <h5 class="text-white">Logo Design</h5>
+                        <p class="text-gray">Brand identity projects</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="portfolio-item">
+                    <img src="https://via.placeholder.com/400x300/1a1a1a/FFFFFF?text=Web+Design" class="img-fluid rounded" alt="Web Design">
+                    <div class="portfolio-overlay">
+                        <h5 class="text-white">Web Design</h5>
+                        <p class="text-gray">Responsive websites</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="portfolio-item">
+                    <img src="https://via.placeholder.com/400x300/1a1a1a/FFFFFF?text=Print+Design" class="img-fluid rounded" alt="Print Design">
+                    <div class="portfolio-overlay">
+                        <h5 class="text-white">Print Design</h5>
+                        <p class="text-gray">Marketing materials</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Process Overview -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Creative Process</h2>
+            <p class="text-gray">How we bring your creative vision to life</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">1</div>
+                    <h5 class="text-white mt-3">Consultation</h5>
+                    <p class="text-gray">We discuss your vision, goals, and requirements</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">2</div>
+                    <h5 class="text-white mt-3">Concept</h5>
+                    <p class="text-gray">We create initial concepts and design directions</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">3</div>
+                    <h5 class="text-white mt-3">Design</h5>
+                    <p class="text-gray">We develop the full design based on your feedback</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="step-card text-center">
+                    <div class="step-number">4</div>
+                    <h5 class="text-white mt-3">Delivery</h5>
+                    <p class="text-gray">Final files delivered in all required formats</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="text-white mb-3">Ready to Start Your Creative Project?</h2>
+            <p class="text-gray mb-4">Let's discuss your creative needs and bring your vision to life</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a href="tel:+2348123456789" class="btn btn-primary">
+                            <i class="fas fa-phone me-2"></i>Call Designer
+                        </a>
+                        <a href="{{ url_for('services.service_request_form') }}" class="btn btn-outline-light">
+                            <i class="fas fa-envelope me-2"></i>Start Project
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.bg-dark-alt {
+    background-color: #0a0a0a !important;
+}
+
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover {
+    transform: translateY(-5px);
+}
+
+.portfolio-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    padding: 20px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover .portfolio-overlay {
+    transform: translateY(0);
+}
+
+.step-card {
+    transition: transform 0.3s ease;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin: 0 auto;
+}
+
+.service-icon {
+    transition: transform 0.3s ease;
+}
+
+.service-icon:hover {
+    transform: scale(1.1);
+}
+</style>
+{% endblock %}

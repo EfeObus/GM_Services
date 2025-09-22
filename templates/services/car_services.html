@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Car Services - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-wrench text-danger me-3"></i>Car <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">Professional automotive maintenance and repair services.</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=60" alt="Car Services" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Car Services</h2>
+            <p class="text-gray">Expert automotive care for all vehicle types</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=61" class="card-img-top" alt="Oil Change">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-oil-can text-danger me-2"></i>Oil Change & Maintenance</h5>
+                        <p class="text-gray">Regular maintenance to keep your vehicle running smoothly.</p>
+                        <ul class="text-gray small">
+                            <li>Engine oil change</li>
+                            <li>Filter replacement</li>
+                            <li>Fluid top-ups</li>
+                            <li>Basic inspection</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦8,500</span>
+                            <a href="{{ url_for('services.car_service_booking_form', service_type='oil_maintenance') }}" class="btn btn-danger btn-sm">Book Service</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=62" class="card-img-top" alt="Brake Service">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-cog text-danger me-2"></i>Brake & Suspension</h5>
+                        <p class="text-gray">Safety-critical brake and suspension system services.</p>
+                        <ul class="text-gray small">
+                            <li>Brake pad replacement</li>
+                            <li>Suspension repair</li>
+                            <li>Wheel alignment</li>
+                            <li>Safety inspection</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦15,000</span>
+                            <a href="{{ url_for('services.car_service_booking_form', service_type='brake_suspension') }}" class="btn btn-danger btn-sm">Book Service</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=63" class="card-img-top" alt="AC Service">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-snowflake text-danger me-2"></i>AC & Electrical</h5>
+                        <p class="text-gray">Air conditioning and electrical system diagnostics.</p>
+                        <ul class="text-gray small">
+                            <li>AC repair & service</li>
+                            <li>Electrical diagnostics</li>
+                            <li>Battery replacement</li>
+                            <li>Alternator service</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦12,000</span>
+                            <a href="{{ url_for('services.car_service_booking_form', service_type='ac_electrical') }}" class="btn btn-danger btn-sm">Book Service</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

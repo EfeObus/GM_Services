@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Our Services - GM Services{% endblock %}
+
+{% block content %}
+<!-- Services Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                Our <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Comprehensive business solutions designed to meet all your needs across Nigeria.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Dynamic Services Display -->
+<section class="py-5">
+    <div class="container">
+        {% if services_by_category %}
+        {% for category, services in services_by_category.items() %}
+        <div class="mb-5">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="text-white mb-3">
+                        <i class="fas fa-{% if category == 'automotive' %}car{% elif category == 'loans' %}money-bill-wave{% elif category == 'hotel' %}hotel{% elif category == 'logistics' %}truck{% elif category == 'creative' %}paint-brush{% elif category == 'security' %}shield-alt{% elif category == 'legal' %}gavel{% elif category == 'real_estate' %}home{% else %}concierge-bell{% endif %} me-2"></i>
+                        {{ category.replace('_', ' ').title() }} Services
+                    </h2>
+                    <hr class="text-gold">
+                </div>
+            </div>
+            
+            <div class="row">
+                {% for service in services %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gm-card h-100 service-card">
+                        <div class="gm-card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="text-white mb-0">{{ service.name }}</h5>
+                                {% if service.is_featured %}
+                                <span class="badge bg-gold">Featured</span>
+                                {% endif %}
+                            </div>
+                            
+                            {% if service.short_description %}
+                            <p class="text-gray mb-3">{{ service.short_description }}</p>
+                            {% elif service.description %}
+                            <p class="text-gray mb-3">{{ service.description[:100] }}{% if service.description|length > 100 %}...{% endif %}</p>
+                            {% endif %}
+                            
+                            <div class="service-details mb-3">
+                                {% if service.price and service.price > 0 %}
+                                <div class="price-info mb-2">
+                                    <span class="text-success fw-bold">
+                                        ₦{{ "{:,.2f}".format(service.price) }}
+                                        {% if service.currency and service.currency != 'NGN' %}
+                                        ({{ service.currency }})
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if service.duration %}
+                                <div class="duration-info mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>{{ service.duration }}
+                                    </small>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ url_for('services.service_detail', service_id=service.id) }}" 
+                                   class="btn btn-primary btn-sm">
+                                    <i class="fas fa-info-circle me-1"></i>Learn More
+                                </a>
+                                {% if current_user.is_authenticated %}
+                                <a href="{{ url_for('services.request_service', service_id=service.id) }}" 
+                                   class="btn btn-success btn-sm">
+                                    <i class="fas fa-paper-plane me-1"></i>Request
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('auth.login') }}" 
+                                   class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Login to Request
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- No Services Available -->
+        <div class="text-center py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <i class="fas fa-tools fa-4x text-muted mb-4"></i>
+                    <h3 class="text-white mb-3">Services Coming Soon</h3>
+                    <p class="text-gray mb-4">
+                        We're working hard to bring you comprehensive business solutions. 
+                        Our services portfolio will be available shortly.
+                    </p>
+                    <a href="{{ url_for('main.contact') }}" class="btn btn-primary">
+                        <i class="fas fa-envelope me-2"></i>Contact Us for Information
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Service Categories Overview (Static Fallback) -->
+{% if not services_by_category %}
+<section class="py-5 bg-dark-secondary">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">What We Offer</h2>
+            <p class="text-gray">From automotive to hospitality, we provide end-to-end solutions for modern businesses and individuals</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100 service-card">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-car text-success"></i>
+                        </div>
+                        <h5 class="text-white">Automotive</h5>
+                        <p class="text-gray">Complete vehicle solutions</p>
+                        <a href="{{ url_for('services.automobile') }}" class="btn btn-outline-primary btn-sm">Explore</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100 service-card">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-money-bill-wave text-success"></i>
+                        </div>
+                        <h5 class="text-white">Financial Services</h5>
+                        <p class="text-gray">Loans and financial assistance</p>
+                        <a href="{{ url_for('services.loans') }}" class="btn btn-outline-primary btn-sm">Explore</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100 service-card">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-hotel text-success"></i>
+                        </div>
+                        <h5 class="text-white">Hospitality</h5>
+                        <p class="text-gray">Hotel and accommodation services</p>
+                        <a href="{{ url_for('services.hotel') }}" class="btn btn-outline-primary btn-sm">Explore</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card text-center h-100 service-card">
+                    <div class="gm-card-body">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-truck text-success"></i>
+                        </div>
+                        <h5 class="text-white">Logistics</h5>
+                        <p class="text-gray">Transportation and delivery</p>
+                        <a href="{{ url_for('services.logistics') }}" class="btn btn-outline-primary btn-sm">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="text-white mb-3">Ready to Get Started?</h2>
+                <p class="text-gray mb-4">
+                    Our team of experts is ready to help you find the perfect solution for your needs.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('main.contact') }}" class="btn btn-primary">
+                        <i class="fas fa-phone me-2"></i>Contact Us
+                    </a>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-success">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #2d3748;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: #4299e1;
+}
+
+.service-icon i {
+    font-size: 3rem;
+}
+
+.bg-dark-secondary {
+    background-color: #1a202c;
+}
+
+.text-gold {
+    color: #d69e2e;
+}
+
+.bg-gold {
+    background-color: #d69e2e;
+}
+
+.btn-outline-success:hover {
+    background-color: #38a169;
+    border-color: #38a169;
+}
+</style>
+{% endblock %}

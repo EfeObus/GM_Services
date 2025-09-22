@@ -1,0 +1,647 @@
+{% extends "base.html" %}
+
+{% block title %}Loan Application - {{ loan_type.name }} - GM Services{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h2 class="text-white mb-3">
+                    <i class="fas fa-file-alt text-success me-2"></i>
+                    {{ loan_type.name }} Application
+                </h2>
+                <p class="text-gray">Please fill out all required information accurately</p>
+                <div class="alert alert-info">
+                    <strong>Loan Details:</strong> ₦{{ "{:,.0f}".format(loan_type.min_amount) }} - ₦{{ "{:,.0f}".format(loan_type.max_amount) }} 
+                    | {{ loan_type.min_term_months }}-{{ loan_type.max_term_months }} months 
+                    | From {{ loan_type.base_interest_rate }}% p.a.
+                </div>
+            </div>
+
+            <!-- Loan Policy Agreement -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3"><i class="fas fa-shield-alt text-success me-2"></i>Loan Policy & Agreement</h5>
+                    
+                    <!-- Policy Tabs -->
+                    <ul class="nav nav-tabs mb-3" id="policyTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="terms-tab" data-bs-toggle="tab" data-bs-target="#terms" type="button">
+                                Terms & Conditions
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="privacy-tab" data-bs-toggle="tab" data-bs-target="#privacy" type="button">
+                                Privacy Policy
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content" id="policyTabContent">
+                        <div class="tab-pane fade show active" id="terms" role="tabpanel">
+                            <div class="policy-content bg-dark p-3 rounded" style="height: 300px; overflow-y: auto;">
+                                <div class="text-center mb-3">
+                                    <a href="{{ url_for('services.loan_terms') }}" target="_blank" class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-external-link-alt me-1"></i>View Full Terms & Conditions
+                                    </a>
+                                </div>
+                                <div class="text-gray small">
+                                    <h6 class="text-warning">Summary of Key Terms:</h6>
+                                    <ul>
+                                        <li><strong>Interest Rates:</strong> Personal (24%), Business (18%), Auto (15%) per annum using reducing balance method</li>
+                                        <li><strong>Processing Fee:</strong> 1% of loan amount (min ₦5,000, max ₦50,000)</li>
+                                        <li><strong>Late Payment:</strong> 5% of overdue amount after 5-day grace period</li>
+                                        <li><strong>Early Repayment:</strong> Allowed without penalty with 30-day notice</li>
+                                        <li><strong>Default:</strong> 90+ days overdue results in loan acceleration and credit bureau reporting</li>
+                                        <li><strong>Collateral:</strong> Required for loans above ₦1,000,000 (Personal) and all Business loans</li>
+                                        <li><strong>Governing Law:</strong> Federal Republic of Nigeria</li>
+                                        <li><strong>Dispute Resolution:</strong> Mediation, arbitration, or Nigerian courts</li>
+                                    </ul>
+                                    <p class="mt-3"><strong>Important:</strong> By applying, you agree to credit checks, income verification, and data sharing with credit bureaus as required by law.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="privacy" role="tabpanel">
+                            <div class="policy-content bg-dark p-3 rounded" style="height: 300px; overflow-y: auto;">
+                                <div class="text-center mb-3">
+                                    <a href="{{ url_for('services.loan_privacy') }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-external-link-alt me-1"></i>View Full Privacy Policy
+                                    </a>
+                                </div>
+                                <div class="text-gray small">
+                                    <h6 class="text-warning">Privacy & Data Protection Summary:</h6>
+                                    <ul>
+                                        <li><strong>NDPR Compliance:</strong> Full compliance with Nigeria Data Protection Regulation 2019</li>
+                                        <li><strong>Data Collection:</strong> Personal, financial, employment, and biometric data for loan processing</li>
+                                        <li><strong>Data Usage:</strong> Loan assessment, risk management, KYC/AML compliance, service delivery</li>
+                                        <li><strong>Data Sharing:</strong> Credit bureaus, regulatory authorities, authorized service providers only</li>
+                                        <li><strong>Data Security:</strong> 256-bit encryption, multi-factor authentication, secure Nigerian hosting</li>
+                                        <li><strong>Your Rights:</strong> Access, rectification, erasure, portability, objection, restriction</li>
+                                        <li><strong>Retention:</strong> 7 years for loan records, 5 years for KYC, as required by CBN</li>
+                                        <li><strong>Data Residency:</strong> Primary storage in Nigeria with limited international transfers</li>
+                                    </ul>
+                                    <p class="mt-3"><strong>Contact DPO:</strong> dpo@gmservices.com for data protection requests and concerns.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Form -->
+            <form id="loanApplicationForm" method="POST" enctype="multipart/form-data" action="{{ url_for('services.apply_loan', loan_type_id=loan_type.id) }}">
+                {{ form.hidden_tag() }}
+                
+                <!-- Step 1: Basic Information -->
+                <div class="gm-card mb-4" id="step1">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-success me-2">1</span>Basic Information
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.requested_amount.label(class="form-label text-white") }}
+                                {{ form.requested_amount(class="form-control", placeholder="Enter amount between ₦{:,.0f} - ₦{:,.0f}".format(loan_type.min_amount, loan_type.max_amount)) }}
+                                {% if form.requested_amount.errors %}
+                                    <div class="text-danger small">{{ form.requested_amount.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.term_months.label(class="form-label text-white") }}
+                                {{ form.term_months(class="form-control") }}
+                                {% if form.term_months.errors %}
+                                    <div class="text-danger small">{{ form.term_months.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.purpose.label(class="form-label text-white") }}
+                                {{ form.purpose(class="form-control") }}
+                                {% if form.purpose.errors %}
+                                    <div class="text-danger small">{{ form.purpose.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.phone_number.label(class="form-label text-white") }}
+                                {{ form.phone_number(class="form-control", placeholder="+234XXXXXXXXXX") }}
+                                {% if form.phone_number.errors %}
+                                    <div class="text-danger small">{{ form.phone_number.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.purpose_description.label(class="form-label text-white") }}
+                            {{ form.purpose_description(class="form-control", rows="3") }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Personal Information -->
+                <div class="gm-card mb-4" id="step2">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-success me-2">2</span>Personal Information
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.residential_address.label(class="form-label text-white") }}
+                                {{ form.residential_address(class="form-control", rows="3") }}
+                                {% if form.residential_address.errors %}
+                                    <div class="text-danger small">{{ form.residential_address.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    {{ form.state_of_origin.label(class="form-label text-white") }}
+                                    {{ form.state_of_origin(class="form-control") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.lga.label(class="form-label text-white") }}
+                                    {{ form.lga(class="form-control") }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ form.next_of_kin_name.label(class="form-label text-white") }}
+                                {{ form.next_of_kin_name(class="form-control") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.next_of_kin_phone.label(class="form-label text-white") }}
+                                {{ form.next_of_kin_phone(class="form-control") }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.next_of_kin_relationship.label(class="form-label text-white") }}
+                                {{ form.next_of_kin_relationship(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Bank Information -->
+                <div class="gm-card mb-4" id="step3">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-success me-2">3</span>Bank Information
+                            <small class="text-gray">(Required for loan disbursement)</small>
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.bank_name.label(class="form-label text-white") }}
+                                {{ form.bank_name(class="form-control") }}
+                                {% if form.bank_name.errors %}
+                                    <div class="text-danger small">{{ form.bank_name.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.account_number.label(class="form-label text-white") }}
+                                {{ form.account_number(class="form-control", placeholder="10-digit account number") }}
+                                {% if form.account_number.errors %}
+                                    <div class="text-danger small">{{ form.account_number.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.account_name.label(class="form-label text-white") }}
+                                {{ form.account_name(class="form-control") }}
+                                {% if form.account_name.errors %}
+                                    <div class="text-danger small">{{ form.account_name.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.bvn.label(class="form-label text-white") }}
+                                {{ form.bvn(class="form-control", placeholder="11-digit BVN") }}
+                                {% if form.bvn.errors %}
+                                    <div class="text-danger small">{{ form.bvn.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Employment Information -->
+                <div class="gm-card mb-4" id="step4">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-success me-2">4</span>Employment/Business Information
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.employment_type.label(class="form-label text-white") }}
+                                {{ form.employment_type(class="form-control", id="employmentType") }}
+                                {% if form.employment_type.errors %}
+                                    <div class="text-danger small">{{ form.employment_type.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.monthly_income.label(class="form-label text-white") }}
+                                {{ form.monthly_income(class="form-control", placeholder="Enter monthly income in NGN") }}
+                                {% if form.monthly_income.errors %}
+                                    <div class="text-danger small">{{ form.monthly_income.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Employment Details (shown for employed/self-employed) -->
+                        <div id="employmentDetails">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.employer_name.label(class="form-label text-white") }}
+                                    {{ form.employer_name(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.job_title.label(class="form-label text-white") }}
+                                    {{ form.job_title(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.employment_duration_months.label(class="form-label text-white") }}
+                                    {{ form.employment_duration_months(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.employer_phone.label(class="form-label text-white") }}
+                                    {{ form.employer_phone(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.employer_address.label(class="form-label text-white") }}
+                                {{ form.employer_address(class="form-control", rows="2") }}
+                            </div>
+                        </div>
+                        
+                        <!-- Business Details (shown for business owners) -->
+                        <div id="businessDetails" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.business_name.label(class="form-label text-white") }}
+                                    {{ form.business_name(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.business_type.label(class="form-label text-white") }}
+                                    {{ form.business_type(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.business_registration_number.label(class="form-label text-white") }}
+                                    {{ form.business_registration_number(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.years_in_business.label(class="form-label text-white") }}
+                                    {{ form.years_in_business(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.average_monthly_revenue.label(class="form-label text-white") }}
+                                    {{ form.average_monthly_revenue(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.business_address.label(class="form-label text-white") }}
+                                {{ form.business_address(class="form-control", rows="2") }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.other_income.label(class="form-label text-white") }}
+                                {{ form.other_income(class="form-control", placeholder="Enter additional income (optional)") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.other_income_source.label(class="form-label text-white") }}
+                                {{ form.other_income_source(class="form-control", placeholder="e.g., Rental income, Investments") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Financial Information -->
+                <div class="gm-card mb-4" id="step5">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-success me-2">5</span>Financial Information
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.monthly_expenses.label(class="form-label text-white") }}
+                                {{ form.monthly_expenses(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.credit_score.label(class="form-label text-white") }}
+                                {{ form.credit_score(class="form-control", placeholder="If known (300-850)") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Collateral Information (for loans over 1M) -->
+                <div class="gm-card mb-4" id="collateralSection" style="display: none;">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-warning me-2">6</span>Collateral Information
+                            <small class="text-gray">(Required for loans over ₦1,000,000)</small>
+                        </h5>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Since your loan amount exceeds ₦1,000,000, collateral documentation is required.
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.collateral_type.label(class="form-label text-white") }}
+                                {{ form.collateral_type(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.collateral_value.label(class="form-label text-white") }}
+                                {{ form.collateral_value(class="form-control") }}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.collateral_location.label(class="form-label text-white") }}
+                                {{ form.collateral_location(class="form-control") }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.collateral_description.label(class="form-label text-white") }}
+                            {{ form.collateral_description(class="form-control", rows="3") }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 7: Document Upload -->
+                <div class="gm-card mb-4" id="step7">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-success me-2">7</span>Document Upload
+                            <small class="text-gray">(PDF format only, max 5MB each)</small>
+                        </h5>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-upload me-2"></i>
+                            Please upload clear, legible documents in PDF format. All documents are required for loan processing.
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.identity_document.label(class="form-label text-white") }}
+                                {{ form.identity_document(class="form-control", accept=".pdf") }}
+                                <small class="text-gray">National ID, Passport, or Driver's License</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.income_proof.label(class="form-label text-white") }}
+                                {{ form.income_proof(class="form-control", accept=".pdf") }}
+                                <small class="text-gray">Recent salary slip or income statement</small>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.bank_statement.label(class="form-label text-white") }}
+                                {{ form.bank_statement(class="form-control", accept=".pdf") }}
+                                <small class="text-gray">Last 6 months bank statement</small>
+                            </div>
+                            
+                            <!-- Employment Letter (for auto loans or employed applicants) -->
+                            <div class="col-md-6 mb-3" id="employmentLetterSection">
+                                {{ form.employment_letter.label(class="form-label text-white") }}
+                                {{ form.employment_letter(class="form-control", accept=".pdf") }}
+                                <small class="text-gray">Employment verification letter</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Business Documents (for business loans) -->
+                        <div id="businessDocumentsSection" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white">Business Registration (CAC)</label>
+                                    <input type="file" name="business_documents[]" class="form-control" accept=".pdf">
+                                    <small class="text-gray">Certificate of Incorporation/Business Registration</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white">Tax Certificate</label>
+                                    <input type="file" name="business_documents[]" class="form-control" accept=".pdf">
+                                    <small class="text-gray">Tax Identification Number certificate</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Collateral Documents (for loans over 1M) -->
+                        <div id="collateralDocumentsSection" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white">Property Documents</label>
+                                    <input type="file" name="collateral_documents[]" class="form-control" accept=".pdf">
+                                    <small class="text-gray">Property title, survey plan, etc.</small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white">Property Valuation</label>
+                                    <input type="file" name="collateral_documents[]" class="form-control" accept=".pdf">
+                                    <small class="text-gray">Recent property valuation report</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 8: Agreement and Submission -->
+                <div class="gm-card mb-4" id="step8">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-4">
+                            <span class="badge bg-success me-2">8</span>Agreement & Submission
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.policy_agreed(class="form-check-input") }}
+                                <label class="form-check-label text-white" for="{{ form.policy_agreed.id }}">
+                                    I have read and agree to the 
+                                    <a href="{{ url_for('services.loan_policy') }}" target="_blank" class="text-success">
+                                        Loan Policy and Agreement
+                                    </a>
+                                </label>
+                                {% if form.policy_agreed.errors %}
+                                    <div class="text-danger small">{{ form.policy_agreed.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.terms_agreed(class="form-check-input") }}
+                                <label class="form-check-label text-white" for="{{ form.terms_agreed.id }}">
+                                    I have read, understood, and agree to the 
+                                    <a href="{{ url_for('services.loan_terms') }}" target="_blank" class="text-success">
+                                        <i class="fas fa-external-link-alt me-1"></i>Terms and Conditions
+                                    </a>
+                                    governing this loan facility
+                                </label>
+                                {% if form.terms_agreed.errors %}
+                                    <div class="text-danger small">{{ form.terms_agreed.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="form-check">
+                                {{ form.data_processing_agreed(class="form-check-input") }}
+                                <label class="form-check-label text-white" for="{{ form.data_processing_agreed.id }}">
+                                    I consent to the collection, processing, and sharing of my personal data as outlined in the 
+                                    <a href="{{ url_for('services.loan_privacy') }}" target="_blank" class="text-primary">
+                                        <i class="fas fa-external-link-alt me-1"></i>Privacy Policy
+                                    </a>
+                                    and in compliance with Nigerian data protection laws
+                                </label>
+                                {% if form.data_processing_agreed.errors %}
+                                    <div class="text-danger small">{{ form.data_processing_agreed.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg px-5">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Loan Application
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Calculate Monthly Payment -->
+<div class="position-fixed bottom-0 end-0 p-3">
+    <div class="toast show" id="loanCalculator">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto">Loan Calculator</strong>
+        </div>
+        <div class="toast-body bg-dark text-white">
+            <div class="small">
+                <strong>Amount:</strong> <span id="calcAmount">₦0</span><br>
+                <strong>Term:</strong> <span id="calcTerm">0 months</span><br>
+                <strong>Rate:</strong> <span id="calcRate">{{ loan_type.base_interest_rate }}%</span><br>
+                <strong>Monthly Payment:</strong> <span id="calcPayment" class="text-success">₦0</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Show/hide sections based on form inputs
+    $('#employmentType').change(function() {
+        const empType = $(this).val();
+        if (empType === 'business-owner' || empType === 'self-employed') {
+            $('#businessDetails').show();
+            $('#employmentDetails').hide();
+            $('#businessDocumentsSection').show();
+        } else {
+            $('#businessDetails').hide();
+            $('#employmentDetails').show();
+            $('#businessDocumentsSection').hide();
+        }
+    });
+    
+    // Show collateral section for loans over 1M
+    $('#id_requested_amount').on('input', function() {
+        const amount = parseFloat($(this).val()) || 0;
+        if (amount > 1000000) {
+            $('#collateralSection').show();
+            $('#collateralDocumentsSection').show();
+        } else {
+            $('#collateralSection').hide();
+            $('#collateralDocumentsSection').hide();
+        }
+        updateCalculator();
+    });
+    
+    $('#id_term_months').on('input', updateCalculator);
+    
+    function updateCalculator() {
+        const amount = parseFloat($('#id_requested_amount').val()) || 0;
+        const term = parseInt($('#id_term_months').val()) || 0;
+        const rate = {{ loan_type.base_interest_rate }};
+        
+        $('#calcAmount').text('₦' + amount.toLocaleString());
+        $('#calcTerm').text(term + ' months');
+        
+        if (amount > 0 && term > 0) {
+            const monthlyRate = rate / 100 / 12;
+            const monthlyPayment = monthlyRate === 0 
+                ? amount / term 
+                : amount * (monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+            
+            $('#calcPayment').text('₦' + Math.round(monthlyPayment).toLocaleString());
+        }
+    }
+    
+    // Auto loan specific requirements
+    {% if loan_type.name == 'Auto Loan' %}
+    $('#employmentLetterSection').show();
+    {% endif %}
+    
+    // File upload validation
+    $('input[type="file"]').change(function() {
+        const file = this.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) { // 5MB
+                alert('File size must be less than 5MB');
+                $(this).val('');
+                return;
+            }
+            
+            if (file.type !== 'application/pdf') {
+                alert('Only PDF files are allowed');
+                $(this).val('');
+                return;
+            }
+        }
+    });
+    
+    // Form validation before submit
+    $('#loanApplicationForm').submit(function(e) {
+        const requiredChecks = ['#id_policy_agreed', '#id_terms_agreed', '#id_data_processing_agreed'];
+        let allChecked = true;
+        
+        requiredChecks.forEach(function(checkId) {
+            if (!$(checkId).is(':checked')) {
+                allChecked = false;
+            }
+        });
+        
+        if (!allChecked) {
+            e.preventDefault();
+            alert('Please accept all terms and policies before submitting your application.');
+            return false;
+        }
+        
+        // Show loading state
+        $(this).find('button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Submitting...');
+    });
+});
+</script>
+{% endblock %}

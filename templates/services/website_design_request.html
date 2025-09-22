@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Website Design Request - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-globe text-danger me-3"></i>Website Design Request
+            </h1>
+            <p class="lead text-gray mb-4">Professional website design and development services.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Tell us about your website project</h3>
+                        
+                        <form method="POST" novalidate>
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Website Basic Information -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.website_name.label(class="form-label text-gray") }}
+                                    {{ form.website_name(class="form-control") }}
+                                    {% if form.website_name.errors %}
+                                        <div class="text-danger small">{{ form.website_name.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.website_type.label(class="form-label text-gray") }}
+                                    {{ form.website_type(class="form-select") }}
+                                    {% if form.website_type.errors %}
+                                        <div class="text-danger small">{{ form.website_type.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.website_description.label(class="form-label text-gray") }}
+                                {{ form.website_description(class="form-control") }}
+                                {% if form.website_description.errors %}
+                                    <div class="text-danger small">{{ form.website_description.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Domain and Existing Website -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.domain_name.label(class="form-label text-gray") }}
+                                    {{ form.domain_name(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.existing_website.label(class="form-label text-gray") }}
+                                    {{ form.existing_website(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <!-- Website Features -->
+                            <div class="mb-3">
+                                {{ form.website_features.label(class="form-label text-gray") }}
+                                <div class="row">
+                                    {% for choice in form.website_features %}
+                                        <div class="col-md-6 col-lg-4 mb-2">
+                                            <div class="form-check">
+                                                {{ choice(class="form-check-input") }}
+                                                {{ choice.label(class="form-check-label text-gray") }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- E-commerce Specific (Show only for e-commerce type) -->
+                            <div id="ecommerce-section" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.ecommerce_products.label(class="form-label text-gray") }}
+                                        {{ form.ecommerce_products(class="form-control", type="number") }}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    {{ form.payment_methods.label(class="form-label text-gray") }}
+                                    <div class="row">
+                                        {% for choice in form.payment_methods %}
+                                            <div class="col-md-6 col-lg-4 mb-2">
+                                                <div class="form-check">
+                                                    {{ choice(class="form-check-input") }}
+                                                    {{ choice.label(class="form-check-label text-gray") }}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Content and Pages -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.page_count.label(class="form-label text-gray") }}
+                                    {{ form.page_count(class="form-select") }}
+                                    {% if form.page_count.errors %}
+                                        <div class="text-danger small">{{ form.page_count.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.content_ready.label(class="form-label text-gray") }}
+                                    {{ form.content_ready(class="form-select") }}
+                                    {% if form.content_ready.errors %}
+                                        <div class="text-danger small">{{ form.content_ready.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Design Preferences -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.color_scheme.label(class="form-label text-gray") }}
+                                    {{ form.color_scheme(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.design_inspiration.label(class="form-label text-gray") }}
+                                {{ form.design_inspiration(class="form-control") }}
+                            </div>
+                            
+                            <!-- Technical Requirements -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ form.mobile_responsive(class="form-check-input") }}
+                                        {{ form.mobile_responsive.label(class="form-check-label text-gray") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ form.seo_optimization(class="form-check-input") }}
+                                        {{ form.seo_optimization.label(class="form-check-label text-gray") }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Timeline and Budget -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.launch_date.label(class="form-label text-gray") }}
+                                    {{ form.launch_date(class="form-control") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.budget_range.label(class="form-label text-gray") }}
+                                    {{ form.budget_range(class="form-select") }}
+                                    {% if form.budget_range.errors %}
+                                        <div class="text-danger small">{{ form.budget_range.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Maintenance and Support -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.maintenance_needed.label(class="form-label text-gray") }}
+                                    {{ form.maintenance_needed(class="form-select") }}
+                                    {% if form.maintenance_needed.errors %}
+                                        <div class="text-danger small">{{ form.maintenance_needed.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Additional Services -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ form.hosting_help(class="form-check-input") }}
+                                        {{ form.hosting_help.label(class="form-check-label text-gray") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ form.training_needed(class="form-check-input") }}
+                                        {{ form.training_needed.label(class="form-check-label text-gray") }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Communication -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.preferred_contact.label(class="form-label text-gray") }}
+                                    {{ form.preferred_contact(class="form-select") }}
+                                </div>
+                            </div>
+                            
+                            <!-- Additional Notes -->
+                            <div class="mb-4">
+                                {{ form.additional_notes.label(class="form-label text-gray") }}
+                                {{ form.additional_notes(class="form-control") }}
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('services.web_design') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-danger">Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const websiteTypeSelect = document.getElementById('website_type');
+    const ecommerceSection = document.getElementById('ecommerce-section');
+    
+    function toggleEcommerceSection() {
+        if (websiteTypeSelect.value === 'ecommerce') {
+            ecommerceSection.style.display = 'block';
+        } else {
+            ecommerceSection.style.display = 'none';
+        }
+    }
+    
+    // Initial check
+    toggleEcommerceSection();
+    
+    // Listen for changes
+    websiteTypeSelect.addEventListener('change', toggleEcommerceSection);
+});
+</script>
+{% endblock %}

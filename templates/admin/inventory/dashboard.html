@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory Management - GM Services Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white">Inventory Management</h1>
+            <p class="text-gray mb-0">Monitor stock levels and manage inventory across all locations</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.inventory_reports') }}" class="btn btn-outline-light me-2">
+                <i class="fas fa-chart-bar"></i> Reports
+            </a>
+            <a href="{{ url_for('admin.inventory_locations') }}" class="btn btn-primary">
+                <i class="fas fa-warehouse"></i> Manage Locations
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Total Locations</h6>
+                            <h3 class="text-white mb-0">{{ total_locations }}</h3>
+                        </div>
+                        <div class="text-primary">
+                            <i class="fas fa-warehouse fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Total Items</h6>
+                            <h3 class="text-white mb-0">{{ total_items }}</h3>
+                        </div>
+                        <div class="text-success">
+                            <i class="fas fa-boxes fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Low Stock Items</h6>
+                            <h3 class="text-warning mb-0">{{ low_stock_count }}</h3>
+                        </div>
+                        <div class="text-warning">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Out of Stock</h6>
+                            <h3 class="text-danger mb-0">{{ out_of_stock_count }}</h3>
+                        </div>
+                        <div class="text-danger">
+                            <i class="fas fa-times-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Quick Actions -->
+        <div class="col-md-6 mb-4">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h5>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('admin.inventory_items', stock_status='low_stock') }}" 
+                           class="btn btn-outline-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>View Low Stock Items
+                        </a>
+                        <a href="{{ url_for('admin.low_stock_alerts') }}" 
+                           class="btn btn-outline-danger">
+                            <i class="fas fa-bell me-2"></i>Manage Alerts ({{ recent_alerts|length }})
+                        </a>
+                        <a href="{{ url_for('admin.inventory_items') }}" 
+                           class="btn btn-outline-primary">
+                            <i class="fas fa-search me-2"></i>Browse All Items
+                        </a>
+                        <a href="{{ url_for('admin.staff_assignments') }}" 
+                           class="btn btn-outline-info">
+                            <i class="fas fa-users me-2"></i>Staff Assignments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Low Stock Alerts -->
+        <div class="col-md-6 mb-4">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-white mb-0">
+                            <i class="fas fa-bell me-2"></i>Recent Alerts
+                        </h5>
+                        <a href="{{ url_for('admin.low_stock_alerts') }}" class="btn btn-sm btn-outline-light">
+                            View All
+                        </a>
+                    </div>
+                    
+                    {% if recent_alerts %}
+                        {% for alert in recent_alerts %}
+                        <div class="alert alert-{{ 'danger' if alert.alert_level == 'critical' else 'warning' }} alert-dismissible fade show mb-2">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>{{ alert.inventory_item.get_item_name() }}</strong><br>
+                                    <small>{{ alert.inventory_item.location.name }} - Stock: {{ alert.current_stock }}</small>
+                                </div>
+                                <span class="badge bg-{{ 'danger' if alert.alert_level == 'critical' else 'warning' }}">
+                                    {{ alert.alert_level.title() }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-gray py-3">
+                            <i class="fas fa-check-circle fa-2x mb-2"></i>
+                            <p>No recent alerts. All inventory levels are good!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Stock Movements -->
+    <div class="row">
+        <div class="col-12">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-exchange-alt me-2"></i>Recent Stock Movements
+                    </h5>
+                    
+                    {% if recent_movements %}
+                        <div class="table-responsive">
+                            <table class="table table-dark table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Item</th>
+                                        <th>Location</th>
+                                        <th>Type</th>
+                                        <th>Quantity</th>
+                                        <th>User</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for movement in recent_movements %}
+                                    <tr>
+                                        <td>{{ movement.movement_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>{{ movement.inventory_item.get_item_name() }}</td>
+                                        <td>{{ movement.location.name }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ 'success' if movement.quantity > 0 else 'danger' }}">
+                                                {{ movement.movement_type.title() }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-{{ 'success' if movement.quantity > 0 else 'danger' }}">
+                                                {{ '+' if movement.quantity > 0 else '' }}{{ movement.quantity }}
+                                            </span>
+                                        </td>
+                                        <td>{{ movement.user.full_name }}</td>
+                                        <td>{{ movement.notes[:50] }}{{ '...' if movement.notes|length > 50 else '' }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center text-gray py-3">
+                            <i class="fas fa-history fa-2x mb-2"></i>
+                            <p>No recent stock movements to display.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Overview -->
+    {% if locations %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-map-marker-alt me-2"></i>Location Overview
+                    </h5>
+                    <div class="row">
+                        {% for location in locations %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card bg-secondary">
+                                <div class="card-body">
+                                    <h6 class="text-white">{{ location.name }}</h6>
+                                    <p class="text-gray small mb-2">{{ location.city }}, {{ location.state }}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <small class="text-gray">Manager:</small>
+                                        <small class="text-white">
+                                            {{ location.manager.full_name if location.manager else 'Not assigned' }}
+                                        </small>
+                                    </div>
+                                    <div class="mt-2">
+                                        <a href="{{ url_for('admin.location_detail', location_id=location.id) }}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto-refresh alerts every 30 seconds
+    setInterval(function() {
+        // You can add AJAX call here to refresh alert counts
+        console.log('Checking for new alerts...');
+    }, 30000);
+</script>
+{% endblock %}

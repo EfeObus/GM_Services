@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Jewelry Consultation - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-palette text-warning me-3"></i>Jewelry <span class="text-gold">Consultation</span>
+            </h1>
+            <p class="lead text-gray mb-4">Schedule a consultation with our jewelry experts for custom designs and professional services.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Request a Jewelry Consultation</h3>
+                        
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Personal Information -->
+                            <div class="row mb-4">
+                                <div class="col-12 mb-3">
+                                    <h5 class="text-warning mb-3">Personal Information</h5>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.full_name.label(class="form-label text-white") }}
+                                    {{ form.full_name(class="form-control") }}
+                                    {% if form.full_name.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.full_name.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.email.label(class="form-label text-white") }}
+                                    {{ form.email(class="form-control") }}
+                                    {% if form.email.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.email.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.phone.label(class="form-label text-white") }}
+                                    {{ form.phone(class="form-control") }}
+                                    {% if form.phone.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.phone.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Consultation Details -->
+                            <div class="row mb-4">
+                                <div class="col-12 mb-3">
+                                    <h5 class="text-warning mb-3">Consultation Details</h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.consultation_type.label(class="form-label text-white") }}
+                                    {{ form.consultation_type(class="form-select") }}
+                                    {% if form.consultation_type.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.consultation_type.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.jewelry_type.label(class="form-label text-white") }}
+                                    {{ form.jewelry_type(class="form-select") }}
+                                    {% if form.jewelry_type.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {% for error in form.jewelry_type.errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.preferred_metal.label(class="form-label text-white") }}
+                                    {{ form.preferred_metal(class="form-select") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.preferred_gemstone.label(class="form-label text-white") }}
+                                    {{ form.preferred_gemstone(class="form-select") }}
+                                </div>
+                            </div>
+                            
+                            <!-- Budget and Occasion -->
+                            <div class="row mb-4">
+                                <div class="col-md-4 mb-3">
+                                    {{ form.budget_range.label(class="form-label text-white") }}
+                                    {{ form.budget_range(class="form-select") }}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.occasion.label(class="form-label text-white") }}
+                                    {{ form.occasion(class="form-select") }}
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    {{ form.design_style.label(class="form-label text-white") }}
+                                    {{ form.design_style(class="form-select") }}
+                                </div>
+                            </div>
+                            
+                            <!-- Description -->
+                            <div class="mb-4">
+                                {{ form.description.label(class="form-label text-white") }}
+                                {{ form.description(class="form-control", rows="5") }}
+                                {% if form.description.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.description.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Timeline and Engraving -->
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.timeline.label(class="form-label text-white") }}
+                                    {{ form.timeline(class="form-select") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label text-white">Engraving Options</label>
+                                    <div class="form-check">
+                                        {{ form.engraving_required(class="form-check-input") }}
+                                        {{ form.engraving_required.label(class="form-check-label text-gray") }}
+                                    </div>
+                                    <div class="mt-2">
+                                        {{ form.engraving_text(class="form-control", placeholder="Enter engraving text") }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Size Information -->
+                            <div class="row mb-4">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        {{ form.size_known(class="form-check-input") }}
+                                        {{ form.size_known.label(class="form-check-label text-gray") }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.ring_size.label(class="form-label text-white") }}
+                                    {{ form.ring_size(class="form-control") }}
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Preferences -->
+                            <div class="row mb-4">
+                                <div class="col-12 mb-3">
+                                    <h5 class="text-warning mb-3">Contact Preferences</h5>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.preferred_contact_method.label(class="form-label text-white") }}
+                                    {{ form.preferred_contact_method(class="form-select") }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.preferred_time.label(class="form-label text-white") }}
+                                    {{ form.preferred_time(class="form-select") }}
+                                </div>
+                            </div>
+                            
+                            <!-- File Upload -->
+                            <div class="mb-4">
+                                {{ form.reference_images.label(class="form-label text-white") }}
+                                {{ form.reference_images(class="form-control") }}
+                                <div class="form-text text-gray">Upload reference images to help us understand your vision (optional)</div>
+                                {% if form.reference_images.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.reference_images.errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Additional Notes -->
+                            <div class="mb-4">
+                                {{ form.additional_notes.label(class="form-label text-white") }}
+                                {{ form.additional_notes(class="form-control", rows="3") }}
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-calendar-check me-2"></i>Request Consultation
+                                </button>
+                                <a href="{{ url_for('services.jewelry') }}" class="btn btn-outline-secondary btn-lg ms-3">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Jewelry
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Information Section -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                    <h5 class="text-white">Response Time</h5>
+                    <p class="text-gray">We respond to all consultation requests within 24-48 hours.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-users fa-3x text-warning mb-3"></i>
+                    <h5 class="text-white">Expert Team</h5>
+                    <p class="text-gray">Our certified jewelry designers have over 15 years of experience.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
+                    <h5 class="text-white">Secure Process</h5>
+                    <p class="text-gray">All consultations are confidential and your designs are protected.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

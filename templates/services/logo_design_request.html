@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}Logo Design Request - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-star text-danger me-3"></i>Logo Design Request
+            </h1>
+            <p class="lead text-gray mb-4">Create a memorable logo that represents your brand perfectly.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Tell us about your logo project</h3>
+                        
+                        <form method="POST" enctype="multipart/form-data" novalidate>
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Project Basic Information -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.project_title.label(class="form-label text-gray") }}
+                                    {{ form.project_title(class="form-control") }}
+                                    {% if form.project_title.errors %}
+                                        <div class="text-danger small">{{ form.project_title.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.logo_type.label(class="form-label text-gray") }}
+                                    {{ form.logo_type(class="form-select") }}
+                                    {% if form.logo_type.errors %}
+                                        <div class="text-danger small">{{ form.logo_type.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.project_description.label(class="form-label text-gray") }}
+                                {{ form.project_description(class="form-control") }}
+                                {% if form.project_description.errors %}
+                                    <div class="text-danger small">{{ form.project_description.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Company Information -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.company_name.label(class="form-label text-gray") }}
+                                    {{ form.company_name(class="form-control") }}
+                                    {% if form.company_name.errors %}
+                                        <div class="text-danger small">{{ form.company_name.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.industry.label(class="form-label text-gray") }}
+                                    {{ form.industry(class="form-control") }}
+                                    {% if form.industry.errors %}
+                                        <div class="text-danger small">{{ form.industry.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.company_description.label(class="form-label text-gray") }}
+                                {{ form.company_description(class="form-control") }}
+                                {% if form.company_description.errors %}
+                                    <div class="text-danger small">{{ form.company_description.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Logo Usage -->
+                            <div class="mb-3">
+                                {{ form.logo_usage.label(class="form-label text-gray") }}
+                                <div class="row">
+                                    {% for choice in form.logo_usage %}
+                                        <div class="col-md-6 col-lg-4 mb-2">
+                                            <div class="form-check">
+                                                {{ choice(class="form-check-input") }}
+                                                {{ choice.label(class="form-check-label text-gray") }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {% if form.logo_usage.errors %}
+                                    <div class="text-danger small">{{ form.logo_usage.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Design Preferences -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.preferred_colors.label(class="form-label text-gray") }}
+                                    {{ form.preferred_colors(class="form-control") }}
+                                    {% if form.preferred_colors.errors %}
+                                        <div class="text-danger small">{{ form.preferred_colors.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.competitors.label(class="form-label text-gray") }}
+                                    {{ form.competitors(class="form-control") }}
+                                    {% if form.competitors.errors %}
+                                        <div class="text-danger small">{{ form.competitors.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Design Style -->
+                            <div class="mb-3">
+                                {{ form.design_style.label(class="form-label text-gray") }}
+                                <div class="row">
+                                    {% for choice in form.design_style %}
+                                        <div class="col-md-6 col-lg-4 mb-2">
+                                            <div class="form-check">
+                                                {{ choice(class="form-check-input") }}
+                                                {{ choice.label(class="form-check-label text-gray") }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- File Formats -->
+                            <div class="mb-3">
+                                {{ form.file_formats.label(class="form-label text-gray") }}
+                                <div class="row">
+                                    {% for choice in form.file_formats %}
+                                        <div class="col-md-6 col-lg-4 mb-2">
+                                            <div class="form-check">
+                                                {{ choice(class="form-check-input") }}
+                                                {{ choice.label(class="form-check-label text-gray") }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Target Audience -->
+                            <div class="mb-3">
+                                {{ form.target_audience.label(class="form-label text-gray") }}
+                                {{ form.target_audience(class="form-control") }}
+                                {% if form.target_audience.errors %}
+                                    <div class="text-danger small">{{ form.target_audience.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Timeline and Budget -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.requested_completion_date.label(class="form-label text-gray") }}
+                                    {{ form.requested_completion_date(class="form-control") }}
+                                    {% if form.requested_completion_date.errors %}
+                                        <div class="text-danger small">{{ form.requested_completion_date.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.budget_range.label(class="form-label text-gray") }}
+                                    {{ form.budget_range(class="form-select") }}
+                                    {% if form.budget_range.errors %}
+                                        <div class="text-danger small">{{ form.budget_range.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Rush Job -->
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    {{ form.is_rush_job(class="form-check-input") }}
+                                    {{ form.is_rush_job.label(class="form-check-label text-gray") }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3" id="rush-reason" style="display: none;">
+                                {{ form.rush_reason.label(class="form-label text-gray") }}
+                                {{ form.rush_reason(class="form-control") }}
+                            </div>
+                            
+                            <!-- Brand Guidelines -->
+                            <div class="mb-3">
+                                {{ form.brand_guidelines.label(class="form-label text-gray") }}
+                                {{ form.brand_guidelines(class="form-control") }}
+                            </div>
+                            
+                            <!-- Reference Materials -->
+                            <div class="mb-3">
+                                {{ form.reference_notes.label(class="form-label text-gray") }}
+                                {{ form.reference_notes(class="form-control") }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.reference_files.label(class="form-label text-gray") }}
+                                {{ form.reference_files(class="form-control", multiple=True) }}
+                                <div class="form-text text-gray">Upload reference images, competitor logos, or inspiration files (optional)</div>
+                            </div>
+                            
+                            <!-- Communication -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.preferred_contact.label(class="form-label text-gray") }}
+                                    {{ form.preferred_contact(class="form-select") }}
+                                </div>
+                            </div>
+                            
+                            <!-- Additional Notes -->
+                            <div class="mb-4">
+                                {{ form.additional_notes.label(class="form-label text-gray") }}
+                                {{ form.additional_notes(class="form-control") }}
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('services.graphic_design') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-danger">Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rushJobCheckbox = document.getElementById('is_rush_job');
+    const rushReasonDiv = document.getElementById('rush-reason');
+    
+    rushJobCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            rushReasonDiv.style.display = 'block';
+        } else {
+            rushReasonDiv.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}

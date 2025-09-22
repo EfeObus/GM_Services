@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Service Requests - GM Services Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white">
+                <i class="fas fa-hands-helping me-2"></i>Service Requests
+            </h1>
+            <p class="text-gray mb-0">Manage customer service requests and inquiries</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="gm-card mb-4">
+        <div class="gm-card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label text-white">Status</label>
+                    <select name="status" class="form-select bg-light text-dark border-secondary">
+                        <option value="all" {{ 'selected' if current_status == 'all' }}>All Status</option>
+                        <option value="pending" {{ 'selected' if current_status == 'pending' }}>Pending</option>
+                        <option value="in_progress" {{ 'selected' if current_status == 'in_progress' }}>In Progress</option>
+                        <option value="completed" {{ 'selected' if current_status == 'completed' }}>Completed</option>
+                        <option value="cancelled" {{ 'selected' if current_status == 'cancelled' }}>Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-white">Urgency</label>
+                    <select name="urgency" class="form-select bg-light text-dark border-secondary">
+                        <option value="all" {{ 'selected' if current_urgency == 'all' }}>All Urgency Levels</option>
+                        <option value="urgent" {{ 'selected' if current_urgency == 'urgent' }}>Urgent</option>
+                        <option value="high" {{ 'selected' if current_urgency == 'high' }}>High</option>
+                        <option value="medium" {{ 'selected' if current_urgency == 'medium' }}>Medium</option>
+                        <option value="low" {{ 'selected' if current_urgency == 'low' }}>Low</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-white">Search</label>
+                    <input type="text" name="search" class="form-control bg-light text-dark border-secondary" 
+                           placeholder="Search by subject, customer name, or email..." value="{{ search }}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-white">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary d-block w-100">
+                        <i class="fas fa-search"></i> Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Service Requests Table -->
+    <div class="gm-card">
+        <div class="gm-card-body">
+            {% if requests and requests.items %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-white">Request</th>
+                                <th class="text-white">Customer</th>
+                                <th class="text-white">Urgency</th>
+                                <th class="text-white">Status</th>
+                                <th class="text-white">Created</th>
+                                <th class="text-white">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-light">
+                            {% for request in requests.items %}
+                            <tr class="{{ 'table-warning' if request.urgency == 'urgent' else ('table-info' if request.urgency == 'high' else '') }}">
+                                <td>
+                                    <div>
+                                        <strong class="text-dark">{{ request.subject }}</strong>
+                                        {% if request.service %}
+                                            <br><small class="text-muted">Service: {{ request.service.name }}</small>
+                                        {% elif request.request_type %}
+                                            <br><small class="text-muted">Type: {{ request.request_type.name }}</small>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <strong class="text-dark">{{ request.customer_name or 'N/A' }}</strong>
+                                        <br><small class="text-muted">{{ request.customer_email or 'N/A' }}</small>
+                                        {% if request.customer_phone %}
+                                            <br><small class="text-muted">{{ request.customer_phone }}</small>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ 
+                                        'danger' if request.urgency == 'urgent' else
+                                        'warning' if request.urgency == 'high' else
+                                        'info' if request.urgency == 'medium' else
+                                        'secondary'
+                                    }}">
+                                        {{ request.urgency.title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ 
+                                        'warning' if request.status == 'pending' else
+                                        'info' if request.status == 'in_progress' else
+                                        'success' if request.status == 'completed' else
+                                        'danger' if request.status == 'cancelled' else
+                                        'secondary'
+                                    }}">
+                                        {{ request.status.replace('_', ' ').title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ request.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                    {% if request.updated_at != request.created_at %}
+                                        <br><small class="text-muted">Updated: {{ request.updated_at.strftime('%m-%d %H:%M') }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ url_for('admin.service_request_detail', request_id=request.id) }}" 
+                                           class="btn btn-primary btn-sm" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        {% if request.status in ['pending', 'in_progress'] %}
+                                        <button class="btn btn-success btn-sm" 
+                                                title="Quick Complete"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#completeModal{{ request.id }}">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                {% if requests.pages > 1 %}
+                <nav aria-label="Service requests pagination">
+                    <ul class="pagination justify-content-center mt-3">
+                        {% if requests.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin.service_requests', 
+                                page=requests.prev_num,
+                                status=current_status,
+                                priority=current_priority,
+                                search=search) }}">Previous</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for page_num in requests.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num != requests.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('admin.service_requests', 
+                                        page=page_num,
+                                        status=current_status,
+                                        priority=current_priority,
+                                        search=search) }}">{{ page_num }}</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                                {% endif %}
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if requests.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin.service_requests', 
+                                page=requests.next_num,
+                                status=current_status,
+                                priority=current_priority,
+                                search=search) }}">Next</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-hands-helping fa-3x text-muted mb-3"></i>
+                    <h4 class="text-white">No Service Requests Found</h4>
+                    {% if current_status != 'all' or current_priority != 'all' or search %}
+                    <p class="text-gray">No service requests match your current filters.</p>
+                    <a href="{{ url_for('admin.service_requests') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-times me-2"></i>Clear Filters
+                    </a>
+                    {% else %}
+                    <p class="text-gray">No service requests have been submitted yet.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Quick Complete Modals -->
+{% if requests and requests.items %}
+{% for request in requests.items %}
+{% if request.status in ['pending', 'in_progress'] %}
+<div class="modal fade" id="completeModal{{ request.id }}" tabindex="-1" aria-labelledby="completeModalLabel{{ request.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <form method="POST" action="{{ url_for('admin.update_service_request_status', request_id=request.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeModalLabel{{ request.id }}">
+                        Complete Request: {{ request.subject }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="status{{ request.id }}" class="form-label">Status</label>
+                        <select class="form-select bg-dark text-white border-secondary" 
+                                id="status{{ request.id }}" name="status" required>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="in_progress">In Progress</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="admin_notes{{ request.id }}" class="form-label">Admin Notes</label>
+                        <textarea class="form-control bg-dark text-white border-secondary" 
+                                  id="admin_notes{{ request.id }}" name="admin_notes" rows="3" 
+                                  placeholder="Add completion notes or resolution details..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-2"></i>Update Status
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% endblock %}

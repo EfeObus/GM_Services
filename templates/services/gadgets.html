@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Gadgets & Accessories - GM Services{% endblock %}
+
+{% block content %}
+<!-- Gadgets Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-mobile-alt text-danger me-3"></i>Gadgets & <span class="text-gold">Accessories</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Latest technology gadgets and premium accessories for modern lifestyle.
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=20" 
+                         alt="Gadgets & Accessories" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Product Categories -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Featured Products</h2>
+            <p class="text-gray">Premium gadgets and accessories from top global brands</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=21" class="card-img-top" alt="Smartphones">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-mobile-alt text-danger me-2"></i>Smartphones</h5>
+                        <p class="text-gray">Latest smartphones with cutting-edge technology and features.</p>
+                        <ul class="text-gray small">
+                            <li>Latest Android & iOS devices</li>
+                            <li>Original warranties</li>
+                            <li>Accessories included</li>
+                            <li>Trade-in options</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦85,000</span>
+                            <a href="{{ url_for('gadgets.smartphones') }}" class="btn btn-danger btn-sm">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=22" class="card-img-top" alt="Laptops">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-laptop text-danger me-2"></i>Laptops & PCs</h5>
+                        <p class="text-gray">High-performance computers for work, gaming, and creativity.</p>
+                        <ul class="text-gray small">
+                            <li>Gaming & business laptops</li>
+                            <li>Custom PC builds</li>
+                            <li>Software installation</li>
+                            <li>Technical support</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦180,000</span>
+                            <a href="{{ url_for('gadgets.laptops') }}" class="btn btn-danger btn-sm">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=23" class="card-img-top" alt="Accessories">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-headphones text-danger me-2"></i>Accessories</h5>
+                        <p class="text-gray">Premium tech accessories to enhance your digital experience.</p>
+                        <ul class="text-gray small">
+                            <li>Wireless headphones</li>
+                            <li>Power banks & chargers</li>
+                            <li>Cases & screen protectors</li>
+                            <li>Smart watches</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦5,000</span>
+                            <a href="{{ url_for('gadgets.accessories') }}" class="btn btn-danger btn-sm">Shop Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3 class="text-white mb-3">Need Help Choosing?</h3>
+                <p class="text-gray mb-4">
+                    Our tech experts are here to help you find the perfect gadgets and accessories for your needs.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('contact') }}" class="btn btn-danger">
+                        <i class="fas fa-phone me-2"></i>Contact Us
+                    </a>
+                    <a href="{{ url_for('gadgets.index') }}" class="btn btn-outline-success">
+                        <i class="fas fa-shopping-cart me-2"></i>Shop Online
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://picsum.photos/600/400?random=24" 
+                     alt="Gadgets Contact" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

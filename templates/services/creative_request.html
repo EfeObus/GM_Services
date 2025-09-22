@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Request {{ service_name }} - GM Services{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-paint-brush me-3"></i>Request {{ service_name }}
+            </h1>
+            <p class="lead text-gray">Tell us about your creative project and we'll bring it to life</p>
+        </div>
+    </div>
+</section>
+
+<!-- Request Form Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">{{ service_name }} Request Form</h3>
+                        
+                        {% if current_user.is_authenticated %}
+                        <form method="POST" action="{{ url_for('services.creative_request_service_post', service_type=service_type) }}">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label text-gray">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="urgency" class="form-label text-gray">Project Urgency</label>
+                                    <select class="form-select" id="urgency" name="urgency" required>
+                                        <option value="low">Low - Within 3-4 weeks</option>
+                                        <option value="medium" selected>Medium - Within 2 weeks</option>
+                                        <option value="high">High - Within 1 week</option>
+                                        <option value="urgent">Urgent - Within 3 days</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="project_scope" class="form-label text-gray">Project Scope</label>
+                                <select class="form-select" id="project_scope" name="project_scope" required>
+                                    <option value="">Select Project Scope</option>
+                                    {% if service_type == 'graphic_design' %}
+                                    <option value="single_design">Single Design (1 item)</option>
+                                    <option value="small_package">Small Package (2-5 items)</option>
+                                    <option value="medium_package">Medium Package (6-10 items)</option>
+                                    <option value="large_package">Large Package (10+ items)</option>
+                                    {% elif service_type == 'logo_design' %}
+                                    <option value="logo_only">Logo Only</option>
+                                    <option value="logo_variations">Logo + Variations</option>
+                                    <option value="complete_branding">Complete Brand Package</option>
+                                    {% elif service_type == 'web_design' %}
+                                    <option value="single_page">Single Page</option>
+                                    <option value="small_site">Small Site (2-5 pages)</option>
+                                    <option value="medium_site">Medium Site (6-15 pages)</option>
+                                    <option value="large_site">Large Site (15+ pages)</option>
+                                    <option value="ecommerce">E-commerce Site</option>
+                                    {% elif service_type == 'web_development' %}
+                                    <option value="simple_site">Simple Website</option>
+                                    <option value="custom_app">Custom Web Application</option>
+                                    <option value="ecommerce_dev">E-commerce Development</option>
+                                    <option value="api_integration">API Integration</option>
+                                    {% endif %}
+                                    <option value="custom">Custom Scope</option>
+                                </select>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="timeline" class="form-label text-gray">Project Timeline</label>
+                                    <select class="form-select" id="timeline" name="timeline" required>
+                                        <option value="">Select Timeline</option>
+                                        <option value="rush">Rush (1-3 days)</option>
+                                        <option value="fast">Fast (1 week)</option>
+                                        <option value="standard">Standard (2-3 weeks)</option>
+                                        <option value="extended">Extended (1 month+)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="budget_range" class="form-label text-gray">Budget Range (₦)</label>
+                                    <select class="form-select" id="budget_range" name="budget_range" required>
+                                        <option value="">Select Budget Range</option>
+                                        <option value="under_50k">Under ₦50,000</option>
+                                        <option value="50k_100k">₦50,000 - ₦100,000</option>
+                                        <option value="100k_250k">₦100,000 - ₦250,000</option>
+                                        <option value="250k_500k">₦250,000 - ₦500,000</option>
+                                        <option value="above_500k">Above ₦500,000</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="target_audience" class="form-label text-gray">Target Audience</label>
+                                <input type="text" class="form-control" id="target_audience" name="target_audience" 
+                                    placeholder="e.g., Young professionals, Small businesses, Tech startups" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label text-gray">Project Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" 
+                                    placeholder="Please describe your project in detail. What do you want to achieve? What style or look are you going for?" required></textarea>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="design_preferences" class="form-label text-gray">Design Preferences & Inspiration</label>
+                                <textarea class="form-control" id="design_preferences" name="design_preferences" rows="3" 
+                                    placeholder="Colors you like, style preferences, inspirational websites/designs, what you want to avoid, etc."></textarea>
+                            </div>
+                            
+                            <!-- Service-specific fields -->
+                            {% if service_type == 'web_design' or service_type == 'web_development' %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="website_type" class="form-label text-gray">Website Type</label>
+                                    <select class="form-select" id="website_type" name="website_type">
+                                        <option value="">Select Type</option>
+                                        <option value="business">Business/Corporate</option>
+                                        <option value="portfolio">Portfolio</option>
+                                        <option value="ecommerce">E-commerce</option>
+                                        <option value="blog">Blog/News</option>
+                                        <option value="landing">Landing Page</option>
+                                        <option value="nonprofit">Non-profit</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="features_needed" class="form-label text-gray">Special Features Needed</label>
+                                    <input type="text" class="form-control" id="features_needed" name="features_needed" 
+                                        placeholder="e.g., Contact forms, Payment gateway, User accounts">
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if service_type == 'logo_design' %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="business_type" class="form-label text-gray">Business Type</label>
+                                    <input type="text" class="form-control" id="business_type" name="business_type" 
+                                        placeholder="e.g., Restaurant, Tech company, Fashion brand">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="logo_style" class="form-label text-gray">Preferred Logo Style</label>
+                                    <select class="form-select" id="logo_style" name="logo_style">
+                                        <option value="">Select Style</option>
+                                        <option value="modern">Modern/Minimalist</option>
+                                        <option value="classic">Classic/Traditional</option>
+                                        <option value="playful">Playful/Creative</option>
+                                        <option value="professional">Professional/Corporate</option>
+                                        <option value="artistic">Artistic/Abstract</option>
+                                    </select>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Next Steps:</strong> Our creative team will review your request and contact you within 24 hours with a detailed proposal and timeline.
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paint-brush me-2"></i>Submit Creative Request
+                                </button>
+                                <a href="{{ url_for('services.creative_services') }}" class="btn btn-outline-light">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Creative Services
+                                </a>
+                            </div>
+                        </form>
+                        
+                        {% else %}
+                        <div class="text-center">
+                            <h4 class="text-white mb-3">Please Login to Continue</h4>
+                            <p class="text-gray mb-4">You need to be logged in to request our creative services.</p>
+                            <div class="d-flex gap-3 justify-content-center">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                </a>
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light">
+                                    <i class="fas fa-user-plus me-2"></i>Register
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Features -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="text-white">What You Get with {{ service_name }}</h3>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-drafting-compass fa-2x text-primary mb-2"></i>
+                    <h6 class="text-white">Professional Design</h6>
+                    <p class="text-gray">High-quality creative work</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-sync-alt fa-2x text-success mb-2"></i>
+                    <h6 class="text-white">Unlimited Revisions</h6>
+                    <p class="text-gray">Until you're satisfied</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-file-download fa-2x text-warning mb-2"></i>
+                    <h6 class="text-white">All File Formats</h6>
+                    <p class="text-gray">Print and web ready</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-headset fa-2x text-info mb-2"></i>
+                    <h6 class="text-white">Ongoing Support</h6>
+                    <p class="text-gray">Post-delivery assistance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.bg-dark-alt {
+    background-color: #0a0a0a !important;
+}
+
+.feature-item {
+    transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-3px);
+}
+</style>
+{% endblock %}

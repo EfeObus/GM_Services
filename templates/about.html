@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - GM Services{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-white mb-4">
+                    About <span class="text-gold">GM Services</span>
+                </h1>
+                <p class="lead text-gray mb-4">
+                    Your trusted partner for comprehensive business solutions across Nigeria. 
+                    We provide professional services ranging from automobile sales to luxury jewelry, 
+                    logistics, and financial solutions.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('contact') }}" class="btn btn-primary">Contact Us</a>
+                    <a href="{{ url_for('services.service_request_form') }}" class="btn btn-outline-secondary">Get Started</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <img src="https://via.placeholder.com/600x400/1a1a1a/FFD700?text=GM+Services+Building" 
+                         class="img-fluid rounded shadow" alt="GM Services Headquarters">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Story Section -->
+<section class="py-5" style="background: var(--surface-100);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <img src="https://via.placeholder.com/600x400/2d2d2d/228B22?text=Our+Journey" 
+                     class="img-fluid rounded shadow" alt="Our Journey">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="text-white mb-4">Our Story</h2>
+                <p class="text-gray mb-3">
+                    Founded in 2015, GM Services began as a small automotive dealership in Lagos with a vision 
+                    to provide exceptional service and quality products to Nigerian customers. Over the years, 
+                    we have grown into a comprehensive service provider offering solutions across multiple industries.
+                </p>
+                <p class="text-gray mb-3">
+                    Our commitment to excellence and customer satisfaction has allowed us to expand our services 
+                    to include logistics, financial services, hotel management, luxury goods, and much more. 
+                    Today, we serve thousands of customers across Nigeria with offices in major cities.
+                </p>
+                <p class="text-gray">
+                    We believe in building long-term relationships with our clients by delivering reliable, 
+                    professional services that exceed expectations every time.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Mission & Vision -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-bullseye fa-3x text-red"></i>
+                        </div>
+                        <h4 class="text-gold mb-3">Our Mission</h4>
+                        <p class="text-gray">
+                            To provide exceptional, comprehensive business solutions that empower our clients 
+                            to achieve their goals while contributing to Nigeria's economic growth and development.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-eye fa-3x text-green"></i>
+                        </div>
+                        <h4 class="text-gold mb-3">Our Vision</h4>
+                        <p class="text-gray">
+                            To become Nigeria's leading integrated service provider, known for innovation, 
+                            reliability, and exceptional customer experience across all business sectors.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-heart fa-3x text-gold"></i>
+                        </div>
+                        <h4 class="text-gold mb-3">Our Values</h4>
+                        <p class="text-gray">
+                            Integrity, Excellence, Innovation, Customer Focus, and Community Development 
+                            guide everything we do and every decision we make.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Team -->
+<section class="py-5" style="background: var(--surface-100);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white">Our Leadership Team</h2>
+            <p class="lead text-gray">Meet the experienced professionals leading GM Services</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <img src="https://via.placeholder.com/200x200/2d2d2d/FFD700?text=CEO" 
+                             class="rounded-circle mb-3" alt="CEO" width="150" height="150">
+                        <h5 class="text-gold">Gabriel Musa</h5>
+                        <p class="text-green mb-2">Chief Executive Officer</p>
+                        <p class="text-gray small">
+                            Over 15 years of experience in business development and strategic leadership 
+                            across multiple industries in Nigeria.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <img src="https://via.placeholder.com/200x200/2d2d2d/DC143C?text=COO" 
+                             class="rounded-circle mb-3" alt="COO" width="150" height="150">
+                        <h5 class="text-gold">Mary Adebayo</h5>
+                        <p class="text-green mb-2">Chief Operating Officer</p>
+                        <p class="text-gray small">
+                            Expert in operations management with a proven track record of scaling 
+                            business operations across Nigeria.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <img src="https://via.placeholder.com/200x200/2d2d2d/228B22?text=CTO" 
+                             class="rounded-circle mb-3" alt="CTO" width="150" height="150">
+                        <h5 class="text-gold">David Okafor</h5>
+                        <p class="text-green mb-2">Chief Technology Officer</p>
+                        <p class="text-gray small">
+                            Technology innovator with expertise in digital transformation and 
+                            modern business solutions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Offices -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white">Our Offices</h2>
+            <p class="lead text-gray">We serve customers across Nigeria from our strategic locations</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card">
+                    <img src="https://via.placeholder.com/400x250/1a1a1a/FFD700?text=Lagos+Office" 
+                         class="card-img-top" alt="Lagos Office">
+                    <div class="gm-card-body">
+                        <h5 class="text-gold">Lagos Headquarters</h5>
+                        <p class="text-gray">
+                            <i class="fas fa-map-marker-alt text-red me-2"></i>
+                            123 Victoria Island, Lagos State
+                        </p>
+                        <p class="text-gray small">
+                            Our flagship office serving the Lagos metropolitan area and South-West Nigeria.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card">
+                    <img src="https://via.placeholder.com/400x250/1a1a1a/DC143C?text=Abuja+Office" 
+                         class="card-img-top" alt="Abuja Office">
+                    <div class="gm-card-body">
+                        <h5 class="text-gold">Abuja Branch</h5>
+                        <p class="text-gray">
+                            <i class="fas fa-map-marker-alt text-red me-2"></i>
+                            456 Central Business District, FCT
+                        </p>
+                        <p class="text-gray small">
+                            Serving the Federal Capital Territory and North-Central Nigeria.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card">
+                    <img src="https://via.placeholder.com/400x250/1a1a1a/228B22?text=Port+Harcourt+Office" 
+                         class="card-img-top" alt="Port Harcourt Office">
+                    <div class="gm-card-body">
+                        <h5 class="text-gold">Port Harcourt Branch</h5>
+                        <p class="text-gray">
+                            <i class="fas fa-map-marker-alt text-red me-2"></i>
+                            789 GRA Phase II, Rivers State
+                        </p>
+                        <p class="text-gray small">
+                            Covering the South-South region and Niger Delta area.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-5" style="background: var(--surface-100);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white">Why Choose GM Services?</h2>
+            <p class="lead text-gray">What sets us apart from the competition</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-award fa-3x text-gold"></i>
+                    </div>
+                    <h5 class="text-white">Quality Assurance</h5>
+                    <p class="text-gray">
+                        ISO certified processes ensuring the highest quality standards in all our services.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-clock fa-3x text-red"></i>
+                    </div>
+                    <h5 class="text-white">24/7 Support</h5>
+                    <p class="text-gray">
+                        Round-the-clock customer support to assist you whenever you need help.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-green"></i>
+                    </div>
+                    <h5 class="text-white">Secure & Reliable</h5>
+                    <p class="text-gray">
+                        Bank-level security and reliability you can trust for all your business needs.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-users fa-3x text-gold"></i>
+                    </div>
+                    <h5 class="text-white">Expert Team</h5>
+                    <p class="text-gray">
+                        Experienced professionals dedicated to delivering exceptional results.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

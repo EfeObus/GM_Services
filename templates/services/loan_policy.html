@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+
+{% block title %}GM Services Loan Policy & Agreement{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="text-white mb-3">
+                    <i class="fas fa-file-contract text-success me-2"></i>
+                    Loan Policy & Agreement
+                </h1>
+                <p class="text-gray lead">Please read our loan terms and conditions carefully before applying</p>
+            </div>
+
+            <!-- Policy Content -->
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <!-- Introduction -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">1. Introduction</h3>
+                                <p class="text-white">
+                                    Welcome to GM Services Loan Program. This Loan Policy and Agreement ("Agreement") 
+                                    governs the terms and conditions under which GM Services ("we," "us," or "our") 
+                                    provides loan services to eligible customers ("you" or "borrower") in Nigeria.
+                                </p>
+                                <p class="text-gray">
+                                    By applying for a loan through our platform, you acknowledge that you have read, 
+                                    understood, and agree to be bound by all terms and conditions outlined in this Agreement.
+                                </p>
+                            </section>
+
+                            <!-- Loan Types and Terms -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">2. Loan Types and Terms</h3>
+                                
+                                <div class="table-responsive mb-4">
+                                    <table class="table table-dark table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Loan Type</th>
+                                                <th>Interest Rate (Annual)</th>
+                                                <th>Maximum Term</th>
+                                                <th>Maximum Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Personal Loan</strong></td>
+                                                <td>24% per annum</td>
+                                                <td>48 months</td>
+                                                <td>₦5,000,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Business Loan</strong></td>
+                                                <td>18% per annum</td>
+                                                <td>60 months</td>
+                                                <td>₦20,000,000</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Auto Loan</strong></td>
+                                                <td>15% per annum</td>
+                                                <td>84 months</td>
+                                                <td>₦15,000,000</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="alert alert-warning">
+                                    <h6 class="text-dark"><i class="fas fa-info-circle me-2"></i>Important Note</h6>
+                                    <p class="text-dark mb-0">
+                                        Interest rates are calculated using the reducing balance method. 
+                                        All rates are subject to change based on Central Bank of Nigeria guidelines 
+                                        and your creditworthiness assessment.
+                                    </p>
+                                </div>
+                            </section>
+
+                            <!-- Eligibility Criteria -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">3. Eligibility Criteria</h3>
+                                <p class="text-white mb-3">To qualify for a loan, you must meet the following requirements:</p>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="text-warning mb-3">General Requirements</h5>
+                                        <ul class="text-gray">
+                                            <li>Must be a Nigerian citizen or legal resident</li>
+                                            <li>Age between 21 and 65 years</li>
+                                            <li>Valid Bank Verification Number (BVN)</li>
+                                            <li>Active Nigerian bank account</li>
+                                            <li>Verifiable source of income</li>
+                                            <li>Good credit history (if applicable)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5 class="text-warning mb-3">Income Requirements</h5>
+                                        <ul class="text-gray">
+                                            <li>Minimum monthly income of ₦100,000</li>
+                                            <li>Stable employment for at least 6 months</li>
+                                            <li>Debt-to-income ratio below 40%</li>
+                                            <li>3 months bank statements</li>
+                                            <li>Employment letter or business registration</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Required Documents -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">4. Required Documents</h3>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="text-warning mb-3">Standard Documents</h5>
+                                        <ul class="text-gray">
+                                            <li>Valid government-issued ID (National ID, Driver's License, or International Passport)</li>
+                                            <li>BVN verification</li>
+                                            <li>3 months bank statements</li>
+                                            <li>Proof of income (salary slip, business income certificate)</li>
+                                            <li>Utility bill (proof of address)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5 class="text-warning mb-3">Additional Documents</h5>
+                                        <ul class="text-gray">
+                                            <li><strong>For loans above ₦1,000,000:</strong> Collateral documents</li>
+                                            <li><strong>For auto loans:</strong> Employment letter or business registration</li>
+                                            <li><strong>For business loans:</strong> Business plan and financial statements</li>
+                                            <li><strong>Self-employed:</strong> Tax certificates and business registration</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-info mt-3">
+                                    <p class="text-dark mb-0">
+                                        <i class="fas fa-upload me-2"></i>
+                                        All documents must be uploaded in PDF format with a maximum file size of 5MB each.
+                                    </p>
+                                </div>
+                            </section>
+
+                            <!-- Loan Processing -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">5. Loan Processing and Approval</h3>
+                                
+                                <div class="timeline mb-4">
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-primary"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="text-white">Application Submission</h6>
+                                            <p class="text-gray">Complete online application with required documents</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-warning"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="text-white">Initial Review (24-48 hours)</h6>
+                                            <p class="text-gray">Document verification and eligibility check</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-info"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="text-white">Credit Assessment (2-5 business days)</h6>
+                                            <p class="text-gray">Income verification and credit evaluation</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-success"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="text-white">Final Decision</h6>
+                                            <p class="text-gray">Approval notification and loan offer</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="text-gray">
+                                    Processing time may vary based on loan amount, complexity, and completeness of documentation. 
+                                    We reserve the right to request additional information or documentation during the review process.
+                                </p>
+                            </section>
+
+                            <!-- Repayment Terms -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">6. Repayment Terms</h3>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="text-warning mb-3">Payment Schedule</h5>
+                                        <ul class="text-gray">
+                                            <li>Monthly repayments on a fixed date</li>
+                                            <li>First payment due 30 days after disbursement</li>
+                                            <li>Payments via direct debit or bank transfer</li>
+                                            <li>Grace period of 5 days after due date</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5 class="text-warning mb-3">Early Repayment</h5>
+                                        <ul class="text-gray">
+                                            <li>No penalty for early repayment</li>
+                                            <li>Interest calculated only for utilized period</li>
+                                            <li>Partial prepayments allowed</li>
+                                            <li>30-day notice required for full prepayment</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Fees and Charges -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">7. Fees and Charges</h3>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Fee Type</th>
+                                                <th>Amount</th>
+                                                <th>When Charged</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Processing Fee</td>
+                                                <td>1% of loan amount (min ₦5,000)</td>
+                                                <td>Upon loan approval</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Late Payment Fee</td>
+                                                <td>5% of overdue amount</td>
+                                                <td>After 5-day grace period</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Loan Restructuring Fee</td>
+                                                <td>₦10,000</td>
+                                                <td>Upon request approval</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Documentation Fee</td>
+                                                <td>₦2,500</td>
+                                                <td>For additional document requests</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            <!-- Default and Collections -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">8. Default and Collections</h3>
+                                
+                                <div class="alert alert-danger">
+                                    <h6 class="text-dark mb-2">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>Default Consequences
+                                    </h6>
+                                    <ul class="text-dark mb-0">
+                                        <li>Loan considered in default after 90 days of non-payment</li>
+                                        <li>Negative credit bureau reporting</li>
+                                        <li>Collection agency engagement</li>
+                                        <li>Legal action for debt recovery</li>
+                                        <li>Collateral enforcement (if applicable)</li>
+                                    </ul>
+                                </div>
+
+                                <p class="text-gray mt-3">
+                                    We encourage borrowers facing financial difficulties to contact us immediately 
+                                    to discuss restructuring options before defaulting on payments.
+                                </p>
+                            </section>
+
+                            <!-- Privacy and Data Protection -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">9. Privacy and Data Protection</h3>
+                                
+                                <p class="text-white mb-3">Your privacy is important to us. By accepting this agreement, you consent to:</p>
+                                
+                                <ul class="text-gray">
+                                    <li>Collection and processing of personal and financial data for loan assessment</li>
+                                    <li>Sharing information with credit bureaus and regulatory authorities</li>
+                                    <li>Verification of information with employers, banks, and other relevant parties</li>
+                                    <li>Storage of data in accordance with Nigerian data protection laws</li>
+                                    <li>Communication regarding your loan account via phone, email, or SMS</li>
+                                </ul>
+                            </section>
+
+                            <!-- Governing Law -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">10. Governing Law</h3>
+                                
+                                <p class="text-gray">
+                                    This Agreement is governed by the laws of the Federal Republic of Nigeria. 
+                                    Any disputes arising from this Agreement shall be resolved through arbitration 
+                                    in Lagos State, Nigeria, in accordance with the Arbitration and Conciliation Act.
+                                </p>
+                            </section>
+
+                            <!-- Contact Information -->
+                            <section class="mb-5">
+                                <h3 class="text-success mb-3">11. Contact Information</h3>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-warning">Customer Service</h6>
+                                        <p class="text-gray">
+                                            Email: loans@gmservices.com<br>
+                                            Phone: +234 1 234 5678<br>
+                                            Hours: Monday-Friday, 8:00 AM - 6:00 PM
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-warning">Complaints and Feedback</h6>
+                                        <p class="text-gray">
+                                            Email: complaints@gmservices.com<br>
+                                            Phone: +234 1 234 5679<br>
+                                            Address: 123 Victoria Island, Lagos
+                                        </p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Agreement Acceptance -->
+                            <div class="border-top pt-4 mt-5">
+                                <div class="alert alert-success">
+                                    <h5 class="text-dark mb-3">
+                                        <i class="fas fa-check-circle me-2"></i>Agreement Acceptance
+                                    </h5>
+                                    <p class="text-dark mb-3">
+                                        By clicking "I Agree" during the loan application process, you acknowledge that:
+                                    </p>
+                                    <ul class="text-dark mb-3">
+                                        <li>You have read and understood all terms and conditions</li>
+                                        <li>You meet all eligibility requirements</li>
+                                        <li>All information provided is true and accurate</li>
+                                        <li>You agree to the loan terms, fees, and charges</li>
+                                        <li>You consent to data processing and credit checks</li>
+                                    </ul>
+                                    <p class="text-dark mb-0">
+                                        <strong>This agreement becomes legally binding upon loan approval and disbursement.</strong>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="text-center mt-5">
+                                <a href="{{ url_for('services.loans') }}" class="btn btn-success btn-lg me-3">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Loan Services
+                                </a>
+                                <a href="{{ url_for('services.loan_application_form') }}" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-file-alt me-2"></i>Apply for Loan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -23px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #333;
+}
+
+.timeline-content h6 {
+    margin-bottom: 5px;
+}
+
+.timeline-content p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}

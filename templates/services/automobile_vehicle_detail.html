@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+
+{% block title %}{{ vehicle.full_name }} - GM Services{% endblock %}
+
+{% block content %}
+<!-- Vehicle Detail Hero -->
+<section class="py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('services.automobile') }}" class="text-danger">Automobile</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('services.automobile_vehicles') }}" class="text-danger">Vehicles</a></li>
+                <li class="breadcrumb-item active text-gray">{{ vehicle.full_name }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row">
+            <!-- Vehicle Images -->
+            <div class="col-lg-8">
+                {% if vehicle.images and vehicle.images|length > 0 %}
+                    <div id="vehicleCarousel" class="carousel slide mb-3" data-bs-ride="false">
+                        <div class="carousel-inner rounded">
+                            {% for image in vehicle.images %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                    <img src="{{ image }}" class="d-block w-100" alt="{{ vehicle.full_name }}" style="height: 400px; object-fit: cover;">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        {% if vehicle.images|length > 1 %}
+                            <button class="carousel-control-prev" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                            
+                            <!-- Thumbnails -->
+                            <div class="d-flex gap-2 mt-3 flex-wrap">
+                                {% for image in vehicle.images %}
+                                    <img src="{{ image }}" 
+                                         class="img-thumbnail cursor-pointer {% if loop.first %}border-danger{% endif %}" 
+                                         style="width: 80px; height: 60px; object-fit: cover;"
+                                         onclick="goToSlide({{ loop.index0 }})"
+                                         id="thumb-{{ loop.index0 }}">
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center text-gray mb-3" style="height: 400px;">
+                        <i class="fas fa-car fa-5x"></i>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Vehicle Info -->
+            <div class="col-lg-4">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h2 class="text-white mb-2">{{ vehicle.full_name }}</h2>
+                                <span class="badge bg-{{ 'success' if vehicle.condition == 'new' else 'warning' }} mb-3">
+                                    {{ vehicle.condition|title }}
+                                </span>
+                            </div>
+                            <div class="text-end">
+                                <div class="text-success fw-bold fs-3">₦{{ "{:,.0f}".format(vehicle.selling_price) }}</div>
+                                {% if vehicle.msrp and vehicle.msrp > vehicle.selling_price %}
+                                    <small class="text-decoration-line-through text-gray">₦{{ "{:,.0f}".format(vehicle.msrp) }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Specs -->
+                        <div class="row text-sm mb-3">
+                            <div class="col-6 mb-2">
+                                <span class="text-gray">Year:</span>
+                                <span class="text-white fw-bold">{{ vehicle.year }}</span>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <span class="text-gray">Mileage:</span>
+                                <span class="text-white fw-bold">{{ "{:,}".format(vehicle.mileage) }} km</span>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <span class="text-gray">Fuel:</span>
+                                <span class="text-white fw-bold">{{ vehicle.fuel_type or 'N/A' }}</span>
+                            </div>
+                            <div class="col-6 mb-2">
+                                <span class="text-gray">Transmission:</span>
+                                <span class="text-white fw-bold">{{ vehicle.transmission or 'N/A' }}</span>
+                            </div>
+                            {% if vehicle.exterior_color %}
+                                <div class="col-6 mb-2">
+                                    <span class="text-gray">Exterior:</span>
+                                    <span class="text-white fw-bold">{{ vehicle.exterior_color }}</span>
+                                </div>
+                            {% endif %}
+                            {% if vehicle.interior_color %}
+                                <div class="col-6 mb-2">
+                                    <span class="text-gray">Interior:</span>
+                                    <span class="text-white fw-bold">{{ vehicle.interior_color }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('contact') }}" class="btn btn-danger">
+                                <i class="fas fa-phone me-2"></i>Contact Dealer
+                            </a>
+                            <a href="{{ url_for('contact') }}" class="btn btn-outline-success">
+                                <i class="fas fa-calendar me-2"></i>Schedule Test Drive
+                            </a>
+                            <a href="{{ url_for('services.loans') }}" class="btn btn-outline-warning">
+                                <i class="fas fa-calculator me-2"></i>Get Financing
+                            </a>
+                        </div>
+                        
+                        {% if vehicle.stock_number %}
+                            <div class="text-center mt-3">
+                                <small class="text-gray">Stock #: {{ vehicle.stock_number }}</small>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Vehicle Details Tabs -->
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <ul class="nav nav-tabs border-0" id="vehicleTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active bg-transparent text-white border-0 border-bottom border-danger" 
+                        id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" 
+                        type="button" role="tab">Overview</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link bg-transparent text-gray border-0" 
+                        id="specifications-tab" data-bs-toggle="tab" data-bs-target="#specifications" 
+                        type="button" role="tab">Specifications</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link bg-transparent text-gray border-0" 
+                        id="features-tab" data-bs-toggle="tab" data-bs-target="#features" 
+                        type="button" role="tab">Features</button>
+            </li>
+        </ul>
+        
+        <div class="tab-content mt-4" id="vehicleTabsContent">
+            <!-- Overview Tab -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h4 class="text-white mb-3">Vehicle Overview</h4>
+                        {% if vehicle.description %}
+                            <p class="text-gray">{{ vehicle.description }}</p>
+                        {% else %}
+                            <p class="text-gray">{{ vehicle.full_name }} - A quality vehicle with excellent performance and reliability.</p>
+                        {% endif %}
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h6 class="text-white">Basic Information</h6>
+                                <ul class="list-unstyled text-gray">
+                                    <li><strong>Make:</strong> {{ vehicle.model.make.name }}</li>
+                                    <li><strong>Model:</strong> {{ vehicle.model.name }}</li>
+                                    <li><strong>Year:</strong> {{ vehicle.year }}</li>
+                                    {% if vehicle.trim %}
+                                        <li><strong>Trim:</strong> {{ vehicle.trim }}</li>
+                                    {% endif %}
+                                    <li><strong>Condition:</strong> {{ vehicle.condition|title }}</li>
+                                    <li><strong>Status:</strong> {{ vehicle.status|title }}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-white">Performance</h6>
+                                <ul class="list-unstyled text-gray">
+                                    {% if vehicle.engine %}
+                                        <li><strong>Engine:</strong> {{ vehicle.engine }}</li>
+                                    {% endif %}
+                                    {% if vehicle.transmission %}
+                                        <li><strong>Transmission:</strong> {{ vehicle.transmission }}</li>
+                                    {% endif %}
+                                    {% if vehicle.drivetrain %}
+                                        <li><strong>Drivetrain:</strong> {{ vehicle.drivetrain }}</li>
+                                    {% endif %}
+                                    {% if vehicle.fuel_economy_city or vehicle.fuel_economy_highway %}
+                                        <li><strong>Fuel Economy:</strong> 
+                                            {% if vehicle.fuel_economy_city %}{{ vehicle.fuel_economy_city }} city{% endif %}
+                                            {% if vehicle.fuel_economy_highway %} / {{ vehicle.fuel_economy_highway }} highway MPG{% endif %}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Specifications Tab -->
+            <div class="tab-pane fade" id="specifications" role="tabpanel">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h4 class="text-white mb-3">Technical Specifications</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-borderless text-gray">
+                                    <tr>
+                                        <td><strong>Make</strong></td>
+                                        <td>{{ vehicle.model.make.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Model</strong></td>
+                                        <td>{{ vehicle.model.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Year</strong></td>
+                                        <td>{{ vehicle.year }}</td>
+                                    </tr>
+                                    {% if vehicle.trim %}
+                                        <tr>
+                                            <td><strong>Trim</strong></td>
+                                            <td>{{ vehicle.trim }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if vehicle.vin %}
+                                        <tr>
+                                            <td><strong>VIN</strong></td>
+                                            <td>{{ vehicle.vin }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    <tr>
+                                        <td><strong>Mileage</strong></td>
+                                        <td>{{ "{:,}".format(vehicle.mileage) }} km</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-borderless text-gray">
+                                    {% if vehicle.engine %}
+                                        <tr>
+                                            <td><strong>Engine</strong></td>
+                                            <td>{{ vehicle.engine }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if vehicle.transmission %}
+                                        <tr>
+                                            <td><strong>Transmission</strong></td>
+                                            <td>{{ vehicle.transmission }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if vehicle.drivetrain %}
+                                        <tr>
+                                            <td><strong>Drivetrain</strong></td>
+                                            <td>{{ vehicle.drivetrain }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if vehicle.fuel_type %}
+                                        <tr>
+                                            <td><strong>Fuel Type</strong></td>
+                                            <td>{{ vehicle.fuel_type }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if vehicle.exterior_color %}
+                                        <tr>
+                                            <td><strong>Exterior Color</strong></td>
+                                            <td>{{ vehicle.exterior_color }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if vehicle.interior_color %}
+                                        <tr>
+                                            <td><strong>Interior Color</strong></td>
+                                            <td>{{ vehicle.interior_color }}</td>
+                                        </tr>
+                                    {% endif %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Tab -->
+            <div class="tab-pane fade" id="features" role="tabpanel">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h4 class="text-white mb-3">Vehicle Features</h4>
+                        {% if vehicle.features %}
+                            <div class="row">
+                                {% for feature in vehicle.features %}
+                                    <div class="col-md-6 col-lg-4 mb-2">
+                                        <div class="d-flex align-items-center text-gray">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            {{ feature }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-gray">No specific features listed for this vehicle.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Vehicles -->
+{% if related_vehicles %}
+<section class="py-5">
+    <div class="container">
+        <h3 class="text-white mb-4">Similar Vehicles</h3>
+        <div class="row">
+            {% for related in related_vehicles %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="gm-card h-100">
+                        {% if related.images and related.images|length > 0 %}
+                            <img src="{{ related.images[0] }}" class="card-img-top" alt="{{ related.full_name }}" style="height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-gray" style="height: 150px;">
+                                <i class="fas fa-car fa-2x"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="gm-card-body">
+                            <h6 class="text-white">{{ related.full_name }}</h6>
+                            <p class="text-success fw-bold">₦{{ "{:,.0f}".format(related.selling_price) }}</p>
+                            <a href="{{ url_for('services.automobile_vehicle_detail', vehicle_id=related.id) }}" class="btn btn-outline-danger btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<script>
+// Tab switching functionality
+document.querySelectorAll('#vehicleTabs button').forEach(tab => {
+    tab.addEventListener('shown.bs.tab', function (e) {
+        // Update active tab styling
+        document.querySelectorAll('#vehicleTabs button').forEach(t => {
+            t.classList.remove('text-white', 'border-danger');
+            t.classList.add('text-gray');
+        });
+        
+        e.target.classList.remove('text-gray');
+        e.target.classList.add('text-white', 'border-danger');
+    });
+});
+
+// Carousel thumbnail functionality
+function goToSlide(slideIndex) {
+    const carousel = new bootstrap.Carousel(document.getElementById('vehicleCarousel'));
+    carousel.to(slideIndex);
+    
+    // Update thumbnail borders
+    document.querySelectorAll('[id^="thumb-"]').forEach(thumb => {
+        thumb.classList.remove('border-danger');
+        thumb.classList.add('border-secondary');
+    });
+    
+    document.getElementById(`thumb-${slideIndex}`).classList.remove('border-secondary');
+    document.getElementById(`thumb-${slideIndex}`).classList.add('border-danger');
+}
+
+// Update thumbnail border on carousel slide
+document.getElementById('vehicleCarousel').addEventListener('slid.bs.carousel', function (e) {
+    const activeIndex = Array.from(e.target.querySelectorAll('.carousel-item')).indexOf(e.target.querySelector('.carousel-item.active'));
+    
+    document.querySelectorAll('[id^="thumb-"]').forEach(thumb => {
+        thumb.classList.remove('border-danger');
+        thumb.classList.add('border-secondary');
+    });
+    
+    const activeThumb = document.getElementById(`thumb-${activeIndex}`);
+    if (activeThumb) {
+        activeThumb.classList.remove('border-secondary');
+        activeThumb.classList.add('border-danger');
+    }
+});
+</script>
+{% endblock %}

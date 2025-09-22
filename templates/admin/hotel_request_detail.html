@@ -1,0 +1,397 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Hotel Request {{ hotel_request.request_number }} - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="text-white mb-1">
+                        <i class="fas fa-hotel text-gold me-2"></i>Hotel Request Details
+                    </h2>
+                    <p class="text-gray mb-0">Request #{{ hotel_request.request_number }}</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('admin.hotel_requests') }}" class="btn btn-outline-light">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Requests
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row">
+        <!-- Request Information -->
+        <div class="col-lg-8">
+            <div class="gm-card mb-4">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-info-circle text-gold me-2"></i>Request Information
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Service Type</label>
+                            <div class="text-white">
+                                <span class="badge bg-info fs-6">{{ hotel_request.get_service_type_display() }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Priority Level</label>
+                            <div class="text-white">
+                                <span class="badge bg-{{ hotel_request.priority_color }} fs-6">
+                                    {{ hotel_request.priority_level.title() }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Budget Range</label>
+                            <div class="text-white">{{ hotel_request.budget_range or 'Not specified' }}</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Timeline</label>
+                            <div class="text-white">{{ hotel_request.timeline or 'Not specified' }}</div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label text-gold">Specific Requirements</label>
+                            <div class="text-white bg-dark p-3 rounded">
+                                {{ hotel_request.specific_requirements }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Information -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-user text-gold me-2"></i>Client Information
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Client Name</label>
+                            <div class="text-white">{{ hotel_request.client_name }}</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Email</label>
+                            <div class="text-white">
+                                <a href="mailto:{{ hotel_request.client_email }}" class="text-warning">
+                                    {{ hotel_request.client_email }}
+                                </a>
+                            </div>
+                        </div>
+                        {% if hotel_request.client_phone %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Phone</label>
+                            <div class="text-white">
+                                <a href="tel:{{ hotel_request.client_phone }}" class="text-warning">
+                                    {{ hotel_request.client_phone }}
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if hotel_request.company_name %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Company</label>
+                            <div class="text-white">{{ hotel_request.company_name }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Information -->
+            {% if hotel_request.hotel_name or hotel_request.hotel_location %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-building text-gold me-2"></i>Hotel Information
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    <div class="row">
+                        {% if hotel_request.hotel_name %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Hotel Name</label>
+                            <div class="text-white">{{ hotel_request.hotel_name }}</div>
+                        </div>
+                        {% endif %}
+                        {% if hotel_request.hotel_location %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Location</label>
+                            <div class="text-white">{{ hotel_request.hotel_location }}</div>
+                        </div>
+                        {% endif %}
+                        {% if hotel_request.hotel_size %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-gold">Hotel Size</label>
+                            <div class="text-white">{{ hotel_request.hotel_size.replace('_', ' ').title() }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Service Specific Details -->
+            {% if hotel_request.service_type == 'operations_management' and (hotel_request.current_operations_challenges or hotel_request.departments_to_manage) %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-cogs text-gold me-2"></i>Operations Management Details
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    {% if hotel_request.current_operations_challenges %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Current Challenges</label>
+                        <div class="text-white bg-dark p-3 rounded">
+                            {{ hotel_request.current_operations_challenges }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if hotel_request.departments_to_manage %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Departments to Manage</label>
+                        <div class="text-white">
+                            {% for dept in hotel_request.departments_to_manage %}
+                                <span class="badge bg-secondary me-1">{{ dept.replace('_', ' ').title() }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if hotel_request.service_type == 'booking_system' and (hotel_request.current_booking_system or hotel_request.expected_monthly_bookings) %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-calendar-check text-gold me-2"></i>Booking System Details
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    {% if hotel_request.current_booking_system %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Current System</label>
+                        <div class="text-white">{{ hotel_request.current_booking_system }}</div>
+                    </div>
+                    {% endif %}
+                    {% if hotel_request.expected_monthly_bookings %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Expected Monthly Bookings</label>
+                        <div class="text-white">{{ hotel_request.expected_monthly_bookings }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if hotel_request.service_type == 'staff_training' and (hotel_request.number_of_staff or hotel_request.training_areas) %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-users text-gold me-2"></i>Staff Training Details
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    {% if hotel_request.number_of_staff %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Number of Staff</label>
+                        <div class="text-white">{{ hotel_request.number_of_staff }}</div>
+                    </div>
+                    {% endif %}
+                    {% if hotel_request.current_skill_level %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Current Skill Level</label>
+                        <div class="text-white">{{ hotel_request.current_skill_level.title() }}</div>
+                    </div>
+                    {% endif %}
+                    {% if hotel_request.training_areas %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Training Areas</label>
+                        <div class="text-white">
+                            {% for area in hotel_request.training_areas %}
+                                <span class="badge bg-secondary me-1">{{ area.replace('_', ' ').title() }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Status and Assignment -->
+        <div class="col-lg-4">
+            <!-- Status Card -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-tasks text-gold me-2"></i>Status & Assignment
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Current Status</label>
+                        <div>
+                            <span class="badge bg-{{ hotel_request.status_color }} fs-6">
+                                {{ hotel_request.status.replace('_', ' ').title() }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Created</label>
+                        <div class="text-white">{{ hotel_request.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                    </div>
+
+                    {% if hotel_request.assigned_to %}
+                    <div class="mb-3">
+                        <label class="form-label text-gold">Assigned To</label>
+                        <div class="text-white">{{ hotel_request.assigned_to.full_name }}</div>
+                        <small class="text-gray">Assigned: {{ hotel_request.assigned_at.strftime('%Y-%m-%d %H:%M') if hotel_request.assigned_at else 'N/A' }}</small>
+                    </div>
+                    {% endif %}
+
+                    <!-- Assignment Form -->
+                    <form method="POST" action="{{ url_for('admin.assign_hotel_request', request_id=hotel_request.id) }}" class="mb-3">
+                        <label class="form-label text-gold">Assign/Reassign Staff</label>
+                        <div class="input-group">
+                            <select name="staff_id" class="form-select">
+                                <option value="">Unassigned</option>
+                                {% for staff in staff_members %}
+                                    <option value="{{ staff.id }}" 
+                                            {% if hotel_request.assigned_to_id == staff.id %}selected{% endif %}>
+                                        {{ staff.full_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-user-check"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Status Update Form -->
+                    <form method="POST" action="{{ url_for('admin.update_hotel_request_status', request_id=hotel_request.id) }}">
+                        <label class="form-label text-gold">Update Status</label>
+                        <select name="status" class="form-select mb-2">
+                            <option value="pending" {% if hotel_request.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="reviewed" {% if hotel_request.status == 'reviewed' %}selected{% endif %}>Reviewed</option>
+                            <option value="assigned" {% if hotel_request.status == 'assigned' %}selected{% endif %}>Assigned</option>
+                            <option value="in_progress" {% if hotel_request.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="completed" {% if hotel_request.status == 'completed' %}selected{% endif %}>Completed</option>
+                            <option value="cancelled" {% if hotel_request.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                        
+                        <label class="form-label text-gold">Admin Notes</label>
+                        <textarea name="admin_notes" class="form-control mb-2" rows="3" placeholder="Add notes about this status update...">{{ hotel_request.admin_notes or '' }}</textarea>
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-save me-2"></i>Update Status
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="gm-card">
+                <div class="gm-card-header">
+                    <h5 class="text-white mb-0">
+                        <i class="fas fa-history text-gold me-2"></i>Timeline
+                    </h5>
+                </div>
+                <div class="gm-card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Request Created</h6>
+                                <p class="text-gray small mb-0">{{ hotel_request.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                            </div>
+                        </div>
+                        
+                        {% if hotel_request.assigned_at %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-warning"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Assigned to Staff</h6>
+                                <p class="text-gray small mb-0">{{ hotel_request.assigned_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                                <small class="text-gray">{{ hotel_request.assigned_to.full_name if hotel_request.assigned_to else 'Unknown' }}</small>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if hotel_request.status in ['completed', 'cancelled'] %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-{{ 'success' if hotel_request.status == 'completed' else 'danger' }}"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Request {{ hotel_request.status.title() }}</h6>
+                                <p class="text-gray small mb-0">{{ hotel_request.updated_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #6c757d;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -2.25rem;
+    top: 0.25rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    border: 2px solid var(--bs-dark);
+}
+
+.timeline-content {
+    margin-left: 0.5rem;
+}
+</style>
+{% endblock %}

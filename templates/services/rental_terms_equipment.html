@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Equipment Rental Terms & Conditions - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-tools text-warning me-3"></i>Equipment Rental <span class="text-gold">Terms & Conditions</span>
+            </h1>
+            <p class="lead text-gray mb-4">Please read our terms and conditions carefully before booking.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="text-white mb-4">Equipment Rental Agreement</h3>
+                                
+                                <div class="accordion" id="termsAccordion">
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#rental-terms">
+                                                1. Rental Terms and Duration
+                                            </button>
+                                        </h2>
+                                        <div id="rental-terms" class="accordion-collapse collapse show" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Minimum rental period is 4 hours for most equipment</li>
+                                                    <li>Daily, weekly, and monthly rates available</li>
+                                                    <li>Equipment must be returned by agreed time</li>
+                                                    <li>Late return fees: 25% of daily rate per hour</li>
+                                                    <li>Weekend and holiday rates may apply</li>
+                                                    <li>Advanced booking recommended (24-48 hours)</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#operator-requirements">
+                                                2. Operator Requirements and Training
+                                            </button>
+                                        </h2>
+                                        <div id="operator-requirements" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Certified operators required for specialized equipment</li>
+                                                    <li>Safety briefing mandatory before operation</li>
+                                                    <li>Operating manual provided with each rental</li>
+                                                    <li>Training sessions available at additional cost</li>
+                                                    <li>Minimum age 18 years for most equipment</li>
+                                                    <li>Experience verification may be required</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#payment-security">
+                                                3. Payment and Security Deposit
+                                            </button>
+                                        </h2>
+                                        <div id="payment-security" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Security deposit: 50-100% of equipment value</li>
+                                                    <li>Payment due at pickup or advance payment</li>
+                                                    <li>Accepted: Cash, Bank Transfer, Card, Cheque</li>
+                                                    <li>Deposit refunded within 5-10 business days</li>
+                                                    <li>Damage costs deducted from deposit</li>
+                                                    <li>Replacement cost charged for theft/total loss</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#equipment-condition">
+                                                4. Equipment Condition and Inspection
+                                            </button>
+                                        </h2>
+                                        <div id="equipment-condition" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Pre-rental inspection and testing required</li>
+                                                    <li>Equipment delivered in working condition</li>
+                                                    <li>All accessories and parts must be returned</li>
+                                                    <li>Cleaning required before return</li>
+                                                    <li>Operating hours recorded for applicable equipment</li>
+                                                    <li>Immediate notification required for malfunctions</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#installation-support">
+                                                5. Installation and Technical Support
+                                            </button>
+                                        </h2>
+                                        <div id="installation-support" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Installation service available at additional cost</li>
+                                                    <li>Site preparation customer's responsibility</li>
+                                                    <li>Power supply and connections must be ready</li>
+                                                    <li>Technical support during business hours</li>
+                                                    <li>Emergency support available (charges apply)</li>
+                                                    <li>User manual and safety guidelines provided</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#safety-liability">
+                                                6. Safety and Liability
+                                            </button>
+                                        </h2>
+                                        <div id="safety-liability" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Customer responsible for safe operation</li>
+                                                    <li>Safety equipment must be used as required</li>
+                                                    <li>Workplace safety regulations must be followed</li>
+                                                    <li>Insurance coverage for equipment damage</li>
+                                                    <li>Public liability insurance recommended</li>
+                                                    <li>Immediate accident reporting required</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#prohibited-use">
+                                                7. Prohibited Uses and Restrictions
+                                            </button>
+                                        </h2>
+                                        <div id="prohibited-use" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Use only for intended purpose</li>
+                                                    <li>No modifications or alterations allowed</li>
+                                                    <li>Subletting equipment prohibited</li>
+                                                    <li>Operation beyond rated capacity forbidden</li>
+                                                    <li>Use in hazardous conditions restricted</li>
+                                                    <li>Environmental regulations must be followed</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#maintenance-breakdown">
+                                                8. Maintenance and Breakdown
+                                            </button>
+                                        </h2>
+                                        <div id="maintenance-breakdown" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Regular maintenance included in rental</li>
+                                                    <li>24/7 breakdown support available</li>
+                                                    <li>Replacement equipment if available</li>
+                                                    <li>Customer liable for misuse damage</li>
+                                                    <li>Fuel, oil, and consumables customer's responsibility</li>
+                                                    <li>Service records maintained by GM Services</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5 p-4 bg-warning bg-opacity-10 rounded">
+                                    <h5 class="text-warning mb-3"><i class="fas fa-exclamation-triangle me-2"></i>Safety Reminders</h5>
+                                    <ul class="text-gray mb-0">
+                                        <li>Always wear appropriate safety equipment</li>
+                                        <li>Read and follow operating instructions</li>
+                                        <li>Ensure proper training before operation</li>
+                                        <li>Report any safety concerns immediately</li>
+                                        <li>Comply with local safety regulations</li>
+                                    </ul>
+                                </div>
+
+                                <div class="text-center mt-5">
+                                    <p class="text-gray mb-4">By proceeding with your booking, you acknowledge that you have read, understood, and agree to these terms and conditions.</p>
+                                    <div class="d-flex gap-3 justify-content-center">
+                                        <a href="{{ url_for('services.rentals') }}" class="btn btn-outline-warning">
+                                            <i class="fas fa-arrow-left me-2"></i>Back to Rentals
+                                        </a>
+                                        <a href="{{ url_for('services.rental_booking_form', rental_type='equipment') }}" class="btn btn-warning">
+                                            <i class="fas fa-check me-2"></i>I Agree - Proceed to Book
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

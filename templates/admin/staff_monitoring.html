@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Monitoring - GM Services{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white">
+                <i class="fas fa-users-cog me-2"></i>Staff Activity Monitoring
+            </h1>
+            <p class="text-gray mb-0">Monitor all staff members' activities and performance</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light me-2">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <a href="{{ url_for('admin.create_staff') }}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Onboard New Staff
+            </a>
+        </div>
+    </div>
+
+    <!-- Staff Overview Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Total Staff</h6>
+                            <h3 class="text-white mb-0">{{ staff_activities|length }}</h3>
+                        </div>
+                        <div class="text-primary">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Active Staff</h6>
+                            <h3 class="text-success mb-0">{{ staff_activities.values() | selectattr('total_count', 'gt', 0) | list | length }}</h3>
+                        </div>
+                        <div class="text-success">
+                            <i class="fas fa-user-check fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Total Activities</h6>
+                            <h3 class="text-info mb-0">{{ staff_activities.values() | sum(attribute='total_count') }}</h3>
+                        </div>
+                        <div class="text-info">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-gray mb-1">Avg Activities/Staff</h6>
+                            <h3 class="text-warning mb-0">{{ (staff_activities.values() | sum(attribute='total_count') / staff_activities|length) | round(1) if staff_activities else 0 }}</h3>
+                        </div>
+                        <div class="text-warning">
+                            <i class="fas fa-chart-bar fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Activity Details -->
+    <div class="gm-card">
+        <div class="gm-card-body">
+            <h5 class="text-white mb-4">
+                <i class="fas fa-list me-2"></i>Staff Members Activity (Last 7 Days)
+            </h5>
+            
+            {% if staff_activities %}
+                {% for staff_id, data in staff_activities.items() %}
+                <div class="card mb-3 bg-light">
+                    <div class="card-header bg-primary text-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-user-tie me-2"></i> 
+                                    {{ data.staff.first_name }} {{ data.staff.last_name }}
+                                </h6>
+                                <small class="text-light">{{ data.staff.email }}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <span class="badge bg-{{ 'info' if data.staff.role == 'staff' else ('warning' if data.staff.role == 'admin' else 'secondary') }} text-dark">
+                                    {{ data.staff.role.title() }}
+                                </span>
+                            </div>
+                            <div class="col-md-2">
+                                {% if data.staff.department %}
+                                    <small class="text-light">{{ data.staff.department }}</small>
+                                {% else %}
+                                    <small class="text-muted">No Department</small>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-2">
+                                <span class="badge bg-{{ 'success' if data.total_count > 0 else 'secondary' }}">
+                                    {{ data.total_count }} Activities
+                                </span>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <a href="{{ url_for('admin.user_detail', user_id=data.staff.id) }}" 
+                                   class="btn btn-sm btn-light me-1" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-light" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#staff-{{ staff_id }}" 
+                                        aria-expanded="false" title="Toggle Details">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="collapse" id="staff-{{ staff_id }}">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <h6 class="text-dark">
+                                        <i class="fas fa-info-circle me-2"></i>Staff Information
+                                    </h6>
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td><strong>Full Name:</strong></td>
+                                            <td>{{ data.staff.first_name }} {{ data.staff.last_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Email:</strong></td>
+                                            <td>{{ data.staff.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Role:</strong></td>
+                                            <td>
+                                                <span class="badge bg-{{ 'info' if data.staff.role == 'staff' else ('warning' if data.staff.role == 'admin' else 'secondary') }} text-dark">
+                                                    {{ data.staff.role.title() }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Department:</strong></td>
+                                            <td>{{ data.staff.department or 'Not assigned' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Status:</strong></td>
+                                            <td>
+                                                <span class="badge bg-{{ 'success' if data.staff.is_active else 'danger' }}">
+                                                    {{ 'Active' if data.staff.is_active else 'Inactive' }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% if data.staff.phone %}
+                                        <tr>
+                                            <td><strong>Phone:</strong></td>
+                                            <td>{{ data.staff.phone }}</td>
+                                        </tr>
+                                        {% endif %}
+                                        {% if data.staff.employee_id %}
+                                        <tr>
+                                            <td><strong>Employee ID:</strong></td>
+                                            <td>{{ data.staff.employee_id }}</td>
+                                        </tr>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if data.onboarding_record %}
+                                    <h6 class="text-dark">
+                                        <i class="fas fa-user-plus me-2"></i>Onboarding Details
+                                    </h6>
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td><strong>Onboarded:</strong></td>
+                                            <td>{{ data.onboarding_record.onboarding_date.strftime('%Y-%m-%d') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Department:</strong></td>
+                                            <td>{{ data.onboarding_record.department or 'Not specified' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Position:</strong></td>
+                                            <td>{{ data.onboarding_record.position or 'Not specified' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Onboarded By:</strong></td>
+                                            <td>
+                                                {% if data.onboarding_record.onboarded_by_user %}
+                                                    {{ data.onboarding_record.onboarded_by_user.first_name }} {{ data.onboarding_record.onboarded_by_user.last_name }}
+                                                {% else %}
+                                                    System
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Last Login:</strong></td>
+                                            <td>
+                                                {% if data.staff.last_login %}
+                                                    {{ data.staff.last_login.strftime('%Y-%m-%d %H:%M') }}
+                                                {% else %}
+                                                    Never
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i> 
+                                        No onboarding record found for this staff member
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if data.activities %}
+                            <h6 class="text-dark">
+                                <i class="fas fa-history me-2"></i>Recent Activities
+                            </h6>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th class="text-white">Timestamp</th>
+                                            <th class="text-white">Activity Type</th>
+                                            <th class="text-white">Action</th>
+                                            <th class="text-white">Category</th>
+                                            <th class="text-white">Status</th>
+                                            <th class="text-white">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for activity in data.activities[:10] %}
+                                        <tr class="{% if not activity.success %}table-warning{% endif %}">
+                                            <td>
+                                                <small>{{ activity.timestamp.strftime('%m/%d %H:%M') }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary">
+                                                    {{ activity.activity_type.replace('_', ' ').title() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ activity.action }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ 
+                                                    'primary' if activity.category == 'authentication' else
+                                                    'success' if activity.category == 'user_management' else
+                                                    'info' if activity.category == 'service_request' else
+                                                    'warning' if activity.category == 'system' else
+                                                    'secondary'
+                                                }}">
+                                                    {{ activity.category.replace('_', ' ').title() }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {% if activity.success %}
+                                                    <span class="badge bg-success">Success</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Failed</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ activity.description[:50] }}{% if activity.description|length > 50 %}...{% endif %}</small>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No recent activities found for this staff member
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h4 class="text-white">No Staff Found</h4>
+                <p class="text-gray">No staff members have been onboarded yet.</p>
+                <a href="{{ url_for('admin.create_staff') }}" class="btn btn-primary">
+                    <i class="fas fa-user-plus me-2"></i>Onboard First Staff Member
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

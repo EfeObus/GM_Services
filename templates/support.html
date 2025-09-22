@@ -1,0 +1,530 @@
+{% extends "base.html" %}
+
+{% block title %}Support Center - GM Services{% endblock %}
+
+{% block content %}
+<!-- Support Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <span class="text-gold">Support</span> Center
+            </h1>
+            <p class="lead text-gray mb-4">
+                We're here to help. Get the support you need, when you need it.
+            </p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="#contact-support" class="btn btn-success btn-lg">
+                    <i class="fas fa-headset me-2"></i>Contact Support
+                </a>
+                <a href="#knowledge-base" class="btn btn-outline-warning btn-lg">
+                    <i class="fas fa-book me-2"></i>Knowledge Base
+                </a>
+                <a href="#system-status" class="btn btn-outline-info btn-lg">
+                    <i class="fas fa-chart-line me-2"></i>System Status
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Support Options -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card h-100 text-center">
+                    <div class="gm-card-body">
+                        <div class="icon-circle bg-success mb-3 mx-auto">
+                            <i class="fas fa-phone-alt text-white"></i>
+                        </div>
+                        <h5 class="text-white mb-3">Phone Support</h5>
+                        <p class="text-gray">Speak directly with our support team</p>
+                        <p class="text-gold fw-bold">+234 800 GM-HELP</p>
+                        <small class="text-gray">24/7 Available</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card h-100 text-center">
+                    <div class="gm-card-body">
+                        <div class="icon-circle bg-primary mb-3 mx-auto">
+                            <i class="fas fa-comments text-white"></i>
+                        </div>
+                        <h5 class="text-white mb-3">Live Chat</h5>
+                        <p class="text-gray">Get instant help from our agents</p>
+                        <button class="btn btn-outline-warning" onclick="openChat()">
+                            Start Chat
+                        </button>
+                        <small class="text-green d-block mt-2">Usually responds in 2-5 minutes</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card h-100 text-center">
+                    <div class="gm-card-body">
+                        <div class="icon-circle bg-warning mb-3 mx-auto">
+                            <i class="fas fa-envelope text-white"></i>
+                        </div>
+                        <h5 class="text-white mb-3">Email Support</h5>
+                        <p class="text-gray">Send us detailed questions</p>
+                        <p class="text-gold fw-bold">support@gmservices.ng</p>
+                        <small class="text-gray">Response within 24 hours</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="gm-card h-100 text-center">
+                    <div class="gm-card-body">
+                        <div class="icon-circle bg-danger mb-3 mx-auto">
+                            <i class="fas fa-exclamation-triangle text-white"></i>
+                        </div>
+                        <h5 class="text-white mb-3">Emergency</h5>
+                        <p class="text-gray">Urgent issues requiring immediate attention</p>
+                        <p class="text-red fw-bold">+234 800 URGENT</p>
+                        <small class="text-gray">Emergency hotline</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Support Categories -->
+<section id="support-categories" class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">How Can We Help You?</h2>
+            <p class="text-gray">Choose a category to get specific help</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-circle bg-success me-3">
+                                <i class="fas fa-car text-white"></i>
+                            </div>
+                            <h5 class="text-white mb-0">Automotive Services</h5>
+                        </div>
+                        <p class="text-gray mb-3">Get help with vehicle services, maintenance, and purchases</p>
+                        <ul class="list-unstyled text-gray">
+                            <li><i class="fas fa-check text-green me-2"></i>Vehicle registration issues</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Service appointments</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Insurance claims</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Warranty information</li>
+                        </ul>
+                        <button class="btn btn-outline-success w-100" onclick="selectCategory('automotive')">
+                            Get Automotive Help
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-circle bg-warning me-3">
+                                <i class="fas fa-money-bill-wave text-white"></i>
+                            </div>
+                            <h5 class="text-white mb-0">Financial Services</h5>
+                        </div>
+                        <p class="text-gray mb-3">Support for loans, payments, and financial products</p>
+                        <ul class="list-unstyled text-gray">
+                            <li><i class="fas fa-check text-green me-2"></i>Loan applications</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Payment issues</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Account management</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Investment inquiries</li>
+                        </ul>
+                        <button class="btn btn-outline-warning w-100" onclick="selectCategory('financial')">
+                            Get Financial Help
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-circle bg-primary me-3">
+                                <i class="fas fa-shipping-fast text-white"></i>
+                            </div>
+                            <h5 class="text-white mb-0">Logistics & Delivery</h5>
+                        </div>
+                        <p class="text-gray mb-3">Track packages, schedule deliveries, and resolve shipping issues</p>
+                        <ul class="list-unstyled text-gray">
+                            <li><i class="fas fa-check text-green me-2"></i>Package tracking</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Delivery scheduling</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Lost packages</li>
+                            <li><i class="fas fa-check text-green me-2"></i>Shipping rates</li>
+                        </ul>
+                        <button class="btn btn-outline-primary w-100" onclick="selectCategory('logistics')">
+                            Get Logistics Help
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Support Ticket System -->
+<section id="contact-support" class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <div class="text-center mb-4">
+                            <h2 class="text-gold mb-3">Submit a Support Ticket</h2>
+                            <p class="text-gray">Can't find what you're looking for? Send us a detailed message and we'll get back to you.</p>
+                        </div>
+                        
+                        <form id="supportForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label text-white">First Name *</label>
+                                    <input type="text" class="form-control bg-dark border-success text-white" id="firstName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label text-white">Last Name *</label>
+                                    <input type="text" class="form-control bg-dark border-success text-white" id="lastName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label text-white">Email Address *</label>
+                                    <input type="email" class="form-control bg-dark border-success text-white" id="email" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label text-white">Phone Number</label>
+                                    <input type="tel" class="form-control bg-dark border-success text-white" id="phone">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="category" class="form-label text-white">Support Category *</label>
+                                    <select class="form-select bg-dark border-success text-white" id="category" required>
+                                        <option value="">Select a category</option>
+                                        <option value="automotive">Automotive Services</option>
+                                        <option value="financial">Financial Services</option>
+                                        <option value="logistics">Logistics & Delivery</option>
+                                        <option value="hotel">Hotel & Hospitality</option>
+                                        <option value="security">Security Services</option>
+                                        <option value="technical">Technical Support</option>
+                                        <option value="billing">Billing & Payments</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="priority" class="form-label text-white">Priority Level *</label>
+                                    <select class="form-select bg-dark border-success text-white" id="priority" required>
+                                        <option value="">Select priority</option>
+                                        <option value="low">Low - General inquiry</option>
+                                        <option value="normal">Normal - Standard support</option>
+                                        <option value="high">High - Business impact</option>
+                                        <option value="urgent">Urgent - Critical issue</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="subject" class="form-label text-white">Subject *</label>
+                                <input type="text" class="form-control bg-dark border-success text-white" id="subject" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="message" class="form-label text-white">Message *</label>
+                                <textarea class="form-control bg-dark border-success text-white" id="message" rows="6" required placeholder="Please provide detailed information about your issue..."></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="attachment" class="form-label text-white">Attachments</label>
+                                <input type="file" class="form-control bg-dark border-success text-white" id="attachment" multiple>
+                                <small class="text-gray">Supported formats: PDF, DOC, DOCX, JPG, PNG (Max 10MB each)</small>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Support Ticket
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Knowledge Base -->
+<section id="knowledge-base" class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Knowledge Base</h2>
+            <p class="text-gray">Find answers to common questions and learn how to use our services</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <h5 class="text-gold mb-3">Getting Started</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    How to create an account
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Setting up your profile
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Understanding our services
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    First-time user guide
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <h5 class="text-gold mb-3">Account Management</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Updating personal information
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Password and security
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Managing notifications
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Account verification
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <h5 class="text-gold mb-3">Billing & Payments</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Payment methods accepted
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Understanding your bill
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Refund policies
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-gray text-decoration-none">
+                                    <i class="fas fa-arrow-right text-green me-2"></i>
+                                    Dispute resolution
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- System Status -->
+<section id="system-status" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">System Status</h2>
+            <p class="text-gray">Real-time status of our services and systems</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-3">Core Services</h5>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-gray">Website & Platform</span>
+                            <span class="badge bg-success">Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-gray">Payment Processing</span>
+                            <span class="badge bg-success">Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-gray">Customer Database</span>
+                            <span class="badge bg-success">Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center">
+                            <span class="text-gray">Email Services</span>
+                            <span class="badge bg-warning">Maintenance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-3">Service Modules</h5>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-gray">Automotive Services</span>
+                            <span class="badge bg-success">Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-gray">Financial Services</span>
+                            <span class="badge bg-success">Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-gray">Logistics Platform</span>
+                            <span class="badge bg-success">Operational</span>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center">
+                            <span class="text-gray">Hotel Management</span>
+                            <span class="badge bg-success">Operational</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <p class="text-gray">
+                <i class="fas fa-clock text-gold me-2"></i>
+                Last updated: <span id="statusTime">September 19, 2025 at 3:45 PM WAT</span>
+            </p>
+            <a href="#" class="text-gold text-decoration-none">
+                <i class="fas fa-external-link-alt me-1"></i>
+                View detailed status page
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.bg-dark-alt {
+    background-color: #0a0a0a !important;
+}
+
+.status-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+</style>
+
+<script>
+function openChat() {
+    // Placeholder for chat functionality
+    alert('Live chat will be opened. This would integrate with your chat system.');
+}
+
+function selectCategory(category) {
+    // Auto-select category in support form
+    document.getElementById('category').value = category;
+    document.getElementById('contact-support').scrollIntoView({
+        behavior: 'smooth'
+    });
+}
+
+// Support form submission
+document.getElementById('supportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Collect form data
+    const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        category: document.getElementById('category').value,
+        priority: document.getElementById('priority').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+    
+    // Show success message
+    alert('Support ticket submitted successfully! You will receive a confirmation email shortly.');
+    
+    // Reset form
+    this.reset();
+});
+
+// Update status time every minute
+setInterval(function() {
+    const now = new Date();
+    const timeString = now.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Africa/Lagos',
+        timeZoneName: 'short'
+    });
+    document.getElementById('statusTime').textContent = timeString;
+}, 60000);
+</script>
+{% endblock %}

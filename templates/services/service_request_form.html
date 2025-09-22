@@ -1,0 +1,376 @@
+{% extends "base.html" %}
+
+{% block title %}Service Request - GM Services{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid #007bff;
+    }
+    
+    .form-section h5 {
+        color: #007bff;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .required {
+        color: #dc3545;
+    }
+    
+    .location-select {
+        position: relative;
+    }
+    
+    .urgency-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .urgency-low { background-color: #d4edda; color: #155724; }
+    .urgency-medium { background-color: #fff3cd; color: #856404; }
+    .urgency-high { background-color: #f8d7da; color: #721c24; }
+    .urgency-urgent { background-color: #f5c6cb; color: #721c24; }
+    
+    .contact-method-icons i {
+        margin-right: 8px;
+        width: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h1 class="display-6 text-primary">
+                    <i class="fas fa-headset me-3"></i>Submit Service Request
+                </h1>
+                <p class="lead text-muted">
+                    We're here to help! Fill out the form below and we'll get back to you as soon as possible.
+                </p>
+            </div>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Service Request Form -->
+            <form method="POST" id="serviceRequestForm" novalidate>
+                <!-- Request Type Section -->
+                <div class="form-section">
+                    <h5><i class="fas fa-clipboard-list me-2"></i>Request Type</h5>
+                    <div class="mb-3">
+                        <label for="request_type_id" class="form-label">
+                            Type of Request <span class="required">*</span>
+                        </label>
+                        <select class="form-select" id="request_type_id" name="request_type_id" required>
+                            <option value="">Select a request type...</option>
+                            {% for rt in request_types %}
+                                <option value="{{ rt.id }}" 
+                                        data-description="{{ rt.description }}"
+                                        data-category="{{ rt.category }}"
+                                        data-required-fields="{{ rt.required_fields|tojson if rt.required_fields else '[]' }}"
+                                        data-optional-fields="{{ rt.optional_fields|tojson if rt.optional_fields else '[]' }}">
+                                    {{ rt.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text" id="requestTypeDescription"></div>
+                    </div>
+                </div>
+
+                <!-- Request Details Section -->
+                <div class="form-section">
+                    <h5><i class="fas fa-edit me-2"></i>Request Details</h5>
+                    
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">
+                            Subject <span class="required">*</span>
+                        </label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="subject" 
+                               name="subject" 
+                               placeholder="Brief description of your request"
+                               maxlength="200" 
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">
+                            Description <span class="required">*</span>
+                        </label>
+                        <textarea class="form-control" 
+                                  id="description" 
+                                  name="description" 
+                                  rows="5" 
+                                  placeholder="Please provide detailed information about your request..."
+                                  required></textarea>
+                        <div class="form-text">Be as specific as possible to help us assist you better.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="related_service" class="form-label">Related Service</label>
+                        <select class="form-select" id="related_service" name="related_service">
+                            <option value="">Select if applicable...</option>
+                            <option value="automobile">Automobile Dealerships</option>
+                            <option value="loans">Loan Services</option>
+                            <option value="gadgets">Gadgets & Accessories</option>
+                            <option value="hotel">Hotel Management</option>
+                            <option value="logistics">Logistics</option>
+                            <option value="rentals">Rental Services</option>
+                            <option value="car_services">Car Services</option>
+                            <option value="license_plates">License Plates</option>
+                            <option value="jewelry">Luxury Jewelry</option>
+                            <option value="creative_services">Creative Services</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="urgency" class="form-label">Urgency Level</label>
+                            <select class="form-select" id="urgency" name="urgency">
+                                <option value="low">Low - Can wait a few days</option>
+                                <option value="medium" selected>Medium - Normal priority</option>
+                                <option value="high">High - Need response soon</option>
+                                <option value="urgent">Urgent - Need immediate attention</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="preferred_response_time" class="form-label">Preferred Response Time</label>
+                            <select class="form-select" id="preferred_response_time" name="preferred_response_time">
+                                <option value="within_1_hour">Within 1 hour</option>
+                                <option value="within_24_hours" selected>Within 24 hours</option>
+                                <option value="within_week">Within a week</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="form-section">
+                    <h5><i class="fas fa-user me-2"></i>Contact Information</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="customer_name" class="form-label">
+                                Full Name <span class="required">*</span>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="customer_name" 
+                                   name="customer_name" 
+                                   placeholder="Your full name"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="customer_email" class="form-label">
+                                Email Address <span class="required">*</span>
+                            </label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="customer_email" 
+                                   name="customer_email" 
+                                   placeholder="your.email@example.com"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="customer_phone" class="form-label">Phone Number</label>
+                            <input type="tel" 
+                                   class="form-control" 
+                                   id="customer_phone" 
+                                   name="customer_phone" 
+                                   placeholder="+234 xxx xxxx xxx">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="preferred_contact_method" class="form-label">Preferred Contact Method</label>
+                            <select class="form-select contact-method-icons" id="preferred_contact_method" name="preferred_contact_method">
+                                <option value="email" selected><i class="fas fa-envelope"></i>Email</option>
+                                <option value="phone"><i class="fas fa-phone"></i>Phone Call</option>
+                                <option value="sms"><i class="fas fa-sms"></i>SMS</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Information Section -->
+                <div class="form-section">
+                    <h5><i class="fas fa-map-marker-alt me-2"></i>Location Information</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="customer_state" class="form-label">State</label>
+                            <select class="form-select" id="customer_state" name="customer_state">
+                                <option value="">Select your state...</option>
+                                {% for state in states %}
+                                    <option value="{{ state.name }}" data-state-id="{{ state.id }}">
+                                        {{ state.name }} ({{ state.zone }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="customer_lga" class="form-label">Local Government Area</label>
+                            <select class="form-select" id="customer_lga" name="customer_lga" disabled>
+                                <option value="">Select state first...</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="customer_address" class="form-label">Address</label>
+                        <textarea class="form-control" 
+                                  id="customer_address" 
+                                  name="customer_address" 
+                                  rows="2" 
+                                  placeholder="Your full address (optional)"></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="form-section text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Request
+                    </button>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>
+                            Your information is secure and will only be used to process your request.
+                        </small>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Help Section -->
+            <div class="mt-5 p-4 bg-light rounded">
+                <h6 class="text-primary">
+                    <i class="fas fa-question-circle me-2"></i>Need Help?
+                </h6>
+                <p class="mb-2">
+                    <strong>Track your request:</strong> 
+                    <a href="{{ url_for('services.track_request') }}">Check request status</a>
+                </p>
+                <p class="mb-2">
+                    <strong>Response times:</strong> We typically respond within 24 hours for normal requests
+                </p>
+                <p class="mb-0">
+                    <strong>Urgent matters:</strong> Call us directly at +234 xxx xxxx xxx
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const requestTypeSelect = document.getElementById('request_type_id');
+    const stateSelect = document.getElementById('customer_state');
+    const lgaSelect = document.getElementById('customer_lga');
+    const form = document.getElementById('serviceRequestForm');
+
+    // Handle request type change
+    requestTypeSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const description = selectedOption.getAttribute('data-description');
+        const descriptionDiv = document.getElementById('requestTypeDescription');
+        
+        if (description) {
+            descriptionDiv.textContent = description;
+            descriptionDiv.style.display = 'block';
+        } else {
+            descriptionDiv.style.display = 'none';
+        }
+    });
+
+    // Handle state change to load LGAs
+    stateSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const stateId = selectedOption.getAttribute('data-state-id');
+        
+        // Reset LGA select
+        lgaSelect.innerHTML = '<option value="">Loading...</option>';
+        lgaSelect.disabled = true;
+        
+        if (stateId) {
+            // Fetch LGAs for selected state
+            fetch(`/services/api/states/${stateId}/lgas`)
+                .then(response => response.json())
+                .then(data => {
+                    lgaSelect.innerHTML = '<option value="">Select LGA...</option>';
+                    data.forEach(lga => {
+                        const option = document.createElement('option');
+                        option.value = lga.name;
+                        option.textContent = `${lga.name} (${lga.headquarters})`;
+                        lgaSelect.appendChild(option);
+                    });
+                    lgaSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error loading LGAs:', error);
+                    lgaSelect.innerHTML = '<option value="">Error loading LGAs</option>';
+                });
+        } else {
+            lgaSelect.innerHTML = '<option value="">Select state first...</option>';
+        }
+    });
+
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        const requiredFields = ['request_type_id', 'subject', 'description', 'customer_name', 'customer_email'];
+        let isValid = true;
+
+        requiredFields.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+            alert('Please fill in all required fields.');
+        }
+    });
+
+    // Real-time validation
+    const requiredInputs = document.querySelectorAll('input[required], select[required], textarea[required]');
+    requiredInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

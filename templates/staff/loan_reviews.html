@@ -1,0 +1,243 @@
+{% extends "staff/base.html" %}
+
+{% block title %}Loan Reviews{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-white mb-1">
+                <i class="fas fa-clipboard-check text-success me-2"></i>Loan Reviews
+            </h2>
+            <p class="text-gray mb-0">Review and manage assigned loan applications</p>
+        </div>
+        <div>
+            <span class="badge bg-info fs-6">{{ assigned_applications|length }} Assigned</span>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <ul class="nav nav-pills mb-4">
+        <li class="nav-item">
+            <a class="nav-link {{ 'active' if filter_status == 'assigned' else '' }}" 
+               href="{{ url_for('staff.loan_reviews', status='assigned') }}">
+                <i class="fas fa-user-check me-1"></i>Assigned to Me ({{ assigned_count }})
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ 'active' if filter_status == 'under_review' else '' }}" 
+               href="{{ url_for('staff.loan_reviews', status='under_review') }}">
+                <i class="fas fa-search me-1"></i>Under Review ({{ under_review_count }})
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ 'active' if filter_status == 'all' else '' }}" 
+               href="{{ url_for('staff.loan_reviews') }}">
+                <i class="fas fa-list me-1"></i>All Applications ({{ total_count }})
+            </a>
+        </li>
+    </ul>
+
+    {% if applications %}
+    <!-- Applications Table -->
+    <div class="gm-card">
+        <div class="gm-card-body">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Application #</th>
+                            <th>Customer</th>
+                            <th>Loan Type</th>
+                            <th>Amount</th>
+                            <th>Applied Date</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in applications %}
+                        <tr>
+                            <td>
+                                <span class="fw-bold text-success">
+                                    {{ app.application_number if hasattr(app, 'application_number') else 'App #' + app.id|string }}
+                                </span>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="text-white fw-semibold">{{ app.user.full_name }}</div>
+                                    <small class="text-gray">{{ app.user.email }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">
+                                    {{ app.loan_type.name if app.loan_type else app.loan_type }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-success fw-bold">
+                                    ₦{{ "{:,.0f}".format(app.requested_amount if hasattr(app, 'requested_amount') else app.amount) }}
+                                </span>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="text-white">{{ app.created_at.strftime('%d %b %Y') }}</div>
+                                    <small class="text-gray">{{ app.created_at.strftime('%I:%M %p') }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                {% set status_colors = {
+                                    'submitted': 'bg-warning',
+                                    'assigned': 'bg-primary',
+                                    'under_review': 'bg-info',
+                                    'approved': 'bg-success',
+                                    'rejected': 'bg-danger'
+                                } %}
+                                <span class="badge {{ status_colors.get(app.status, 'bg-secondary') }}">
+                                    {{ app.status_display if hasattr(app, 'status_display') else app.status.title() }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if (app.requested_amount if hasattr(app, 'requested_amount') else app.amount) > 1000000 %}
+                                <span class="badge bg-danger">High</span>
+                                {% elif (app.requested_amount if hasattr(app, 'requested_amount') else app.amount) > 500000 %}
+                                <span class="badge bg-warning">Medium</span>
+                                {% else %}
+                                <span class="badge bg-success">Standard</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('staff.loan_review_detail', application_id=app.id) }}" 
+                                       class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-eye me-1"></i>Review
+                                    </a>
+                                    {% if app.status == 'assigned' and app.assigned_staff_id == current_user.id %}
+                                    <button type="button" class="btn btn-success btn-sm" 
+                                            onclick="startReview({{ app.id }})">
+                                        <i class="fas fa-play me-1"></i>Start
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    {% if pagination and pagination.pages > 1 %}
+    <nav aria-label="Applications pagination" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if pagination.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('staff.loan_reviews', page=pagination.prev_num, status=filter_status) }}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for page_num in pagination.iter_pages() %}
+                {% if page_num %}
+                    {% if page_num != pagination.page %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('staff.loan_reviews', page=page_num, status=filter_status) }}">{{ page_num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                    {% endif %}
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">…</span>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if pagination.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('staff.loan_reviews', page=pagination.next_num, status=filter_status) }}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="gm-card">
+        <div class="gm-card-body text-center py-5">
+            <i class="fas fa-clipboard-list text-gray display-4 mb-3"></i>
+            <h4 class="text-white mb-2">No Loan Applications</h4>
+            {% if filter_status == 'assigned' %}
+            <p class="text-gray mb-0">You don't have any loan applications assigned to you at the moment.</p>
+            {% elif filter_status == 'under_review' %}
+            <p class="text-gray mb-0">No loan applications are currently under review.</p>
+            {% else %}
+            <p class="text-gray mb-0">No loan applications match your current filter.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Start Review Modal -->
+<div class="modal fade" id="startReviewModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-dark">Start Loan Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-dark">Are you ready to start reviewing this loan application? This will change the status to "Under Review".</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="confirmStartReview()">Start Review</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedApplicationId = null;
+
+function startReview(applicationId) {
+    selectedApplicationId = applicationId;
+    new bootstrap.Modal(document.getElementById('startReviewModal')).show();
+}
+
+function confirmStartReview() {
+    if (selectedApplicationId) {
+        fetch(`/staff/loan_reviews/${selectedApplicationId}/start_review`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error starting review: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while starting the review.');
+        });
+    }
+}
+</script>
+{% endblock %}

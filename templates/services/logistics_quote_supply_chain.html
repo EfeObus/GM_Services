@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Supply Chain Management Quote - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-boxes text-success me-3"></i>Supply Chain <span class="text-gold">Quote</span>
+            </h1>
+            <p class="lead text-gray mb-4">Get a custom quote for your supply chain management needs</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">
+                            <i class="fas fa-clipboard-list text-success me-2"></i>
+                            Supply Chain Management Quote Request
+                        </h3>
+                        
+                        <form method="POST" action="{{ url_for('services.submit_logistics_quote', service_type='supply_chain') }}">
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Customer Information -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Customer Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.customer_name.label(class="form-label text-gray") }}
+                                        {{ form.customer_name(class="form-control") }}
+                                        {% if form.customer_name.errors %}
+                                            <div class="text-danger small">{{ form.customer_name.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.customer_email.label(class="form-label text-gray") }}
+                                        {{ form.customer_email(class="form-control") }}
+                                        {% if form.customer_email.errors %}
+                                            <div class="text-danger small">{{ form.customer_email.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.customer_phone.label(class="form-label text-gray") }}
+                                        {{ form.customer_phone(class="form-control") }}
+                                        {% if form.customer_phone.errors %}
+                                            <div class="text-danger small">{{ form.customer_phone.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.company_name.label(class="form-label text-gray") }}
+                                        {{ form.company_name(class="form-control") }}
+                                        {% if form.company_name.errors %}
+                                            <div class="text-danger small">{{ form.company_name.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.business_type.label(class="form-label text-gray") }}
+                                    {{ form.business_type(class="form-control") }}
+                                    {% if form.business_type.errors %}
+                                        <div class="text-danger small">{{ form.business_type.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Business Location -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Business Location</h5>
+                                <div class="mb-3">
+                                    {{ form.business_location.label(class="form-label text-gray") }}
+                                    {{ form.business_location(class="form-control", rows="3") }}
+                                    {% if form.business_location.errors %}
+                                        <div class="text-danger small">{{ form.business_location.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.business_city.label(class="form-label text-gray") }}
+                                        {{ form.business_city(class="form-control") }}
+                                        {% if form.business_city.errors %}
+                                            <div class="text-danger small">{{ form.business_city.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.business_state.label(class="form-label text-gray") }}
+                                        {{ form.business_state(class="form-control") }}
+                                        {% if form.business_state.errors %}
+                                            <div class="text-danger small">{{ form.business_state.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Service Requirements -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Service Requirements</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.supply_chain_type.label(class="form-label text-gray") }}
+                                        {{ form.supply_chain_type(class="form-control") }}
+                                        {% if form.supply_chain_type.errors %}
+                                            <div class="text-danger small">{{ form.supply_chain_type.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.duration_months.label(class="form-label text-gray") }}
+                                        {{ form.duration_months(class="form-control", placeholder="12") }}
+                                        {% if form.duration_months.errors %}
+                                            <div class="text-danger small">{{ form.duration_months.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.volume_per_month.label(class="form-label text-gray") }}
+                                    {{ form.volume_per_month(class="form-control", placeholder="1000") }}
+                                    {% if form.volume_per_month.errors %}
+                                        <div class="text-danger small">{{ form.volume_per_month.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Product Information -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Product Information</h5>
+                                <div class="mb-3">
+                                    {{ form.product_description.label(class="form-label text-gray") }}
+                                    {{ form.product_description(class="form-control", rows="4", placeholder="Describe your products/inventory that need supply chain management") }}
+                                    {% if form.product_description.errors %}
+                                        <div class="text-danger small">{{ form.product_description.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.current_challenges.label(class="form-label text-gray") }}
+                                    {{ form.current_challenges(class="form-control", rows="3", placeholder="What supply chain challenges are you currently facing?") }}
+                                    {% if form.current_challenges.errors %}
+                                        <div class="text-danger small">{{ form.current_challenges.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.special_requirements.label(class="form-label text-gray") }}
+                                    {{ form.special_requirements(class="form-control", rows="3", placeholder="Any special storage, handling, or compliance requirements") }}
+                                    {% if form.special_requirements.errors %}
+                                        <div class="text-danger small">{{ form.special_requirements.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-success flex-grow-1">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Quote Request
+                                </button>
+                                <a href="{{ url_for('services.logistics') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 mx-auto text-center">
+                <h3 class="text-white mb-3">Our Supply Chain Services</h3>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <i class="fas fa-warehouse fa-2x text-success"></i>
+                            </div>
+                            <h6 class="text-white">Warehousing</h6>
+                            <p class="text-gray small">Secure storage facilities</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <i class="fas fa-route fa-2x text-success"></i>
+                            </div>
+                            <h6 class="text-white">Distribution</h6>
+                            <p class="text-gray small">Efficient distribution networks</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <i class="fas fa-chart-line fa-2x text-success"></i>
+                            </div>
+                            <h6 class="text-white">Inventory Management</h6>
+                            <p class="text-gray small">Smart inventory optimization</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <i class="fas fa-cogs fa-2x text-success"></i>
+                            </div>
+                            <h6 class="text-white">Cost Optimization</h6>
+                            <p class="text-gray small">Reduce operational costs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p class="text-gray">
+                        <strong>Custom Solutions:</strong> We design supply chain solutions tailored to your business needs, 
+                        helping you reduce costs, improve efficiency, and scale your operations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

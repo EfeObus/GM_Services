@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Monitoring Dashboard - GM Services{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2><i class="fas fa-chart-line"></i> Comprehensive Monitoring Dashboard</h2>
+            <p class="text-muted">Monitor all system activities, user registrations, and staff performance</p>
+        </div>
+    </div>
+
+    <!-- Date Range Filter -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form method="GET" class="form-inline">
+                <label class="sr-only" for="start_date">Start Date</label>
+                <input type="date" class="form-control mr-2" id="start_date" name="start_date" 
+                       value="{{ start_date }}" placeholder="Start Date">
+                
+                <label class="sr-only" for="end_date">End Date</label>
+                <input type="date" class="form-control mr-2" id="end_date" name="end_date" 
+                       value="{{ end_date }}" placeholder="End Date">
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Filter
+                </button>
+            </form>
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="{{ url_for('admin.usage_statistics') }}" class="btn btn-info">
+                <i class="fas fa-chart-bar"></i> Detailed Statistics
+            </a>
+            <a href="{{ url_for('admin.api_admin_activities', format='csv') }}" class="btn btn-success">
+                <i class="fas fa-download"></i> Export CSV
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Total Activities</h5>
+                            <h3>{{ total_activities }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Active Users</h5>
+                            <h3>{{ unique_users }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Failed Activities</h5>
+                            <h3>{{ failed_activities }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Active Sessions</h5>
+                            <h3>{{ active_sessions }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-user-check fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-pie"></i> Activity Types Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="activityTypesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-clock"></i> Hourly Activity Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="hourlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access Tabs -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="monitoringTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="activities-tab" data-toggle="tab" href="#activities" role="tab">
+                                <i class="fas fa-list"></i> Recent Activities
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="registrations-tab" data-toggle="tab" href="#registrations" role="tab">
+                                <i class="fas fa-user-plus"></i> Recent Registrations
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="onboardings-tab" data-toggle="tab" href="#onboardings" role="tab">
+                                <i class="fas fa-user-tie"></i> Staff Onboardings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.monitor_staff') }}">
+                                <i class="fas fa-users-cog"></i> Staff Monitor
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="monitoringTabsContent">
+                        <!-- Recent Activities Tab -->
+                        <div class="tab-pane fade show active" id="activities" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>User</th>
+                                            <th>Activity</th>
+                                            <th>Action</th>
+                                            <th>Status</th>
+                                            <th>Details</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for activity in activities %}
+                                        <tr class="{% if not activity.success %}table-warning{% endif %}">
+                                            <td>
+                                                <small>{{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                                            </td>
+                                            <td>
+                                                {% if activity.user %}
+                                                    <a href="{{ url_for('admin.monitor_user_detailed', user_id=activity.user.id) }}" 
+                                                       class="text-decoration-none">
+                                                        {{ activity.user.first_name }} {{ activity.user.last_name }}
+                                                        <small class="text-muted">({{ activity.user.role }})</small>
+                                                    </a>
+                                                {% else %}
+                                                    <span class="text-muted">System</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-{{ 
+                                                    'primary' if activity.category == 'authentication' else
+                                                    'success' if activity.category == 'user_management' else
+                                                    'info' if activity.category == 'service_request' else
+                                                    'warning' if activity.category == 'system' else
+                                                    'secondary'
+                                                }}">
+                                                    {{ activity.activity_type.replace('_', ' ').title() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ activity.action }}</td>
+                                            <td>
+                                                {% if activity.success %}
+                                                    <span class="badge badge-success">Success</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">Failed</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">{{ activity.description[:50] }}{% if activity.description|length > 50 %}...{% endif %}</small>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Recent Registrations Tab -->
+                        <div class="tab-pane fade" id="registrations" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>User</th>
+                                            <th>Email</th>
+                                            <th>Method</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for registration in recent_registrations %}
+                                        <tr>
+                                            <td>{{ registration.registration_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                            <td>
+                                                {% if registration.user %}
+                                                    {{ registration.user.first_name }} {{ registration.user.last_name }}
+                                                {% else %}
+                                                    <span class="text-muted">Unknown User</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ registration.email }}</td>
+                                            <td>
+                                                <span class="badge badge-{{ 
+                                                    'primary' if registration.registration_method == 'form' else
+                                                    'success' if registration.registration_method == 'google' else
+                                                    'info' if registration.registration_method == 'apple' else
+                                                    'secondary'
+                                                }}">
+                                                    {{ registration.registration_method.title() }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {% if registration.is_successful %}
+                                                    <span class="badge badge-success">Successful</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">Failed</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if registration.user %}
+                                                    <a href="{{ url_for('admin.monitor_user_detailed', user_id=registration.user.id) }}" 
+                                                       class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Staff Onboardings Tab -->
+                        <div class="tab-pane fade" id="onboardings" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Staff Member</th>
+                                            <th>Email</th>
+                                            <th>Onboarded By</th>
+                                            <th>Department</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for onboarding in recent_onboardings %}
+                                        <tr>
+                                            <td>{{ onboarding.onboarding_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                            <td>
+                                                {% if onboarding.staff_user %}
+                                                    {{ onboarding.staff_user.first_name }} {{ onboarding.staff_user.last_name }}
+                                                {% else %}
+                                                    <span class="text-muted">Unknown Staff</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ onboarding.staff_email }}</td>
+                                            <td>
+                                                {% if onboarding.onboarded_by_user %}
+                                                    {{ onboarding.onboarded_by_user.first_name }} {{ onboarding.onboarded_by_user.last_name }}
+                                                {% else %}
+                                                    <span class="text-muted">System</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ onboarding.department or 'Not specified' }}</td>
+                                            <td>
+                                                {% if onboarding.staff_user %}
+                                                    <a href="{{ url_for('admin.monitor_user_detailed', user_id=onboarding.staff_user.id) }}" 
+                                                       class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js for visualizations -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Activity Types Pie Chart
+const activityTypesCtx = document.getElementById('activityTypesChart').getContext('2d');
+const activityTypesChart = new Chart(activityTypesCtx, {
+    type: 'pie',
+    data: {
+        labels: {{ activity_types.keys() | list | tojson }},
+        datasets: [{
+            data: {{ activity_types.values() | list | tojson }},
+            backgroundColor: [
+                '#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d',
+                '#17a2b8', '#fd7e14', '#6f42c1', '#e83e8c', '#20c997'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        legend: {
+            position: 'bottom'
+        }
+    }
+});
+
+// Hourly Distribution Bar Chart
+const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
+const hourlyChart = new Chart(hourlyCtx, {
+    type: 'bar',
+    data: {
+        labels: Array.from({length: 24}, (_, i) => i + ':00'),
+        datasets: [{
+            label: 'Activities',
+            data: Array.from({length: 24}, (_, i) => {{ hourly_distribution }}[i] || 0),
+            backgroundColor: '#007bff',
+            borderColor: '#0056b3',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

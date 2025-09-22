@@ -1,0 +1,395 @@
+{% extends "base.html" %}
+
+{% block title %}Smartphones - GM Services{% endblock %}
+
+{% block content %}
+<!-- Smartphones Header -->
+<section class="py-4 bg-surface-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-2">
+                        <li class="breadcrumb-item"><a href="{{ url_for('gadgets.index') }}" class="text-danger">Shop</a></li>
+                        <li class="breadcrumb-item active text-gray">Smartphones</li>
+                    </ol>
+                </nav>
+                <h1 class="h2 text-white mb-0">
+                    <i class="fas fa-mobile-alt text-danger me-2"></i>Smartphones
+                </h1>
+                <p class="text-gray mb-0">{{ products.total }} products found</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <!-- Sort Options -->
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-outline-danger dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Sort By
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="?sort=price_asc">Price: Low to High</a></li>
+                        <li><a class="dropdown-item" href="?sort=price_desc">Price: High to Low</a></li>
+                        <li><a class="dropdown-item" href="?sort=name">Name A-Z</a></li>
+                        <li><a class="dropdown-item" href="?sort=newest">Newest First</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Filters Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="gm-card">
+                    <div class="gm-card-header">
+                        <h5 class="text-white mb-0">Filters</h5>
+                    </div>
+                    <div class="gm-card-body">
+                        <form method="GET" action="{{ url_for('gadgets.smartphones') }}">
+                            <!-- Price Range -->
+                            <div class="mb-4">
+                                <h6 class="text-white mb-3">Price Range</h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="number" name="price_min" class="form-control form-control-sm" 
+                                               placeholder="Min" value="{{ request.args.get('price_min', '') }}">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="number" name="price_max" class="form-control form-control-sm" 
+                                               placeholder="Max" value="{{ request.args.get('price_max', '') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Brand Filter -->
+                            {% if brands %}
+                            <div class="mb-4">
+                                <h6 class="text-white mb-3">Brand</h6>
+                                <select name="brand" class="form-select form-select-sm">
+                                    <option value="">All Brands</option>
+                                    {% for brand in brands %}
+                                    <option value="{{ brand }}" 
+                                            {% if request.args.get('brand') == brand %}selected{% endif %}>
+                                        {{ brand }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Operating System Filter -->
+                            {% if operating_systems %}
+                            <div class="mb-4">
+                                <h6 class="text-white mb-3">Operating System</h6>
+                                <select name="os" class="form-select form-select-sm">
+                                    <option value="">All OS</option>
+                                    {% for os in operating_systems %}
+                                    <option value="{{ os }}" 
+                                            {% if request.args.get('os') == os %}selected{% endif %}>
+                                        {{ os }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endif %}
+                            
+                            <button type="submit" class="btn btn-danger btn-sm w-100">Apply Filters</button>
+                            <a href="{{ url_for('gadgets.smartphones') }}" class="btn btn-outline-secondary btn-sm w-100 mt-2">Clear All</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="col-lg-9">
+                {% if products.items %}
+                <div class="row">
+                    {% for product in products.items %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="gm-card product-card h-100">
+                            {% if product.images and product.images|length > 0 %}
+                                <img src="{{ product.images[0] }}" class="card-img-top product-image" alt="{{ product.name }}">
+                            {% else %}
+                                <img src="https://picsum.photos/400/300?random={{ product.id }}" class="card-img-top product-image" alt="{{ product.name }}">
+                            {% endif %}
+                            
+                            {% if product.is_featured %}
+                            <div class="featured-badge">
+                                <i class="fas fa-star"></i> Featured
+                            </div>
+                            {% endif %}
+                            
+                            <div class="gm-card-body">
+                                <h6 class="text-white mb-2">{{ product.name }}</h6>
+                                
+                                {% if product.brand %}
+                                <small class="text-danger">{{ product.brand.name }}</small>
+                                {% endif %}
+                                
+                                <!-- Smartphone specific details -->
+                                {% if product.smartphone_details %}
+                                {% set details = product.smartphone_details %}
+                                <div class="mt-2">
+                                    {% if details.operating_system %}
+                                    <small class="text-gray d-block">{{ details.operating_system }}</small>
+                                    {% endif %}
+                                    {% if details.storage_options %}
+                                    <small class="text-gray d-block">Storage: {{ details.storage_options|join(', ') }}GB</small>
+                                    {% endif %}
+                                    {% if details.ram %}
+                                    <small class="text-gray d-block">RAM: {{ details.ram }}</small>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                
+                                <div class="mt-3">
+                                    {% if product.compare_price %}
+                                    <span class="text-muted text-decoration-line-through small">₦{{ "{:,.0f}".format(product.compare_price) }}</span>
+                                    {% endif %}
+                                    <div class="text-success fw-bold">₦{{ "{:,.0f}".format(product.price) }}</div>
+                                </div>
+                                
+                                <!-- Rating -->
+                                {% if product.average_rating > 0 %}
+                                <div class="mt-2">
+                                    {% for i in range(5) %}
+                                        {% if i < product.average_rating %}
+                                        <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                        <i class="far fa-star text-muted"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <small class="text-gray">({{ product.review_count }})</small>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <a href="{{ url_for('gadgets.product_detail', product_id=product.id) }}" 
+                                       class="btn btn-sm btn-outline-danger">View Details</a>
+                                    
+                                    {% if product.is_in_stock %}
+                                    <button class="btn btn-sm btn-danger add-to-cart-btn" 
+                                            data-product-id="{{ product.id }}">
+                                        <i class="fas fa-cart-plus"></i> Add to Cart
+                                    </button>
+                                    {% else %}
+                                    <button class="btn btn-sm btn-secondary" disabled>
+                                        Out of Stock
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if product.is_low_stock and product.is_in_stock %}
+                                <div class="text-warning small mt-2">
+                                    <i class="fas fa-exclamation-triangle"></i> Only {{ product.stock_quantity }} left!
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if products.pages > 1 %}
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if products.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('gadgets.smartphones', page=products.prev_num, **request.args) }}">Previous</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for page_num in products.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num != products.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('gadgets.smartphones', page=page_num, **request.args) }}">{{ page_num }}</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                                {% endif %}
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">…</span>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if products.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('gadgets.smartphones', page=products.next_num, **request.args) }}">Next</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+                {% else %}
+                <!-- No Products Found -->
+                <div class="text-center py-5">
+                    <i class="fas fa-mobile-alt fa-4x text-muted mb-3"></i>
+                    <h4 class="text-white">No smartphones found</h4>
+                    <p class="text-gray">Try adjusting your search or filter criteria</p>
+                    <a href="{{ url_for('gadgets.smartphones') }}" class="btn btn-danger">Clear Filters</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Shopping Cart Float Button -->
+<div class="floating-cart">
+    <a href="{{ url_for('gadgets.view_cart') }}" class="btn btn-danger cart-float-btn">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">{{ cart_count }}</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.product-card {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(220, 38, 127, 0.2);
+}
+
+.product-image {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.featured-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(45deg, #dc2626, #fbbf24);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.floating-cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.cart-float-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(220, 38, 127, 0.3);
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Add to cart functionality
+    $('.add-to-cart-btn').click(function(e) {
+        e.preventDefault();
+        
+        const productId = $(this).data('product-id');
+        const button = $(this);
+        const originalText = button.html();
+        
+        // Show loading state
+        button.html('<i class="fas fa-spinner fa-spin"></i>');
+        button.prop('disabled', true);
+        
+        $.ajax({
+            url: "{{ url_for('gadgets.add_to_cart') }}",
+            method: 'POST',
+            data: {
+                product_id: productId,
+                quantity: 1
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update cart count
+                    $('#cartCount').text(response.cart_count);
+                    
+                    // Show success message
+                    button.html('<i class="fas fa-check"></i> Added');
+                    button.removeClass('btn-danger').addClass('btn-success');
+                    
+                    // Show toast notification
+                    showToast('success', response.message);
+                    
+                    setTimeout(function() {
+                        button.html(originalText);
+                        button.removeClass('btn-success').addClass('btn-danger');
+                        button.prop('disabled', false);
+                    }, 2000);
+                } else {
+                    showToast('error', response.message);
+                    button.html(originalText);
+                    button.prop('disabled', false);
+                }
+            },
+            error: function() {
+                showToast('error', 'Error adding product to cart');
+                button.html(originalText);
+                button.prop('disabled', false);
+            }
+        });
+    });
+});
+
+function showToast(type, message) {
+    const toastClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const toast = `
+        <div class="alert ${toastClass} alert-dismissible fade show position-fixed" 
+             style="top: 20px; right: 20px; z-index: 9999;">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    $('body').append(toast);
+    
+    setTimeout(function() {
+        $('.alert').fadeOut();
+    }, 3000);
+}
+</script>
+{% endblock %}

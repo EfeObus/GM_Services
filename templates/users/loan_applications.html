@@ -1,0 +1,198 @@
+{% extends "users/base.html" %}
+
+{% block title %}My Loan Applications - {{ current_user.full_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-white mb-1">
+                <i class="fas fa-money-bill-wave text-success me-2"></i>My Loan Applications
+            </h2>
+            <p class="text-gray mb-0">Track your loan application status and history</p>
+        </div>
+        <div>
+            <a href="{{ url_for('services.loans') }}" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i>Apply for New Loan
+            </a>
+        </div>
+    </div>
+
+    <!-- Loan Applications -->
+    {% if applications %}
+    <div class="row">
+        {% for application in applications %}
+        <div class="col-lg-6 col-xl-4 mb-4">
+            <div class="gm-card h-100">
+                <div class="gm-card-body">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-white mb-1">{{ application.loan_type.name if application.loan_type else application.loan_type }}</h6>
+                            <small class="text-gray">{{ application.application_number if hasattr(application, 'application_number') else 'App #' + application.id|string }}</small>
+                        </div>
+                        {% set status_colors = {
+                            'submitted': 'bg-warning',
+                            'pending': 'bg-warning',
+                            'under_review': 'bg-info',
+                            'assigned': 'bg-primary',
+                            'approved': 'bg-success',
+                            'rejected': 'bg-danger',
+                            'disbursed': 'bg-success'
+                        } %}
+                        <span class="badge {{ status_colors.get(application.status, 'bg-secondary') }}">
+                            {{ application.status_display if hasattr(application, 'status_display') else application.status.title() }}
+                        </span>
+                    </div>
+
+                    <!-- Amount and Terms -->
+                    <div class="mb-3">
+                        {% if hasattr(application, 'requested_amount') %}
+                            <div class="text-success fw-bold fs-5">₦{{ "{:,.0f}".format(application.requested_amount) }}</div>
+                            <small class="text-gray">{{ application.term_months }} months term</small>
+                        {% else %}
+                            <div class="text-success fw-bold fs-5">₦{{ "{:,.0f}".format(application.amount) }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Purpose -->
+                    <div class="mb-3">
+                        <small class="text-gray">Purpose:</small>
+                        <div class="text-white">{{ application.purpose.title() }}</div>
+                    </div>
+
+                    <!-- Status Details -->
+                    {% if application.status == 'approved' and hasattr(application, 'approved_amount') %}
+                    <div class="alert alert-success py-2">
+                        <small class="text-dark">
+                            <strong>Approved:</strong> ₦{{ "{:,.0f}".format(application.approved_amount) }}
+                            {% if application.interest_rate %}
+                            at {{ application.interest_rate }}% p.a.
+                            {% endif %}
+                        </small>
+                    </div>
+                    {% elif application.status == 'rejected' and hasattr(application, 'rejection_reason') %}
+                    <div class="alert alert-danger py-2">
+                        <small class="text-dark">
+                            <strong>Rejected:</strong> {{ application.rejection_reason }}
+                        </small>
+                    </div>
+                    {% elif application.status == 'assigned' and hasattr(application, 'assigned_staff') %}
+                    <div class="alert alert-info py-2">
+                        <small class="text-dark">
+                            <strong>Assigned to:</strong> {{ application.assigned_staff.full_name if application.assigned_staff else 'Staff member' }}
+                        </small>
+                    </div>
+                    {% endif %}
+
+                    <!-- Dates -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-gray">
+                            Applied: {{ application.created_at.strftime('%d %b %Y') }}
+                        </small>
+                        <a href="{{ url_for('users.view_loan_application', application_id=application.id) }}" 
+                           class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-eye me-1"></i>View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="gm-card">
+        <div class="gm-card-body text-center py-5">
+            <i class="fas fa-money-bill-wave text-gray mb-3" style="font-size: 4rem;"></i>
+            <h4 class="text-white mb-3">No Loan Applications Yet</h4>
+            <p class="text-gray mb-4">
+                You haven't applied for any loans yet. Explore our loan products and apply for the one that suits your needs.
+            </p>
+            <a href="{{ url_for('services.loans') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-plus me-2"></i>Apply for Your First Loan
+            </a>
+            
+            <!-- Loan Types Preview -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-3">
+                    <div class="feature-card p-3 rounded border">
+                        <i class="fas fa-user text-success mb-2" style="font-size: 2rem;"></i>
+                        <h6 class="text-white">Personal Loans</h6>
+                        <p class="text-gray small mb-0">For personal expenses, education, or emergencies</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="feature-card p-3 rounded border">
+                        <i class="fas fa-briefcase text-success mb-2" style="font-size: 2rem;"></i>
+                        <h6 class="text-white">Business Loans</h6>
+                        <p class="text-gray small mb-0">Capital for business expansion and growth</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="feature-card p-3 rounded border">
+                        <i class="fas fa-car text-success mb-2" style="font-size: 2rem;"></i>
+                        <h6 class="text-white">Auto Loans</h6>
+                        <p class="text-gray small mb-0">Financing for new and used vehicles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Application Status Legend -->
+    <div class="gm-card mt-4">
+        <div class="gm-card-body">
+            <h6 class="text-white mb-3">
+                <i class="fas fa-info-circle text-info me-2"></i>Application Status Guide
+            </h6>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-warning me-2">Submitted</span>
+                        <small class="text-gray">Application received and pending initial review</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-info me-2">Under Review</span>
+                        <small class="text-gray">Application is being reviewed by our team</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-primary me-2">Assigned</span>
+                        <small class="text-gray">Assigned to a loan officer for detailed review</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-success me-2">Approved</span>
+                        <small class="text-gray">Loan approved and ready for disbursement</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-success me-2">Disbursed</span>
+                        <small class="text-gray">Loan amount has been transferred to your account</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="badge bg-danger me-2">Rejected</span>
+                        <small class="text-gray">Application did not meet our requirements</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.feature-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

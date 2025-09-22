@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Stock - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="gm-card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-upload me-2"></i>Upload Inventory Stock
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- Upload Instructions -->
+                    <div class="alert alert-info mb-4">
+                        <h5><i class="fas fa-info-circle me-2"></i>Upload Instructions</h5>
+                        <ul class="mb-0">
+                            <li>Upload CSV or Excel files (.csv, .xlsx, .xls)</li>
+                            <li>Required columns: <code>name, sku, category, unit_cost, selling_price, current_stock, reorder_point</code></li>
+                            <li>Optional columns: <code>description, supplier</code></li>
+                            <li>If an item with the same SKU exists, stock will be added to current quantity</li>
+                            <li>All costs should be in Naira (₦)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Sample Data Download -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-secondary text-white">
+                                    <h6 class="mb-0"><i class="fas fa-download me-2"></i>Download Sample Template</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-muted small mb-2">Download a sample CSV template with the correct format</p>
+                                    <a href="#" onclick="downloadTemplate()" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-file-csv me-2"></i>Download CSV Template
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h6 class="mb-0"><i class="fas fa-plus me-2"></i>Quick Actions</h6>
+                                </div>
+                                <div class="card-body">
+                                    <a href="{{ url_for('admin.add_inventory_item') }}" class="btn btn-outline-success btn-sm me-2">
+                                        <i class="fas fa-plus me-2"></i>Add Single Item
+                                    </a>
+                                    <a href="{{ url_for('admin.inventory_items') }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-list me-2"></i>View All Items
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Form -->
+                    <form method="POST" enctype="multipart/form-data" class="upload-form">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="file" class="form-label">Select File</label>
+                                    <input type="file" class="form-control" id="file" name="file" 
+                                           accept=".csv,.xlsx,.xls" required>
+                                    <div class="form-text">Supported formats: CSV, Excel (.xlsx, .xls)</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-upload me-2"></i>Upload Stock
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Upload Progress (hidden by default) -->
+                    <div class="progress mt-3" id="uploadProgress" style="display: none;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                             role="progressbar" style="width: 0%">
+                            Processing...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Show progress bar when form is submitted
+document.querySelector('.upload-form').addEventListener('submit', function() {
+    document.getElementById('uploadProgress').style.display = 'block';
+    document.querySelector('button[type="submit"]').disabled = true;
+});
+
+// Download CSV template
+function downloadTemplate() {
+    const csvContent = "name,sku,category,description,unit_cost,selling_price,current_stock,reorder_point,supplier\n" +
+                      "Sample Product,SKU001,Electronics,Sample electronics product,1000,1500,50,10,Sample Supplier\n" +
+                      "Another Item,SKU002,Office Supplies,Office supply item,500,750,25,5,Office Supplies Ltd";
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'inventory_template.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+}
+</script>
+
+<style>
+.gm-card {
+    background: #1a1d29;
+    border: 1px solid #2d3748;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.form-control {
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    color: #e2e8f0;
+}
+
+.form-control:focus {
+    background-color: #2d3748;
+    border-color: #3182ce;
+    color: #e2e8f0;
+    box-shadow: 0 0 0 0.2rem rgba(49, 130, 206, 0.25);
+}
+
+.btn-outline-primary {
+    color: #3182ce;
+    border-color: #3182ce;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3182ce;
+    border-color: #3182ce;
+}
+
+.btn-outline-success {
+    color: #38a169;
+    border-color: #38a169;
+}
+
+.btn-outline-success:hover {
+    background-color: #38a169;
+    border-color: #38a169;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,640 @@
+{% extends "base.html" %}
+
+{% block title %}Frequently Asked Questions - GM Services{% endblock %}
+
+{% block content %}
+<!-- FAQ Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                Frequently Asked <span class="text-gold">Questions</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Find quick answers to common questions about our services and platform.
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-dark border-success text-white" 
+                               placeholder="Search FAQs..." id="faqSearch">
+                        <button class="btn btn-success" type="button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Categories -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Browse by Category</h2>
+            <p class="text-gray">Click on a category to view related questions</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
+                    <button class="btn btn-outline-success category-btn active" data-category="all">
+                        <i class="fas fa-th-large me-2"></i>All Questions
+                    </button>
+                    <button class="btn btn-outline-success category-btn" data-category="account">
+                        <i class="fas fa-user-circle me-2"></i>Account
+                    </button>
+                    <button class="btn btn-outline-success category-btn" data-category="automotive">
+                        <i class="fas fa-car me-2"></i>Automotive
+                    </button>
+                    <button class="btn btn-outline-success category-btn" data-category="financial">
+                        <i class="fas fa-money-bill-wave me-2"></i>Financial
+                    </button>
+                    <button class="btn btn-outline-success category-btn" data-category="logistics">
+                        <i class="fas fa-shipping-fast me-2"></i>Logistics
+                    </button>
+                    <button class="btn btn-outline-success category-btn" data-category="billing">
+                        <i class="fas fa-credit-card me-2"></i>Billing
+                    </button>
+                    <button class="btn btn-outline-success category-btn" data-category="technical">
+                        <i class="fas fa-cogs me-2"></i>Technical
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Content -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                
+                <!-- Account Questions -->
+                <div class="faq-category" data-category="account">
+                    <h3 class="text-gold mb-4">
+                        <i class="fas fa-user-circle me-2"></i>Account Management
+                    </h3>
+                    
+                    <div class="accordion" id="accountAccordion">
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#account1">
+                                    How do I create an account with GM Services?
+                                </button>
+                            </h2>
+                            <div id="account1" class="accordion-collapse collapse show" data-bs-parent="#accountAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>Creating an account is simple and takes just a few minutes:</p>
+                                    <ol>
+                                        <li>Click the "Register" button on our homepage</li>
+                                        <li>Fill in your personal information (name, email, phone)</li>
+                                        <li>Choose a strong password</li>
+                                        <li>Verify your email address through the confirmation link</li>
+                                        <li>Complete your profile with additional details</li>
+                                    </ol>
+                                    <p>Once verified, you'll have access to all our services and can start making bookings immediately.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#account2">
+                                    What information do I need to verify my account?
+                                </button>
+                            </h2>
+                            <div id="account2" class="accordion-collapse collapse" data-bs-parent="#accountAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>For account verification, you'll need to provide:</p>
+                                    <ul>
+                                        <li><strong>Government-issued ID:</strong> National ID, Passport, or Driver's License</li>
+                                        <li><strong>Proof of Address:</strong> Utility bill or bank statement (within 3 months)</li>
+                                        <li><strong>Phone Verification:</strong> We'll send a verification code to your mobile</li>
+                                        <li><strong>Email Confirmation:</strong> Click the link sent to your email address</li>
+                                    </ul>
+                                    <p>Verification typically takes 24-48 hours and is required for financial services and high-value transactions.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#account3">
+                                    How do I reset my password?
+                                </button>
+                            </h2>
+                            <div id="account3" class="accordion-collapse collapse" data-bs-parent="#accountAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>To reset your password:</p>
+                                    <ol>
+                                        <li>Go to the login page and click "Forgot Password"</li>
+                                        <li>Enter your registered email address</li>
+                                        <li>Check your email for a password reset link</li>
+                                        <li>Click the link and create a new password</li>
+                                        <li>Log in with your new password</li>
+                                    </ol>
+                                    <p>If you don't receive the email within 15 minutes, check your spam folder or contact support.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Automotive Questions -->
+                <div class="faq-category" data-category="automotive">
+                    <h3 class="text-gold mb-4">
+                        <i class="fas fa-car me-2"></i>Automotive Services
+                    </h3>
+                    
+                    <div class="accordion" id="automotiveAccordion">
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#auto1">
+                                    What automotive services do you offer?
+                                </button>
+                            </h2>
+                            <div id="auto1" class="accordion-collapse collapse show" data-bs-parent="#automotiveAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>We offer a comprehensive range of automotive services:</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Vehicle Sales & Leasing</h5>
+                                            <ul>
+                                                <li>New and used car sales</li>
+                                                <li>Vehicle leasing options</li>
+                                                <li>Trade-in assessments</li>
+                                                <li>Financing assistance</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Maintenance & Repairs</h5>
+                                            <ul>
+                                                <li>Routine maintenance</li>
+                                                <li>Engine diagnostics</li>
+                                                <li>Body work and painting</li>
+                                                <li>Emergency roadside assistance</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#auto2">
+                                    How do I schedule a vehicle service appointment?
+                                </button>
+                            </h2>
+                            <div id="auto2" class="accordion-collapse collapse" data-bs-parent="#automotiveAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>Scheduling is easy through multiple channels:</p>
+                                    <ol>
+                                        <li><strong>Online:</strong> Use our service booking portal on the website</li>
+                                        <li><strong>Mobile App:</strong> Download our app and book instantly</li>
+                                        <li><strong>Phone:</strong> Call our service center at +234 800 GM-AUTO</li>
+                                        <li><strong>Walk-in:</strong> Visit any of our service centers</li>
+                                    </ol>
+                                    <p>We'll send you a confirmation email and SMS with your appointment details and preparation instructions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Questions -->
+                <div class="faq-category" data-category="financial">
+                    <h3 class="text-gold mb-4">
+                        <i class="fas fa-money-bill-wave me-2"></i>Financial Services
+                    </h3>
+                    
+                    <div class="accordion" id="financialAccordion">
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#financial1">
+                                    What types of loans do you offer?
+                                </button>
+                            </h2>
+                            <div id="financial1" class="accordion-collapse collapse show" data-bs-parent="#financialAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>We offer various loan products to meet different needs:</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Personal Loans</h5>
+                                            <ul>
+                                                <li>Quick cash loans (₦50,000 - ₦5,000,000)</li>
+                                                <li>Salary advance loans</li>
+                                                <li>Emergency loans</li>
+                                                <li>Debt consolidation</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Business Loans</h5>
+                                            <ul>
+                                                <li>SME working capital</li>
+                                                <li>Equipment financing</li>
+                                                <li>Trade finance</li>
+                                                <li>Asset acquisition loans</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p>Interest rates start from 2.5% per month with flexible repayment terms.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#financial2">
+                                    How long does loan approval take?
+                                </button>
+                            </h2>
+                            <div id="financial2" class="accordion-collapse collapse" data-bs-parent="#financialAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>Loan approval times vary by loan type and amount:</p>
+                                    <ul>
+                                        <li><strong>Quick Loans (up to ₦500,000):</strong> 5-30 minutes</li>
+                                        <li><strong>Personal Loans (₦500,000 - ₦2,000,000):</strong> 2-24 hours</li>
+                                        <li><strong>Large Personal Loans (above ₦2,000,000):</strong> 1-3 business days</li>
+                                        <li><strong>Business Loans:</strong> 3-7 business days</li>
+                                    </ul>
+                                    <p>Funds are typically disbursed within 24 hours of approval directly to your bank account.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logistics Questions -->
+                <div class="faq-category" data-category="logistics">
+                    <h3 class="text-gold mb-4">
+                        <i class="fas fa-shipping-fast me-2"></i>Logistics & Delivery
+                    </h3>
+                    
+                    <div class="accordion" id="logisticsAccordion">
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#logistics1">
+                                    What areas do you deliver to?
+                                </button>
+                            </h2>
+                            <div id="logistics1" class="accordion-collapse collapse show" data-bs-parent="#logisticsAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>We provide delivery services across Nigeria:</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Same-Day Delivery</h5>
+                                            <ul>
+                                                <li>Lagos State (all LGAs)</li>
+                                                <li>Abuja (FCT)</li>
+                                                <li>Port Harcourt</li>
+                                                <li>Kano</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Next-Day Delivery</h5>
+                                            <ul>
+                                                <li>All 36 states + FCT</li>
+                                                <li>774 Local Government Areas</li>
+                                                <li>Major cities and towns</li>
+                                                <li>Remote locations (2-3 days)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p>Use our delivery calculator to check exact delivery times and costs for your location.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#logistics2">
+                                    How can I track my package?
+                                </button>
+                            </h2>
+                            <div id="logistics2" class="accordion-collapse collapse" data-bs-parent="#logisticsAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>Track your packages easily through multiple methods:</p>
+                                    <ol>
+                                        <li><strong>Website:</strong> Enter your tracking number on our homepage</li>
+                                        <li><strong>Mobile App:</strong> Real-time GPS tracking with live updates</li>
+                                        <li><strong>SMS:</strong> Automatic status updates sent to your phone</li>
+                                        <li><strong>Email:</strong> Detailed status reports with estimated delivery times</li>
+                                        <li><strong>WhatsApp:</strong> Send your tracking number to +234 800 TRACK-GM</li>
+                                    </ol>
+                                    <p>You'll receive your tracking number immediately after booking your delivery.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Questions -->
+                <div class="faq-category" data-category="billing">
+                    <h3 class="text-gold mb-4">
+                        <i class="fas fa-credit-card me-2"></i>Billing & Payments
+                    </h3>
+                    
+                    <div class="accordion" id="billingAccordion">
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#billing1">
+                                    What payment methods do you accept?
+                                </button>
+                            </h2>
+                            <div id="billing1" class="accordion-collapse collapse show" data-bs-parent="#billingAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>We accept multiple payment methods for your convenience:</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Digital Payments</h5>
+                                            <ul>
+                                                <li>Debit/Credit Cards (Visa, Mastercard, Verve)</li>
+                                                <li>Bank transfers</li>
+                                                <li>USSD payments</li>
+                                                <li>Mobile money (all networks)</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Alternative Methods</h5>
+                                            <ul>
+                                                <li>Paystack, Flutterwave</li>
+                                                <li>Cryptocurrency (BTC, ETH)</li>
+                                                <li>Pay on delivery (selected services)</li>
+                                                <li>Corporate accounts</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p>All payments are processed securely with 256-bit SSL encryption.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#billing2">
+                                    How do refunds work?
+                                </button>
+                            </h2>
+                            <div id="billing2" class="accordion-collapse collapse" data-bs-parent="#billingAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>Our refund policy ensures fair treatment for all customers:</p>
+                                    <ul>
+                                        <li><strong>Service Cancellation:</strong> Full refund if cancelled 24+ hours before service</li>
+                                        <li><strong>Processing Time:</strong> 3-5 business days for most payment methods</li>
+                                        <li><strong>Partial Refunds:</strong> Available for partially completed services</li>
+                                        <li><strong>Dispute Resolution:</strong> Dedicated team handles payment disputes</li>
+                                    </ul>
+                                    <p>Refunds are processed to the original payment method unless otherwise requested.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Questions -->
+                <div class="faq-category" data-category="technical">
+                    <h3 class="text-gold mb-4">
+                        <i class="fas fa-cogs me-2"></i>Technical Support
+                    </h3>
+                    
+                    <div class="accordion" id="technicalAccordion">
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#technical1">
+                                    Is there a mobile app available?
+                                </button>
+                            </h2>
+                            <div id="technical1" class="accordion-collapse collapse show" data-bs-parent="#technicalAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>Yes! Our mobile app is available for both Android and iOS:</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">App Features</h5>
+                                            <ul>
+                                                <li>Service booking and management</li>
+                                                <li>Real-time tracking</li>
+                                                <li>Secure payments</li>
+                                                <li>Document upload</li>
+                                                <li>Push notifications</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Download Links</h5>
+                                            <ul>
+                                                <li>Google Play Store</li>
+                                                <li>Apple App Store</li>
+                                                <li>Direct APK download</li>
+                                                <li>Progressive Web App (PWA)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p>The app syncs with your web account and offers offline functionality for basic features.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item bg-dark border-success mb-3">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-dark text-white border-0" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#technical2">
+                                    What are the system requirements?
+                                </button>
+                            </h2>
+                            <div id="technical2" class="accordion-collapse collapse" data-bs-parent="#technicalAccordion">
+                                <div class="accordion-body bg-dark text-gray">
+                                    <p>Our platform works on most modern devices and browsers:</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Web Browsers</h5>
+                                            <ul>
+                                                <li>Chrome 70+ (recommended)</li>
+                                                <li>Firefox 65+</li>
+                                                <li>Safari 12+</li>
+                                                <li>Edge 79+</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5 class="text-green">Mobile Apps</h5>
+                                            <ul>
+                                                <li>Android 6.0+ (API level 23)</li>
+                                                <li>iOS 11.0+</li>
+                                                <li>2GB RAM minimum</li>
+                                                <li>500MB storage space</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p>For best performance, ensure you have a stable internet connection (3G/4G/WiFi).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Still Have Questions -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="text-white mb-3">Still Have Questions?</h2>
+            <p class="text-gray mb-4">Can't find what you're looking for? Our support team is here to help.</p>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="gm-card text-center h-100">
+                                <div class="gm-card-body">
+                                    <i class="fas fa-comments text-success fa-2x mb-3"></i>
+                                    <h5 class="text-white">Live Chat</h5>
+                                    <p class="text-gray">Get instant help</p>
+                                    <button class="btn btn-outline-success">Start Chat</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="gm-card text-center h-100">
+                                <div class="gm-card-body">
+                                    <i class="fas fa-envelope text-warning fa-2x mb-3"></i>
+                                    <h5 class="text-white">Email Support</h5>
+                                    <p class="text-gray">Detailed assistance</p>
+                                    <a href="mailto:support@gmservices.ng" class="btn btn-outline-warning">Send Email</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="gm-card text-center h-100">
+                                <div class="gm-card-body">
+                                    <i class="fas fa-phone text-danger fa-2x mb-3"></i>
+                                    <h5 class="text-white">Phone Support</h5>
+                                    <p class="text-gray">Speak to an expert</p>
+                                    <a href="tel:+2348006MHELP" class="btn btn-outline-danger">Call Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.bg-dark-alt {
+    background-color: #0a0a0a !important;
+}
+
+.category-btn {
+    border: 2px solid #28a745;
+    color: #28a745;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.category-btn:hover,
+.category-btn.active {
+    background-color: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.faq-category {
+    margin-bottom: 3rem;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: #28a745;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-color: #28a745;
+}
+
+.accordion-item {
+    border: 1px solid #28a745;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+#faqSearch:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+</style>
+
+<script>
+// FAQ Search functionality
+document.getElementById('faqSearch').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const allQuestions = document.querySelectorAll('.accordion-item');
+    
+    allQuestions.forEach(item => {
+        const questionText = item.querySelector('.accordion-button').textContent.toLowerCase();
+        const answerText = item.querySelector('.accordion-body').textContent.toLowerCase();
+        
+        if (questionText.includes(searchTerm) || answerText.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = searchTerm === '' ? 'block' : 'none';
+        }
+    });
+});
+
+// Category filtering
+document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Update active button
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const category = this.dataset.category;
+        const categories = document.querySelectorAll('.faq-category');
+        
+        categories.forEach(cat => {
+            if (category === 'all' || cat.dataset.category === category) {
+                cat.style.display = 'block';
+            } else {
+                cat.style.display = 'none';
+            }
+        });
+        
+        // Clear search when changing categories
+        document.getElementById('faqSearch').value = '';
+        document.querySelectorAll('.accordion-item').forEach(item => {
+            item.style.display = 'block';
+        });
+    });
+});
+
+// Initialize with all categories visible
+document.addEventListener('DOMContentLoaded', function() {
+    // Show only first accordion item as expanded for each category
+    document.querySelectorAll('.accordion-collapse.show').forEach((collapse, index) => {
+        if (index > 0) {
+            collapse.classList.remove('show');
+        }
+    });
+});
+</script>
+{% endblock %}

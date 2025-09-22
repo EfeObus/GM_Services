@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block title %}Loan Services - GM Services{% endblock %}
+
+{% block content %}
+<!-- Loan Services Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-money-bill-wave text-success me-3"></i>Loan <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Flexible financing solutions for personal and business needs across Nigeria.
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=10" 
+                         alt="Loan Services" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Loan Categories -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Loan Products</h2>
+            <p class="text-gray">Competitive rates and flexible terms to meet your financial goals</p>
+        </div>
+        
+        <div class="row">
+            {% if loan_types %}
+                {% for loan_type in loan_types %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gm-card h-100">
+                        <img src="https://picsum.photos/400/250?random={{ loop.index + 10 }}" class="card-img-top" alt="{{ loan_type.name }}">
+                        <div class="gm-card-body">
+                            <h5 class="text-white">
+                                <i class="fas {% if 'Personal' in loan_type.name %}fa-user{% elif 'Business' in loan_type.name %}fa-briefcase{% elif 'Auto' in loan_type.name %}fa-car{% else %}fa-money-bill-wave{% endif %} text-success me-2"></i>
+                                {{ loan_type.name }}
+                            </h5>
+                            <p class="text-gray">{{ loan_type.description }}</p>
+                            <ul class="text-gray small">
+                                <li>₦{{ "{:,.0f}".format(loan_type.min_amount) }} - ₦{{ "{:,.0f}".format(loan_type.max_amount) }}</li>
+                                <li>{{ loan_type.min_term_months }}-{{ loan_type.max_term_months }} months tenure</li>
+                                <li>{% if loan_type.requires_collateral %}Collateral required{% else %}No collateral needed{% endif %}</li>
+                                <li>{% if loan_type.requires_employment_proof %}Employment verification{% else %}Quick approval{% endif %}</li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">From {{ loan_type.base_interest_rate }}% p.a.</span>
+                                {% if current_user.is_authenticated %}
+                                    <a href="{{ url_for('services.apply_loan_form', loan_type_id=loan_type.id) }}" class="btn btn-success btn-sm">Apply Now</a>
+                                {% else %}
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-success btn-sm">Login to Apply</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback static cards if no loan types in database -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gm-card h-100">
+                        <img src="https://picsum.photos/400/250?random=11" class="card-img-top" alt="Personal Loans">
+                        <div class="gm-card-body">
+                            <h5 class="text-white"><i class="fas fa-user text-success me-2"></i>Personal Loans</h5>
+                            <p class="text-gray">Quick personal loans for emergencies, education, or major purchases.</p>
+                            <ul class="text-gray small">
+                                <li>Up to ₦5,000,000</li>
+                                <li>12-60 months tenure</li>
+                                <li>Competitive interest rates</li>
+                                <li>Quick approval</li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">From 24% p.a.</span>
+                                {% if current_user.is_authenticated %}
+                                    <button class="btn btn-success btn-sm" onclick="alert('Please contact admin to set up loan types')">Apply Now</button>
+                                {% else %}
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-success btn-sm">Login to Apply</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gm-card h-100">
+                        <img src="https://picsum.photos/400/250?random=12" class="card-img-top" alt="Business Loans">
+                        <div class="gm-card-body">
+                            <h5 class="text-white"><i class="fas fa-briefcase text-success me-2"></i>Business Loans</h5>
+                            <p class="text-gray">Capital for business expansion, equipment, or working capital needs.</p>
+                            <ul class="text-gray small">
+                                <li>Up to ₦50,000,000</li>
+                                <li>6-120 months tenure</li>
+                                <li>Flexible repayment</li>
+                                <li>Collateral options</li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">From 18% p.a.</span>
+                                {% if current_user.is_authenticated %}
+                                    <button class="btn btn-success btn-sm" onclick="alert('Please contact admin to set up loan types')">Apply Now</button>
+                                {% else %}
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-success btn-sm">Login to Apply</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="gm-card h-100">
+                        <img src="https://picsum.photos/400/250?random=13" class="card-img-top" alt="Auto Loans">
+                        <div class="gm-card-body">
+                            <h5 class="text-white"><i class="fas fa-car text-success me-2"></i>Auto Loans</h5>
+                            <p class="text-gray">Financing for new and used vehicles with competitive rates.</p>
+                            <ul class="text-gray small">
+                                <li>Up to 90% financing</li>
+                                <li>12-84 months tenure</li>
+                                <li>No hidden charges</li>
+                                <li>Insurance inclusive</li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">From 15% p.a.</span>
+                                {% if current_user.is_authenticated %}
+                                    <button class="btn btn-success btn-sm" onclick="alert('Please contact admin to set up loan types')">Apply Now</button>
+                                {% else %}
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-success btn-sm">Login to Apply</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Loan Calculator Section -->
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3 class="text-white mb-3">Loan Calculator</h3>
+                <p class="text-gray mb-4">
+                    Calculate your monthly payments and see what you can afford with our loan calculator.
+                </p>
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <div class="mb-3">
+                            <label class="form-label text-white">Loan Amount</label>
+                            <input type="range" class="form-range" min="100000" max="10000000" step="100000" value="1000000" id="loanAmount">
+                            <div class="text-success fw-bold" id="loanAmountDisplay">₦1,000,000</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">Tenure (Months)</label>
+                            <input type="range" class="form-range" min="6" max="60" value="24" id="loanTenure">
+                            <div class="text-success fw-bold" id="loanTenureDisplay">24 months</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-white">Interest Rate</label>
+                            <input type="range" class="form-range" min="10" max="30" step="0.5" value="15" id="interestRate">
+                            <div class="text-success fw-bold" id="interestRateDisplay">15% p.a.</div>
+                        </div>
+                        <div class="alert alert-success">
+                            <strong>Monthly Payment: <span id="monthlyPayment">₦48,487</span></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://picsum.photos/600/400?random=14" 
+                     alt="Loan Calculator" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="text-white mb-3">Why Choose Our Loan Services?</h3>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-percentage text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">Competitive Rates</h5>
+                    <p class="text-gray">Some of the best interest rates in the Nigerian market.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-clock text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">Quick Approval</h5>
+                    <p class="text-gray">Fast processing with approval decisions within 24-48 hours.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-shield-alt text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">Secure Process</h5>
+                    <p class="text-gray">Bank-level security for all your financial information.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-headset text-gold" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="text-white">24/7 Support</h5>
+                    <p class="text-gray">Round-the-clock customer support for all your queries.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Policy and Information Section -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h3 class="text-white mb-4">Important Information</h3>
+                <p class="text-gray mb-4">
+                    Before applying for a loan, please review our comprehensive loan policy and terms. 
+                    We are committed to transparency and helping you make informed financial decisions.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{{ url_for('services.loan_terms') }}" class="btn btn-outline-success me-2 mb-2">
+                        <i class="fas fa-file-contract me-2"></i>Terms & Conditions
+                    </a>
+                    <a href="{{ url_for('services.loan_privacy') }}" class="btn btn-outline-primary me-2 mb-2">
+                        <i class="fas fa-user-shield me-2"></i>Privacy Policy
+                    </a>
+                    <a href="mailto:loans@gmservices.com" class="btn btn-outline-warning me-2 mb-2">
+                        <i class="fas fa-envelope me-2"></i>Contact Loan Officer
+                    </a>
+                    <a href="tel:+2341234567890" class="btn btn-outline-info mb-2">
+                        <i class="fas fa-phone me-2"></i>Call Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

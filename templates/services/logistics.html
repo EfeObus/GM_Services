@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Logistics Services - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-shipping-fast text-success me-3"></i>Logistics <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">Reliable transportation and logistics solutions across Nigeria.</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=40" alt="Logistics Services" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Logistics Solutions</h2>
+            <p class="text-gray">Fast, secure, and reliable transportation services</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=41" class="card-img-top" alt="Freight Transport">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-truck text-success me-2"></i>Freight Transport</h5>
+                        <p class="text-gray">Heavy-duty freight transportation for businesses.</p>
+                        <ul class="text-gray small">
+                            <li>Interstate delivery</li>
+                            <li>Cargo insurance</li>
+                            <li>Real-time tracking</li>
+                            <li>Warehouse storage</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦15,000</span>
+                            <a href="{{ url_for('services.logistics_quote_form', service_type='freight_transport') }}" class="btn btn-success btn-sm">Get Quote</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=42" class="card-img-top" alt="Express Delivery">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-clock text-success me-2"></i>Express Delivery</h5>
+                        <p class="text-gray">Same-day and next-day delivery services.</p>
+                        <ul class="text-gray small">
+                            <li>Same-day delivery</li>
+                            <li>Document courier</li>
+                            <li>E-commerce logistics</li>
+                            <li>Last-mile delivery</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦2,500</span>
+                            <a href="{{ url_for('services.logistics_quote_form', service_type='express_delivery') }}" class="btn btn-success btn-sm">Get Quote</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=43" class="card-img-top" alt="Supply Chain">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-boxes text-success me-2"></i>Supply Chain</h5>
+                        <p class="text-gray">End-to-end supply chain management solutions.</p>
+                        <ul class="text-gray small">
+                            <li>Inventory management</li>
+                            <li>Distribution planning</li>
+                            <li>Quality control</li>
+                            <li>Cost optimization</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">Custom Pricing</span>
+                            <a href="{{ url_for('services.logistics_quote_form', service_type='supply_chain') }}" class="btn btn-success btn-sm">Get Quote</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3 class="text-white mb-3">Ready to Ship?</h3>
+                <p class="text-gray mb-4">Get your goods moving with our reliable logistics network across Nigeria.</p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('contact') }}" class="btn btn-success"><i class="fas fa-phone me-2"></i>Contact Us</a>
+                    <button class="btn btn-outline-warning"><i class="fas fa-calculator me-2"></i>Calculate Cost</button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://picsum.photos/600/400?random=44" alt="Logistics Contact" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Graphic Design - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-paint-brush text-danger me-3"></i>Graphic <span class="text-gold">Design</span>
+            </h1>
+            <p class="lead text-gray mb-4">Creative design solutions for your brand and business needs.</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=90" alt="Graphic Design" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Design Services</h2>
+            <p class="text-gray">Professional graphic design to elevate your brand</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=91" class="card-img-top" alt="Logo Design">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-star text-danger me-2"></i>Logo & Branding</h5>
+                        <p class="text-gray">Memorable logos and complete brand identity packages.</p>
+                        <ul class="text-gray small">
+                            <li>Logo design concepts</li>
+                            <li>Brand guidelines</li>
+                            <li>Business card design</li>
+                            <li>Brand color schemes</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦25,000</span>
+                            <a href="{{ url_for('services.logo_design_request') }}" class="btn btn-danger btn-sm">Start Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=92" class="card-img-top" alt="Print Design">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-print text-danger me-2"></i>Print Design</h5>
+                        <p class="text-gray">Professional print materials for marketing and business use.</p>
+                        <ul class="text-gray small">
+                            <li>Brochures & flyers</li>
+                            <li>Posters & banners</li>
+                            <li>Packaging design</li>
+                            <li>Annual reports</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦15,000</span>
+                            <a href="{{ url_for('services.print_design_request') }}" class="btn btn-danger btn-sm">Start Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=93" class="card-img-top" alt="Digital Design">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-mobile-alt text-danger me-2"></i>Digital Design</h5>
+                        <p class="text-gray">Digital graphics for websites, social media, and online presence.</p>
+                        <ul class="text-gray small">
+                            <li>Social media graphics</li>
+                            <li>Web banners</li>
+                            <li>Email templates</li>
+                            <li>Digital advertisements</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦10,000</span>
+                            <a href="{{ url_for('services.digital_design_request') }}" class="btn btn-danger btn-sm">Start Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">More Design Services</h2>
+            <p class="text-gray">Additional creative solutions for your business</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-palette text-danger me-2"></i>Complete Branding Package</h5>
+                        <p class="text-gray">Full brand identity including logo, colors, typography, and guidelines.</p>
+                        <ul class="text-gray small">
+                            <li>Logo design & variations</li>
+                            <li>Color palette & typography</li>
+                            <li>Business stationery</li>
+                            <li>Brand style guide</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦50,000</span>
+                            <a href="{{ url_for('services.branding_request') }}" class="btn btn-danger btn-sm">Start Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-globe text-danger me-2"></i>Website Design</h5>
+                        <p class="text-gray">Professional website design and development services.</p>
+                        <ul class="text-gray small">
+                            <li>Custom website design</li>
+                            <li>Mobile responsive</li>
+                            <li>E-commerce integration</li>
+                            <li>SEO optimization</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦100,000</span>
+                            <a href="{{ url_for('services.website_design_request') }}" class="btn btn-danger btn-sm">Start Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Quick Quote</h2>
+            <p class="text-gray">Need a fast quote for a simple design project?</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <i class="fas fa-lightning-bolt text-danger fa-3x mb-4"></i>
+                        <h4 class="text-white mb-3">Get Quick Quote</h4>
+                        <p class="text-gray mb-4">For simple design projects that need a fast turnaround and instant pricing.</p>
+                        <a href="{{ url_for('services.creative_quick_quote') }}" class="btn btn-danger">Get Quick Quote</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="text-white mb-4">Why Choose Our Design Services?</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <i class="fas fa-award text-danger fa-2x mb-3"></i>
+                        <h5 class="text-white">Professional Quality</h5>
+                        <p class="text-gray small">High-quality designs that meet international standards</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <i class="fas fa-clock text-danger fa-2x mb-3"></i>
+                        <h5 class="text-white">Fast Delivery</h5>
+                        <p class="text-gray small">Quick turnaround times without compromising quality</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <i class="fas fa-redo text-danger fa-2x mb-3"></i>
+                        <h5 class="text-white">Unlimited Revisions</h5>
+                        <p class="text-gray small">We work until you're completely satisfied</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

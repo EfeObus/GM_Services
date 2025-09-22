@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.first_name }} {{ user.last_name }} - User Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white">
+                <i class="fas fa-user me-2"></i>User Details
+            </h1>
+            <p class="text-gray mb-0">Detailed information for {{ user.first_name }} {{ user.last_name }}</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.users') }}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Back to Users
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- User Information Card -->
+        <div class="col-md-6">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-info-circle me-2"></i>User Information
+                    </h5>
+                    
+                    <div class="text-center mb-4">
+                        <div class="avatar-circle-large mx-auto mb-3 bg-primary text-white d-flex align-items-center justify-content-center" 
+                             style="width: 80px; height: 80px; border-radius: 50%; font-size: 24px;">
+                            {{ user.first_name[0] }}{{ user.last_name[0] }}
+                        </div>
+                        <h4 class="text-white">{{ user.first_name }} {{ user.last_name }}</h4>
+                        <span class="badge bg-{% if user.role == 'admin' %}danger{% elif user.role == 'staff' %}warning text-dark{% else %}primary{% endif %} mb-2">
+                            {{ user.role.title() }}
+                        </span>
+                        {% if user.department %}
+                            <br><small class="text-gray">{{ user.department }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <table class="table table-dark table-borderless">
+                        <tr>
+                            <td><strong class="text-white">Email:</strong></td>
+                            <td class="text-gray">{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong class="text-white">Phone:</strong></td>
+                            <td class="text-gray">{{ user.phone or 'Not provided' }}</td>
+                        </tr>
+                        {% if user.employee_id %}
+                        <tr>
+                            <td><strong class="text-white">Employee ID:</strong></td>
+                            <td class="text-gray">{{ user.employee_id }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <td><strong class="text-white">Status:</strong></td>
+                            <td>
+                                {% if user.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactive</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong class="text-white">Date Joined:</strong></td>
+                            <td class="text-gray">{{ user.created_at.strftime('%B %d, %Y at %I:%M %p') }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong class="text-white">Last Login:</strong></td>
+                            <td class="text-gray">{{ user.last_login.strftime('%B %d, %Y at %I:%M %p') if user.last_login else 'Never' }}</td>
+                        </tr>
+                        {% if user.address %}
+                        <tr>
+                            <td><strong class="text-white">Address:</strong></td>
+                            <td class="text-gray">{{ user.address }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if user.city %}
+                        <tr>
+                            <td><strong class="text-white">City:</strong></td>
+                            <td class="text-gray">{{ user.city }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if user.state %}
+                        <tr>
+                            <td><strong class="text-white">State:</strong></td>
+                            <td class="text-gray">{{ user.state }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+
+                    {% if user.id != current_user.id %}
+                    <div class="mt-3 d-flex flex-wrap gap-2">
+                        <!-- Toggle User Status -->
+                        <form method="POST" action="{{ url_for('admin.toggle_user_status', user_id=user.id) }}" 
+                              onsubmit="return confirm('Are you sure you want to {{ 'deactivate' if user.is_active else 'activate' }} this user?')" 
+                              style="display: inline;">
+                            <button type="submit" class="btn btn-{% if user.is_active %}warning{% else %}success{% endif %} btn-sm">
+                                <i class="fas fa-{% if user.is_active %}ban{% else %}check{% endif %}"></i>
+                                {% if user.is_active %}Deactivate{% else %}Activate{% endif %}
+                            </button>
+                        </form>
+
+                        <!-- Staff/Admin Actions -->
+                        {% if user.role in ['staff', 'admin'] %}
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                        <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#changeRoleModal">
+                            <i class="fas fa-user-cog"></i> Change Role
+                        </button>
+                        {% endif %}
+
+                        <!-- Update Details Button -->
+                        <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#updateDetailsModal">
+                            <i class="fas fa-edit"></i> Update Details
+                        </button>
+
+                        <!-- Delete User Button -->
+                        <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" 
+                              onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone!')" 
+                              style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Delete User
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity and Statistics Card -->
+        <div class="col-md-6">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-chart-line me-2"></i>Activity Overview
+                    </h5>
+                    
+                    {% if user.role == 'customer' %}
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="border-end border-secondary">
+                                    <h3 class="text-primary">{{ service_requests|length }}</h3>
+                                    <small class="text-gray">Service Requests</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="text-info">{{ loan_applications|length }}</h3>
+                                <small class="text-muted">Loan Applications</small>
+                            </div>
+                        </div>
+                    {% elif user.role == 'staff' %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <h3 class="text-success">Staff Member</h3>
+                                <small class="text-muted">Staff activities and assignments will be shown here</small>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row text-center">
+                            <div class="col-12">
+                                <h3 class="text-danger">Administrator</h3>
+                                <small class="text-muted">Full system access and administrative privileges</small>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Requests (for customers) -->
+    {% if user.role == 'customer' and service_requests %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-concierge-bell"></i> Service Requests</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Service Type</th>
+                                    <th>Status</th>
+                                    <th>Requested</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in service_requests[:5] %}
+                                <tr>
+                                    <td>{{ request.service_type }}</td>
+                                    <td>
+                                        <span class="badge badge-{% if request.status == 'completed' %}success{% elif request.status == 'pending' %}warning{% else %}secondary{% endif %}">
+                                            {{ request.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ request.created_at.strftime('%b %d, %Y') }}</td>
+                                    <td>
+                                        {% if request.amount %}
+                                            ₦{{ "{:,.2f}".format(request.amount) }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if service_requests|length > 5 %}
+                        <small class="text-muted">Showing latest 5 of {{ service_requests|length }} total requests</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Loan Applications (for customers) -->
+    {% if user.role == 'customer' and loan_applications %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-money-bill-wave"></i> Loan Applications</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Applied</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for loan in loan_applications[:5] %}
+                                <tr>
+                                    <td>₦{{ "{:,.2f}".format(loan.amount) }}</td>
+                                    <td>
+                                        <span class="badge badge-{% if loan.status == 'approved' %}success{% elif loan.status == 'pending' %}warning{% elif loan.status == 'rejected' %}danger{% else %}secondary{% endif %}">
+                                            {{ loan.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ loan.created_at.strftime('%b %d, %Y') }}</td>
+                                    <td>{{ loan.purpose[:50] }}{% if loan.purpose|length > 50 %}...{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if loan_applications|length > 5 %}
+                        <small class="text-muted">Showing latest 5 of {{ loan_applications|length }} total applications</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modals -->
+{% if user.id != current_user.id %}
+
+<!-- Change Password Modal -->
+{% if user.role in ['staff', 'admin'] %}
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <form method="POST" action="{{ url_for('admin.change_staff_password', staff_id=user.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changePasswordModalLabel">
+                        Change Password for {{ user.first_name }} {{ user.last_name }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        The user will be required to change this password on their next login.
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control bg-dark text-white border-secondary" 
+                               id="new_password" name="new_password" minlength="6" required>
+                        <div class="form-text text-muted">Password must be at least 6 characters long</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Role Modal -->
+<div class="modal fade" id="changeRoleModal" tabindex="-1" aria-labelledby="changeRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <form method="POST" action="{{ url_for('admin.change_staff_role', staff_id=user.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeRoleModalLabel">
+                        Change Role for {{ user.first_name }} {{ user.last_name }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="new_role" class="form-label">New Role</label>
+                        <select class="form-select bg-dark text-white border-secondary" id="new_role" name="new_role" required>
+                            <option value="staff" {{ 'selected' if user.role == 'staff' }}>Staff</option>
+                            <option value="admin" {{ 'selected' if user.role == 'admin' }}>Admin</option>
+                            <option value="customer" {{ 'selected' if user.role == 'customer' }}>Customer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_department" class="form-label">Department (Optional)</label>
+                        <input type="text" class="form-control bg-dark text-white border-secondary" 
+                               id="new_department" name="new_department" value="{{ user.department or '' }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-user-cog me-2"></i>Change Role
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Update Details Modal -->
+<div class="modal fade" id="updateDetailsModal" tabindex="-1" aria-labelledby="updateDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white">
+            <form method="POST" action="{{ url_for('admin.update_user_details', user_id=user.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateDetailsModalLabel">
+                        Update Details for {{ user.first_name }} {{ user.last_name }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" 
+                                   id="first_name" name="first_name" value="{{ user.first_name }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" 
+                                   id="last_name" name="last_name" value="{{ user.last_name }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" 
+                                   id="phone" name="phone" value="{{ user.phone or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" 
+                                   id="city" name="city" value="{{ user.city or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="state" class="form-label">State</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" 
+                                   id="state" name="state" value="{{ user.state or '' }}">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control bg-dark text-white border-secondary" 
+                                      id="address" name="address" rows="2">{{ user.address or '' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Update Details
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) if user.role == 'customer' else url_for('admin.delete_staff', staff_id=user.id) }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel">
+                        Confirm Deletion
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone!
+                    </div>
+                    <p>Are you sure you want to delete the account for <strong>{{ user.first_name }} {{ user.last_name }}</strong>?</p>
+                    <p class="text-muted small">All associated data will be permanently removed from the system.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Delete Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+<style>
+.avatar-circle-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 28px;
+}
+
+.badge-lg {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.table-borderless td {
+    border: none;
+    padding: 0.5rem 0.75rem;
+}
+
+.border-right {
+    border-right: 1px solid #dee2e6 !important;
+}
+</style>
+{% endblock %}

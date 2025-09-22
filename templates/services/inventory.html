@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% block title %}Available Items - GM Services{% endblock %}
+
+{% block content %}
+<!-- Inventory Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                Available <span class="text-gold">Items</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Browse our current inventory of available items and products.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Filters Section -->
+<section class="py-4 bg-dark-secondary">
+    <div class="container">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label for="search" class="form-label text-white">Search Items</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ current_search }}" placeholder="Search by name or SKU">
+            </div>
+            <div class="col-md-2">
+                <label for="category" class="form-label text-white">Category</label>
+                <select class="form-select" id="category" name="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {{ 'selected' if current_category == cat }}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="location_id" class="form-label text-white">Location</label>
+                <select class="form-select" id="location_id" name="location_id">
+                    <option value="">All Locations</option>
+                    {% for location in locations %}
+                    <option value="{{ location.id }}" {{ 'selected' if current_location == location.id }}>
+                        {{ location.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox" id="in_stock_only" name="in_stock_only" 
+                           value="1" {{ 'checked' if in_stock_only }}>
+                    <label class="form-check-label text-white" for="in_stock_only">
+                        In Stock Only
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <a href="{{ url_for('services.inventory') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-refresh"></i> Reset
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Inventory Items -->
+<section class="py-5">
+    <div class="container">
+        {% if error %}
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Unable to load inventory data. Please try again later.
+        </div>
+        {% elif items %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3 class="text-white">{{ items|length }} Item{{ 's' if items|length != 1 }} Found</h3>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for item in items %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100 inventory-item-card">
+                    <div class="gm-card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="text-white mb-0">{{ item.get_item_name() }}</h5>
+                            <div class="text-end">
+                                {% if item.current_stock > 0 %}
+                                <span class="badge bg-success">In Stock</span>
+                                {% else %}
+                                <span class="badge bg-danger">Out of Stock</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="item-details mb-3">
+                            <small class="text-muted">SKU: {{ item.get_item_sku() }}</small><br>
+                            <small class="text-muted">Category: {{ item.get_item_category() }}</small>
+                            {% if item.location %}
+                            <br><small class="text-muted">Location: {{ item.location.name }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        {% if item.get_item_description() %}
+                        <p class="text-gray mb-3">{{ item.get_item_description()[:100] }}{% if item.get_item_description()|length > 100 %}...{% endif %}</p>
+                        {% endif %}
+                        
+                        <div class="stock-info mb-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted">Available:</small><br>
+                                    <strong class="text-white">{{ item.current_stock }}</strong>
+                                </div>
+                                {% if item.get_item_price() and item.get_item_price() > 0 %}
+                                <div class="col-6">
+                                    <small class="text-muted">Price:</small><br>
+                                    <strong class="text-success">₦{{ "{:,.2f}".format(item.get_item_price()) }}</strong>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            {% if current_user.is_authenticated %}
+                            {% if item.current_stock > 0 %}
+                            <button class="btn btn-success btn-sm" onclick="requestItem({{ item.id }}, '{{ item.get_item_name() }}')">
+                                <i class="fas fa-shopping-cart me-1"></i>Request Item
+                            </button>
+                            {% else %}
+                            <button class="btn btn-outline-secondary btn-sm" disabled>
+                                <i class="fas fa-times me-1"></i>Out of Stock
+                            </button>
+                            {% endif %}
+                            {% else %}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-success btn-sm">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login to Request
+                            </a>
+                            {% endif %}
+                            
+                            {% if item.supplier %}
+                            <small class="text-muted">By {{ item.supplier }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-boxes fa-4x text-muted mb-4"></i>
+            <h3 class="text-white mb-3">No Items Found</h3>
+            <p class="text-gray mb-4">
+                {% if current_search or current_category %}
+                    No items match your search criteria. Try adjusting your filters.
+                {% else %}
+                    No items are currently available in our inventory.
+                {% endif %}
+            </p>
+            {% if current_search or current_category %}
+            <a href="{{ url_for('services.inventory') }}" class="btn btn-primary">
+                <i class="fas fa-refresh me-2"></i>Show All Items
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Item Request Modal -->
+<div class="modal fade" id="itemRequestModal" tabindex="-1" aria-labelledby="itemRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemRequestModalLabel">Request Item</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('services.request_inventory_item') }}">
+                <div class="modal-body">
+                    <input type="hidden" id="item_id" name="item_id">
+                    <div class="mb-3">
+                        <label for="item_name" class="form-label">Item</label>
+                        <input type="text" class="form-control" id="item_name" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity Needed</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="purpose" class="form-label">Purpose/Reason</label>
+                        <textarea class="form-control" id="purpose" name="purpose" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="urgency" class="form-label">Urgency Level</label>
+                        <select class="form-select" id="urgency" name="urgency" required>
+                            <option value="low">Low - Standard processing</option>
+                            <option value="medium" selected>Medium - Within 2-3 days</option>
+                            <option value="high">High - Within 24 hours</option>
+                            <option value="urgent">Urgent - Same day if possible</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function requestItem(itemId, itemName) {
+    document.getElementById('item_id').value = itemId;
+    document.getElementById('item_name').value = itemName;
+    document.getElementById('quantity').value = 1;
+    document.getElementById('purpose').value = '';
+    document.getElementById('urgency').value = 'medium';
+    
+    var modal = new bootstrap.Modal(document.getElementById('itemRequestModal'));
+    modal.show();
+}
+</script>
+
+<style>
+.inventory-item-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #2d3748;
+}
+
+.inventory-item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: #4299e1;
+}
+
+.bg-dark-secondary {
+    background-color: #1a202c;
+}
+
+.text-gold {
+    color: #d69e2e;
+}
+
+.form-control, .form-select {
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    color: #e2e8f0;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #2d3748;
+    border-color: #3182ce;
+    color: #e2e8f0;
+    box-shadow: 0 0 0 0.2rem rgba(49, 130, 206, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #3182ce;
+    border-color: #3182ce;
+}
+</style>
+{% endblock %}

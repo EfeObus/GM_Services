@@ -1,0 +1,441 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Loan Application Details - {{ loan.application_number }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('admin.loans') }}" class="text-success">Loan Management</a></li>
+                    <li class="breadcrumb-item active text-gray">{{ loan.application_number }}</li>
+                </ol>
+            </nav>
+            <h2 class="text-white mb-1">
+                <i class="fas fa-file-contract text-success me-2"></i>Loan Application Details
+            </h2>
+            <p class="text-gray mb-0">Review and manage loan application</p>
+        </div>
+        <div>
+            {% set status_colors = {
+                'submitted': 'bg-warning',
+                'under_review': 'bg-info',
+                'assigned': 'bg-primary',
+                'approved': 'bg-success',
+                'rejected': 'bg-danger',
+                'disbursed': 'bg-success'
+            } %}
+            <span class="badge {{ status_colors.get(loan.status, 'bg-secondary') }} fs-6 me-2">
+                {{ loan.status_display }}
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Details -->
+        <div class="col-lg-8">
+            <!-- Application Summary -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-info-circle text-success me-2"></i>Application Summary
+                    </h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Application Number</label>
+                                <div class="text-white fw-bold">{{ loan.application_number }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Loan Type</label>
+                                <div class="text-white">{{ loan.loan_type.name }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Requested Amount</label>
+                                <div class="text-success fw-bold fs-5">₦{{ "{:,.0f}".format(loan.requested_amount) }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Loan Term</label>
+                                <div class="text-white">{{ loan.term_months }} months</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Purpose</label>
+                                <div class="text-white">{{ loan.purpose|title }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Applied Date</label>
+                                <div class="text-white">{{ loan.created_at.strftime('%d %B %Y at %I:%M %p') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if loan.purpose_description %}
+                    <div class="mb-3">
+                        <label class="text-gray">Purpose Description</label>
+                        <div class="text-white">{{ loan.purpose_description }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Applicant Information -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-user text-success me-2"></i>Applicant Information
+                    </h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Full Name</label>
+                                <div class="text-white">{{ loan.applicant.full_name }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Email</label>
+                                <div class="text-white">{{ loan.applicant.email }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Phone Number</label>
+                                <div class="text-white">{{ loan.phone_number }}</div>
+                            </div>
+                            {% if loan.alternate_phone %}
+                            <div class="mb-3">
+                                <label class="text-gray">Alternate Phone</label>
+                                <div class="text-white">{{ loan.alternate_phone }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Residential Address</label>
+                                <div class="text-white">{{ loan.residential_address }}</div>
+                            </div>
+                            {% if loan.state_of_origin %}
+                            <div class="mb-3">
+                                <label class="text-gray">State of Origin</label>
+                                <div class="text-white">{{ loan.state_of_origin }}</div>
+                            </div>
+                            {% endif %}
+                            {% if loan.lga %}
+                            <div class="mb-3">
+                                <label class="text-gray">LGA</label>
+                                <div class="text-white">{{ loan.lga }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Information -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-chart-line text-success me-2"></i>Financial Information
+                    </h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Monthly Income</label>
+                                <div class="text-success fw-bold">₦{{ "{:,.0f}".format(loan.monthly_income) }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Employment Type</label>
+                                <div class="text-white">{{ loan.employment_type|title }}</div>
+                            </div>
+                            {% if loan.employer_name %}
+                            <div class="mb-3">
+                                <label class="text-gray">Employer</label>
+                                <div class="text-white">{{ loan.employer_name }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Monthly Expenses</label>
+                                <div class="text-white">₦{{ "{:,.0f}".format(loan.monthly_expenses) }}</div>
+                            </div>
+                            {% if loan.other_income %}
+                            <div class="mb-3">
+                                <label class="text-gray">Other Income</label>
+                                <div class="text-white">₦{{ "{:,.0f}".format(loan.other_income) }}</div>
+                            </div>
+                            {% endif %}
+                            {% if loan.debt_to_income_ratio %}
+                            <div class="mb-3">
+                                <label class="text-gray">Debt-to-Income Ratio</label>
+                                <div class="text-white">{{ loan.debt_to_income_ratio }}%</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banking Information -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-university text-success me-2"></i>Banking Information
+                    </h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Bank Name</label>
+                                <div class="text-white">{{ loan.bank_name }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Account Number</label>
+                                <div class="text-white">{{ loan.account_number }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Account Name</label>
+                                <div class="text-white">{{ loan.account_name }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">BVN</label>
+                                <div class="text-white">{{ loan.bvn }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-folder text-success me-2"></i>Documents
+                    </h5>
+                    
+                    <div class="row">
+                        {% if loan.identity_document %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-id-card text-primary me-2"></i>
+                                <span class="text-white">Identity Document</span>
+                                <a href="{{ url_for('static', filename=loan.identity_document) }}" target="_blank" class="btn btn-sm btn-outline-success ms-2">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if loan.income_proof %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-money-check text-success me-2"></i>
+                                <span class="text-white">Income Proof</span>
+                                <a href="{{ url_for('static', filename=loan.income_proof) }}" target="_blank" class="btn btn-sm btn-outline-success ms-2">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if loan.bank_statement %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-university text-info me-2"></i>
+                                <span class="text-white">Bank Statement</span>
+                                <a href="{{ url_for('static', filename=loan.bank_statement) }}" target="_blank" class="btn btn-sm btn-outline-success ms-2">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if loan.employment_letter %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-briefcase text-warning me-2"></i>
+                                <span class="text-white">Employment Letter</span>
+                                <a href="{{ url_for('static', filename=loan.employment_letter) }}" target="_blank" class="btn btn-sm btn-outline-success ms-2">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Actions -->
+        <div class="col-lg-4">
+            <!-- Assignment -->
+            {% if loan.status == 'submitted' and not loan.assigned_to %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-user-plus text-primary me-2"></i>Assign to Staff
+                    </h6>
+                    
+                    <form method="POST" action="{{ url_for('admin.assign_loan', loan_id=loan.id) }}">
+                        <div class="mb-3">
+                            <select name="staff_id" class="form-control" required>
+                                <option value="">Select staff member...</option>
+                                {% for staff in staff_members %}
+                                <option value="{{ staff.id }}">{{ staff.full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-user-plus me-1"></i>Assign Loan
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% elif loan.assigned_staff %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-user-check text-success me-2"></i>Assigned Staff
+                    </h6>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-sm bg-success rounded-circle d-flex align-items-center justify-content-center me-3">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div>
+                            <div class="text-white fw-bold">{{ loan.assigned_staff.full_name }}</div>
+                            <small class="text-gray">Assigned on {{ loan.assigned_at.strftime('%d %b %Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Loan Decision -->
+            {% if loan.status in ['assigned', 'under_review'] %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-gavel text-warning me-2"></i>Loan Decision
+                    </h6>
+                    
+                    <form method="POST" action="{{ url_for('admin.update_loan_status', loan_id=loan.id) }}">
+                        <div class="mb-3">
+                            <label class="form-label text-white">Decision</label>
+                            <select name="status" class="form-control" required>
+                                <option value="">Select decision...</option>
+                                <option value="approved">Approve Loan</option>
+                                <option value="rejected">Reject Loan</option>
+                            </select>
+                        </div>
+                        
+                        <div id="approvalFields" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label text-white">Approved Amount</label>
+                                <input type="number" name="approved_amount" class="form-control" 
+                                       value="{{ loan.requested_amount }}" min="0" step="0.01">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-white">Interest Rate (%)</label>
+                                <input type="number" name="interest_rate" class="form-control" 
+                                       value="{{ loan.loan_type.base_interest_rate }}" min="0" max="100" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <div id="rejectionFields" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label text-white">Rejection Reason</label>
+                                <textarea name="rejection_reason" class="form-control" rows="3" 
+                                          placeholder="Provide reason for rejection..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-white">Additional Notes</label>
+                            <textarea name="notes" class="form-control" rows="3" 
+                                      placeholder="Any additional notes..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-check me-1"></i>Submit Decision
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Loan Calculator -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-calculator text-info me-2"></i>Loan Calculator
+                    </h6>
+                    
+                    <div class="small">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-gray">Requested Amount:</span>
+                            <span class="text-white">₦{{ "{:,.0f}".format(loan.requested_amount) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-gray">Interest Rate:</span>
+                            <span class="text-white">{{ loan.loan_type.base_interest_rate }}% p.a.</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-gray">Term:</span>
+                            <span class="text-white">{{ loan.term_months }} months</span>
+                        </div>
+                        <hr class="border-gray">
+                        <div class="d-flex justify-content-between">
+                            <span class="text-gray">Est. Monthly Payment:</span>
+                            <span class="text-success fw-bold">
+                                {% set monthly_payment = (loan.requested_amount * (loan.loan_type.base_interest_rate/100/12) * ((1 + (loan.loan_type.base_interest_rate/100/12))**loan.term_months)) / (((1 + (loan.loan_type.base_interest_rate/100/12))**loan.term_months) - 1) %}
+                                ₦{{ "{:,.0f}".format(monthly_payment) }}
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-gray">Processing Fee:</span>
+                            <span class="text-warning">₦{{ "{:,.0f}".format(loan.processing_fee_amount) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('select[name="status"]').change(function() {
+        const decision = $(this).val();
+        
+        if (decision === 'approved') {
+            $('#approvalFields').show();
+            $('#rejectionFields').hide();
+        } else if (decision === 'rejected') {
+            $('#approvalFields').hide();
+            $('#rejectionFields').show();
+        } else {
+            $('#approvalFields').hide();
+            $('#rejectionFields').hide();
+        }
+    });
+});
+</script>
+
+<style>
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.document-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+</style>
+{% endblock %}

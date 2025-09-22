@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - GM Services{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+        <div class="col-md-6 text-center">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <i class="fas fa-bug fa-5x mb-4 text-danger"></i>
+                    <h1 class="display-4 mb-3">500</h1>
+                    <h3 class="mb-3">Internal Server Error</h3>
+                    <p class="text-muted mb-4">
+                        Something went wrong on our end. Our team has been notified and 
+                        is working to fix the issue.
+                    </p>
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

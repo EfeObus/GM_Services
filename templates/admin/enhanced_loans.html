@@ -1,0 +1,293 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Loan Management - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-white mb-1">
+                <i class="fas fa-money-bill-wave text-success me-2"></i>Loan Management
+            </h2>
+            <p class="text-gray mb-0">Manage and review loan applications</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.loan_types') }}" class="btn btn-outline-success me-2">
+                <i class="fas fa-cog me-1"></i>Manage Loan Types
+            </a>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#statsModal">
+                <i class="fas fa-chart-bar me-1"></i>Loan Statistics
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="gm-card mb-4">
+        <div class="gm-card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label text-white">Status Filter</label>
+                    <select name="status" class="form-control">
+                        <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All Status</option>
+                        <option value="submitted" {% if status_filter == 'submitted' %}selected{% endif %}>Submitted</option>
+                        <option value="under_review" {% if status_filter == 'under_review' %}selected{% endif %}>Under Review</option>
+                        <option value="assigned" {% if status_filter == 'assigned' %}selected{% endif %}>Assigned</option>
+                        <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approved</option>
+                        <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+                        <option value="disbursed" {% if status_filter == 'disbursed' %}selected{% endif %}>Disbursed</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-white">Loan Type</label>
+                    <select name="loan_type" class="form-control">
+                        <option value="all" {% if loan_type_filter == 'all' %}selected{% endif %}>All Types</option>
+                        {% for loan_type in loan_types %}
+                        <option value="{{ loan_type.id }}" {% if loan_type_filter == loan_type.id|string %}selected{% endif %}>
+                            {{ loan_type.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="fas fa-filter me-1"></i>Filter
+                    </button>
+                    <a href="{{ url_for('admin.loans') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i>Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loan Applications -->
+    <div class="gm-card">
+        <div class="gm-card-body">
+            {% if loans %}
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Application #</th>
+                            <th>Applicant</th>
+                            <th>Loan Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Assigned To</th>
+                            <th>Date Applied</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loan in loans %}
+                        <tr>
+                            <td>
+                                <strong class="text-success">{{ loan.application_number }}</strong>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm bg-success rounded-circle d-flex align-items-center justify-content-center me-2">
+                                        <i class="fas fa-user text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-white">{{ loan.applicant.full_name }}</div>
+                                        <small class="text-gray">{{ loan.applicant.email }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">{{ loan.loan_type.name }}</span>
+                            </td>
+                            <td>
+                                <strong class="text-success">₦{{ "{:,.0f}".format(loan.requested_amount) }}</strong>
+                                <small class="text-gray d-block">{{ loan.term_months }} months</small>
+                            </td>
+                            <td>
+                                {% set status_colors = {
+                                    'submitted': 'bg-warning',
+                                    'under_review': 'bg-info',
+                                    'assigned': 'bg-primary',
+                                    'approved': 'bg-success',
+                                    'rejected': 'bg-danger',
+                                    'disbursed': 'bg-success'
+                                } %}
+                                <span class="badge {{ status_colors.get(loan.status, 'bg-secondary') }}">
+                                    {{ loan.status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if loan.assigned_staff %}
+                                    <div class="text-white">{{ loan.assigned_staff.full_name }}</div>
+                                    <small class="text-gray">{{ loan.assigned_at.strftime('%d %b %Y') }}</small>
+                                {% else %}
+                                    <span class="text-gray">Not assigned</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="text-white">{{ loan.created_at.strftime('%d %b %Y') }}</div>
+                                <small class="text-gray">{{ loan.created_at.strftime('%I:%M %p') }}</small>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('admin.view_loan', loan_id=loan.id) }}" 
+                                       class="btn btn-sm btn-outline-success" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if loan.status == 'submitted' and not loan.assigned_to %}
+                                    <button class="btn btn-sm btn-outline-primary" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#assignModal{{ loan.id }}" 
+                                            title="Assign to Staff">
+                                        <i class="fas fa-user-plus"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Assignment Modal -->
+                        <div class="modal fade" id="assignModal{{ loan.id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-dark">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-white">Assign Loan Application</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form method="POST" action="{{ url_for('admin.assign_loan', loan_id=loan.id) }}">
+                                        <div class="modal-body">
+                                            <p class="text-gray">
+                                                Assign loan application <strong class="text-success">{{ loan.application_number }}</strong> 
+                                                to a staff member for review.
+                                            </p>
+                                            <div class="mb-3">
+                                                <label class="form-label text-white">Select Staff Member</label>
+                                                <select name="staff_id" class="form-control" required>
+                                                    <option value="">Choose staff member...</option>
+                                                    {% for staff in staff_members %}
+                                                    <option value="{{ staff.id }}">{{ staff.full_name }} - {{ staff.email }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-success">Assign Loan</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-money-bill-wave text-gray" style="font-size: 4rem;"></i>
+                <h4 class="text-gray mt-3">No loan applications found</h4>
+                <p class="text-gray">
+                    {% if status_filter != 'all' or loan_type_filter != 'all' %}
+                    Try adjusting your filters to see more results.
+                    {% else %}
+                    No loan applications have been submitted yet.
+                    {% endif %}
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Modal -->
+<div class="modal fade" id="statsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title text-white">
+                    <i class="fas fa-chart-bar text-success me-2"></i>Loan Statistics
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-primary p-3 rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white mb-0">Total Applications</h6>
+                                    <h3 class="text-white mb-0">{{ loans|length }}</h3>
+                                </div>
+                                <i class="fas fa-file-alt text-white-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-success p-3 rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white mb-0">Approved</h6>
+                                    <h3 class="text-white mb-0">{{ loans|selectattr('status', 'equalto', 'approved')|list|length }}</h3>
+                                </div>
+                                <i class="fas fa-check-circle text-white-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-warning p-3 rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white mb-0">Pending</h6>
+                                    <h3 class="text-white mb-0">{{ loans|selectattr('status', 'equalto', 'submitted')|list|length }}</h3>
+                                </div>
+                                <i class="fas fa-clock text-white-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card bg-danger p-3 rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white mb-0">Rejected</h6>
+                                    <h3 class="text-white mb-0">{{ loans|selectattr('status', 'equalto', 'rejected')|list|length }}</h3>
+                                </div>
+                                <i class="fas fa-times-circle text-white-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h6 class="text-white mb-3">Total Amount by Status</h6>
+                    <div class="row">
+                        {% set approved_total = loans|selectattr('status', 'equalto', 'approved')|sum(attribute='approved_amount')|default(0) %}
+                        {% set pending_total = loans|selectattr('status', 'equalto', 'submitted')|sum(attribute='requested_amount')|default(0) %}
+                        
+                        <div class="col-md-6">
+                            <div class="text-success">
+                                <strong>Approved Total: ₦{{ "{:,.0f}".format(approved_total) }}</strong>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-warning">
+                                <strong>Pending Total: ₦{{ "{:,.0f}".format(pending_total) }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.stat-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+</style>
+{% endblock %}

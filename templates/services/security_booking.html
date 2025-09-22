@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Book {{ service_name }} - GM Services{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-shield-alt me-3"></i>Book {{ service_name }}
+            </h1>
+            <p class="lead text-gray">Fill out the form below to request our professional security services</p>
+        </div>
+    </div>
+</section>
+
+<!-- Booking Form Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">{{ service_name }} Request Form</h3>
+                        
+                        {% if current_user.is_authenticated %}
+                        <form method="POST" action="{{ url_for('services.security_book_service_post', service_type=service_type) }}">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label text-gray">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="urgency" class="form-label text-gray">Urgency Level</label>
+                                    <select class="form-select" id="urgency" name="urgency" required>
+                                        <option value="low">Low - Within a week</option>
+                                        <option value="medium" selected>Medium - Within 3 days</option>
+                                        <option value="high">High - Within 24 hours</option>
+                                        <option value="urgent">Urgent - Immediate</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="state" class="form-label text-gray">State</label>
+                                    <select class="form-select" id="state" name="state" required>
+                                        <option value="">Select State</option>
+                                        <option value="Lagos">Lagos</option>
+                                        <option value="Abuja">Abuja</option>
+                                        <option value="Kano">Kano</option>
+                                        <option value="Rivers">Rivers</option>
+                                        <option value="Oyo">Oyo</option>
+                                        <!-- Add more states as needed -->
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="city" class="form-label text-gray">City</label>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="address" class="form-label text-gray">Address</label>
+                                <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="start_date" class="form-label text-gray">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="duration" class="form-label text-gray">Duration</label>
+                                    <select class="form-select" id="duration" name="duration" required>
+                                        <option value="">Select Duration</option>
+                                        <option value="1_day">1 Day</option>
+                                        <option value="1_week">1 Week</option>
+                                        <option value="1_month">1 Month</option>
+                                        <option value="3_months">3 Months</option>
+                                        <option value="6_months">6 Months</option>
+                                        <option value="1_year">1 Year</option>
+                                        <option value="ongoing">Ongoing</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="location" class="form-label text-gray">Specific Location/Venue</label>
+                                <input type="text" class="form-control" id="location" name="location" placeholder="e.g., Office building, Event center, Residential estate" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label text-gray">Service Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" 
+                                    placeholder="Please describe your security requirements in detail..." required></textarea>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="special_requirements" class="form-label text-gray">Special Requirements</label>
+                                <textarea class="form-control" id="special_requirements" name="special_requirements" rows="3" 
+                                    placeholder="Any special requirements or instructions (optional)"></textarea>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-shield-alt me-2"></i>Submit Security Request
+                                </button>
+                                <a href="{{ url_for('services.security_services') }}" class="btn btn-outline-light">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Security Services
+                                </a>
+                            </div>
+                        </form>
+                        
+                        {% else %}
+                        <div class="text-center">
+                            <h4 class="text-white mb-3">Please Login to Continue</h4>
+                            <p class="text-gray mb-4">You need to be logged in to book our security services.</p>
+                            <div class="d-flex gap-3 justify-content-center">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                </a>
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light">
+                                    <i class="fas fa-user-plus me-2"></i>Register
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Features -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="text-white">What's Included in {{ service_name }}?</h3>
+        </div>
+        
+        {% if service_type == 'personal' %}
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-user-tie fa-2x text-success mb-2"></i>
+                    <h6 class="text-white">Professional Guards</h6>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                    <h6 class="text-white">Threat Assessment</h6>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-route fa-2x text-success mb-2"></i>
+                    <h6 class="text-white">Escort Services</h6>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-phone fa-2x text-success mb-2"></i>
+                    <h6 class="text-white">24/7 Support</h6>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if service_type == 'property' %}
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                    <h6 class="text-white">24/7 Guards</h6>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-key fa-2x text-primary mb-2"></i>
+                    <h6 class="text-white">Access Control</h6>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-walking fa-2x text-primary mb-2"></i>
+                    <h6 class="text-white">Patrol Services</h6>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-clipboard-list fa-2x text-primary mb-2"></i>
+                    <h6 class="text-white">Daily Reports</h6>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+.bg-dark-alt {
+    background-color: #0a0a0a !important;
+}
+
+.feature-item {
+    transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-3px);
+}
+</style>
+{% endblock %}

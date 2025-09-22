@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Track Request - GM Services{% endblock %}
+
+{% block extra_css %}
+<style>
+    .track-container {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .track-form {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .track-icon {
+        font-size: 3rem;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+    
+    .request-number-input {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    
+    .help-text {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+    
+    .example-number {
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        background: #f1f3f4;
+        padding: 2px 6px;
+        border-radius: 3px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="track-container">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <div class="track-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h1 class="display-6 text-primary">Track Your Request</h1>
+            <p class="lead text-muted">
+                Enter your request number to check the status of your service request.
+            </p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Tracking Form -->
+        <div class="track-form">
+            <form method="POST" id="trackForm">
+                <div class="mb-3">
+                    <label for="request_number" class="form-label">
+                        <i class="fas fa-ticket-alt me-2"></i>Request Number
+                    </label>
+                    <input type="text" 
+                           class="form-control form-control-lg request-number-input" 
+                           id="request_number" 
+                           name="request_number" 
+                           placeholder="SR240919XXXXXX"
+                           maxlength="20"
+                           required>
+                    <div class="form-text">
+                        Enter the reference number you received when you submitted your request.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope me-2"></i>Email Address (Optional)
+                    </label>
+                    <input type="email" 
+                           class="form-control" 
+                           id="email" 
+                           name="email" 
+                           placeholder="your.email@example.com">
+                    <div class="form-text">
+                        For additional verification (optional but recommended).
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search me-2"></i>Track Request
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Help Section -->
+        <div class="help-text">
+            <h6 class="text-primary mb-3">
+                <i class="fas fa-question-circle me-2"></i>Need Help Finding Your Request Number?
+            </h6>
+            
+            <p class="mb-2">
+                <strong>Format:</strong> Request numbers look like <span class="example-number">SR240919ABC123</span>
+            </p>
+            
+            <p class="mb-2">
+                <strong>Where to find it:</strong>
+            </p>
+            <ul class="mb-2">
+                <li>In the confirmation email sent to you</li>
+                <li>On the success page after submitting your request</li>
+                <li>In any follow-up communications from our team</li>
+            </ul>
+            
+            <p class="mb-0">
+                <strong>Lost your request number?</strong> 
+                <a href="mailto:support@gmservices.com" class="text-decoration-none">
+                    Contact our support team
+                </a> with your email address and we'll help you locate it.
+            </p>
+        </div>
+
+        <!-- Alternative Contact Options -->
+        <div class="mt-4 text-center">
+            <h6 class="text-muted mb-3">Other Ways to Get Help</h6>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <a href="tel:+234xxxxxxxxxx" class="btn btn-outline-success w-100">
+                        <i class="fas fa-phone me-2"></i>
+                        Call Us
+                    </a>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <a href="mailto:support@gmservices.com" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-envelope me-2"></i>
+                        Email Us
+                    </a>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <a href="{{ url_for('services.service_request_form') }}" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-plus me-2"></i>
+                        New Request
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const requestNumberInput = document.getElementById('request_number');
+    const form = document.getElementById('trackForm');
+
+    // Auto-format request number input
+    requestNumberInput.addEventListener('input', function() {
+        // Convert to uppercase and remove any non-alphanumeric characters
+        let value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        this.value = value;
+    });
+
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        const requestNumber = requestNumberInput.value.trim();
+        
+        if (!requestNumber) {
+            e.preventDefault();
+            alert('Please enter a request number.');
+            requestNumberInput.focus();
+            return;
+        }
+        
+        if (requestNumber.length < 6) {
+            e.preventDefault();
+            alert('Please enter a valid request number.');
+            requestNumberInput.focus();
+            return;
+        }
+    });
+
+    // Auto-focus on request number input
+    requestNumberInput.focus();
+});
+</script>
+{% endblock %}

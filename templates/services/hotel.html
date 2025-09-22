@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Hotel Management - GM Services{% endblock %}
+
+{% block content %}
+<!-- Hotel Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-hotel text-gold me-3"></i>Hotel <span class="text-gold">Management</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Comprehensive hospitality management solutions for hotels and resorts.
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=30" 
+                         alt="Hotel Management" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Hotel Services -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">Our Hotel Services</h2>
+            <p class="text-gray">End-to-end hospitality management for exceptional guest experiences</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=31" class="card-img-top" alt="Operations Management">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-cogs text-gold me-2"></i>Operations Management</h5>
+                        <p class="text-gray">Complete operational oversight and management systems.</p>
+                        <ul class="text-gray small">
+                            <li>Front desk operations</li>
+                            <li>Housekeeping coordination</li>
+                            <li>Guest service management</li>
+                            <li>Quality assurance</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">Custom Pricing</span>
+                            <a href="{{ url_for('services.hotel_operations_management') }}" class="btn btn-warning btn-sm">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=32" class="card-img-top" alt="Booking System">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-calendar-check text-gold me-2"></i>Booking System</h5>
+                        <p class="text-gray">Advanced reservation and booking management platform.</p>
+                        <ul class="text-gray small">
+                            <li>Online booking engine</li>
+                            <li>Channel management</li>
+                            <li>Revenue optimization</li>
+                            <li>Guest communication</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦50,000/month</span>
+                            <a href="{{ url_for('services.hotel_booking_system') }}" class="btn btn-warning btn-sm">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=33" class="card-img-top" alt="Staff Training">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-users text-gold me-2"></i>Staff Training</h5>
+                        <p class="text-gray">Professional hospitality training and development programs.</p>
+                        <ul class="text-gray small">
+                            <li>Customer service training</li>
+                            <li>Management development</li>
+                            <li>Safety protocols</li>
+                            <li>Certification programs</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦25,000/person</span>
+                            <a href="{{ url_for('services.hotel_staff_training') }}" class="btn btn-warning btn-sm">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3 class="text-white mb-3">Transform Your Hotel Business</h3>
+                <p class="text-gray mb-4">
+                    Partner with us to elevate your hospitality business with professional management solutions.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('contact') }}" class="btn btn-warning">
+                        <i class="fas fa-phone me-2"></i>Contact Us
+                    </a>
+                    <a href="{{ url_for('services.hotel_consultation') }}" class="btn btn-outline-success">
+                        <i class="fas fa-handshake me-2"></i>Free Consultation
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="https://picsum.photos/600/400?random=34" 
+                     alt="Hotel Management Contact" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Equipment Rental Booking - GM Services{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>
+                        Equipment Rental Booking Request
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_name.label(class="form-label") }}
+                                {{ form.customer_name(class="form-control") }}
+                                {% if form.customer_name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_email.label(class="form-label") }}
+                                {{ form.customer_email(class="form-control") }}
+                                {% if form.customer_email.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_phone.label(class="form-label") }}
+                                {{ form.customer_phone(class="form-control") }}
+                                {% if form.customer_phone.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_phone.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.equipment_category.label(class="form-label") }}
+                                {{ form.equipment_category(class="form-control") }}
+                                {% if form.equipment_category.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.equipment_category.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.equipment_name.label(class="form-label") }}
+                                {{ form.equipment_name(class="form-control") }}
+                                {% if form.equipment_name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.equipment_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.quantity_needed.label(class="form-label") }}
+                                {{ form.quantity_needed(class="form-control") }}
+                                {% if form.quantity_needed.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.quantity_needed.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.start_date.label(class="form-label") }}
+                                {{ form.start_date(class="form-control", type="date") }}
+                                {% if form.start_date.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.start_date.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.end_date.label(class="form-label") }}
+                                {{ form.end_date(class="form-control", type="date") }}
+                                {% if form.end_date.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.end_date.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.pickup_location.label(class="form-label") }}
+                            {{ form.pickup_location(class="form-control", rows="2") }}
+                            {% if form.pickup_location.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.pickup_location.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.delivery_required(class="form-check-input") }}
+                                {{ form.delivery_required.label(class="form-check-label") }}
+                                {% if form.delivery_required.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.delivery_required.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.operator_required(class="form-check-input") }}
+                                {{ form.operator_required.label(class="form-check-label") }}
+                                {% if form.operator_required.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.operator_required.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.installation_required(class="form-check-input") }}
+                                {{ form.installation_required.label(class="form-check-label") }}
+                                {% if form.installation_required.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.installation_required.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.training_required(class="form-check-input") }}
+                                {{ form.training_required.label(class="form-check-label") }}
+                                {% if form.training_required.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.training_required.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            {{ form.terms_accepted(class="form-check-input") }}
+                            {{ form.terms_accepted.label(class="form-check-label") }}
+                            <a href="{{ url_for('services.rental_terms', rental_type='equipment') }}" target="_blank" class="text-primary ms-1">
+                                <i class="fas fa-external-link-alt"></i> View Terms & Conditions
+                            </a>
+                            {% if form.terms_accepted.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.terms_accepted.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit Booking Request
+                            </button>
+                            <a href="{{ url_for('services.rentals') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Back to Rentals
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Set minimum date to today for rental dates
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    const startDate = document.getElementById('start_date');
+    const endDate = document.getElementById('end_date');
+    
+    if (startDate) {
+        startDate.min = today;
+        startDate.addEventListener('change', function() {
+            if (endDate) {
+                endDate.min = this.value;
+                if (endDate.value && endDate.value < this.value) {
+                    endDate.value = this.value;
+                }
+            }
+        });
+    }
+    
+    if (endDate) {
+        endDate.min = today;
+    }
+});
+</script>
+{% endblock %}

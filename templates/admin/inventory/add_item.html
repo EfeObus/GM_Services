@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Add Inventory Item - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="gm-card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus me-2"></i>Add New Inventory Item
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="row">
+                            <!-- Basic Information -->
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Basic Information</h6>
+                                
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Item Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="sku" class="form-label">SKU (Stock Keeping Unit) *</label>
+                                    <input type="text" class="form-control" id="sku" name="sku" required>
+                                    <div class="form-text">Unique identifier for this item</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Category *</label>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="">Select Category</option>
+                                        <option value="Electronics">Electronics</option>
+                                        <option value="Office Supplies">Office Supplies</option>
+                                        <option value="Furniture">Furniture</option>
+                                        <option value="Tools">Tools</option>
+                                        <option value="Consumables">Consumables</option>
+                                        <option value="Raw Materials">Raw Materials</option>
+                                        <option value="Finished Goods">Finished Goods</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Pricing and Stock -->
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Pricing & Stock Information</h6>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="unit_cost" class="form-label">Unit Cost (₦) *</label>
+                                            <input type="number" step="0.01" class="form-control" id="unit_cost" name="unit_cost" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="selling_price" class="form-label">Selling Price (₦) *</label>
+                                            <input type="number" step="0.01" class="form-control" id="selling_price" name="selling_price" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="current_stock" class="form-label">Initial Stock *</label>
+                                            <input type="number" class="form-control" id="current_stock" name="current_stock" required min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="reorder_point" class="form-label">Reorder Point *</label>
+                                            <input type="number" class="form-control" id="reorder_point" name="reorder_point" required min="0">
+                                            <div class="form-text">Alert when stock reaches this level</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="supplier" class="form-label">Supplier</label>
+                                    <input type="text" class="form-control" id="supplier" name="supplier">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="location_id" class="form-label">Location</label>
+                                    <select class="form-select" id="location_id" name="location_id">
+                                        <option value="">Select Location (Optional)</option>
+                                        {% for location in locations %}
+                                        <option value="{{ location.id }}">{{ location.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Profit Margin Display -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-info" id="profitInfo" style="display: none;">
+                                    <i class="fas fa-calculator me-2"></i>
+                                    <strong>Profit Margin:</strong> <span id="profitMargin">0%</span> 
+                                    (<strong>Profit:</strong> ₦<span id="profitAmount">0</span>)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="row">
+                            <div class="col-12">
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ url_for('admin.inventory_items') }}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Back to Inventory
+                                    </a>
+                                    <div>
+                                        <button type="reset" class="btn btn-outline-warning me-2">
+                                            <i class="fas fa-undo me-2"></i>Reset Form
+                                        </button>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-save me-2"></i>Add Item
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Calculate profit margin
+function calculateProfit() {
+    const unitCost = parseFloat(document.getElementById('unit_cost').value) || 0;
+    const sellingPrice = parseFloat(document.getElementById('selling_price').value) || 0;
+    
+    if (unitCost > 0 && sellingPrice > 0) {
+        const profit = sellingPrice - unitCost;
+        const profitMargin = ((profit / sellingPrice) * 100).toFixed(2);
+        
+        document.getElementById('profitAmount').textContent = profit.toFixed(2);
+        document.getElementById('profitMargin').textContent = profitMargin;
+        document.getElementById('profitInfo').style.display = 'block';
+        
+        // Color coding based on margin
+        const alertDiv = document.getElementById('profitInfo');
+        alertDiv.className = 'alert';
+        if (profitMargin < 10) {
+            alertDiv.classList.add('alert-danger');
+        } else if (profitMargin < 25) {
+            alertDiv.classList.add('alert-warning');
+        } else {
+            alertDiv.classList.add('alert-success');
+        }
+    } else {
+        document.getElementById('profitInfo').style.display = 'none';
+    }
+}
+
+// Auto-generate SKU based on category and name
+function generateSKU() {
+    const category = document.getElementById('category').value;
+    const name = document.getElementById('name').value;
+    
+    if (category && name) {
+        const categoryCode = category.substring(0, 3).toUpperCase();
+        const nameCode = name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 3).toUpperCase();
+        const timestamp = Date.now().toString().slice(-3);
+        const sku = `${categoryCode}${nameCode}${timestamp}`;
+        document.getElementById('sku').value = sku;
+    }
+}
+
+// Event listeners
+document.getElementById('unit_cost').addEventListener('input', calculateProfit);
+document.getElementById('selling_price').addEventListener('input', calculateProfit);
+document.getElementById('category').addEventListener('change', generateSKU);
+document.getElementById('name').addEventListener('input', generateSKU);
+</script>
+
+<style>
+.gm-card {
+    background: #1a1d29;
+    border: 1px solid #2d3748;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-control, .form-select {
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    color: #e2e8f0;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #2d3748;
+    border-color: #3182ce;
+    color: #e2e8f0;
+    box-shadow: 0 0 0 0.2rem rgba(49, 130, 206, 0.25);
+}
+
+.text-primary {
+    color: #3182ce !important;
+}
+
+.alert-success {
+    background-color: rgba(56, 161, 105, 0.2);
+    border-color: #38a169;
+    color: #38a169;
+}
+
+.alert-warning {
+    background-color: rgba(237, 137, 54, 0.2);
+    border-color: #ed8936;
+    color: #ed8936;
+}
+
+.alert-danger {
+    background-color: rgba(245, 101, 101, 0.2);
+    border-color: #f56565;
+    color: #f56565;
+}
+</style>
+{% endblock %}

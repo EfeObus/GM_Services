@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Quick Quote - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-lightning-bolt text-danger me-3"></i>Quick Quote
+            </h1>
+            <p class="lead text-gray mb-4">Get a fast quote for simple design projects.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Quick Quote Request</h3>
+                        
+                        <form method="POST" novalidate>
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="mb-3">
+                                {{ form.service_type.label(class="form-label text-gray") }}
+                                {{ form.service_type(class="form-select") }}
+                                {% if form.service_type.errors %}
+                                    <div class="text-danger small">{{ form.service_type.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                {{ form.project_description.label(class="form-label text-gray") }}
+                                {{ form.project_description(class="form-control") }}
+                                {% if form.project_description.errors %}
+                                    <div class="text-danger small">{{ form.project_description.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.timeline.label(class="form-label text-gray") }}
+                                    {{ form.timeline(class="form-select") }}
+                                    {% if form.timeline.errors %}
+                                        <div class="text-danger small">{{ form.timeline.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.budget.label(class="form-label text-gray") }}
+                                    {{ form.budget(class="form-select") }}
+                                    {% if form.budget.errors %}
+                                        <div class="text-danger small">{{ form.budget.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                {{ form.contact_method.label(class="form-label text-gray") }}
+                                {{ form.contact_method(class="form-select") }}
+                                {% if form.contact_method.errors %}
+                                    <div class="text-danger small">{{ form.contact_method.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('services.graphic_design') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-danger">Get Quote</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

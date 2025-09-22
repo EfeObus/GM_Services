@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Freight Transport Quote - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-truck text-success me-3"></i>Freight Transport <span class="text-gold">Quote</span>
+            </h1>
+            <p class="lead text-gray mb-4">Get a custom quote for your freight transport needs</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">
+                            <i class="fas fa-clipboard-list text-success me-2"></i>
+                            Freight Transport Quote Request
+                        </h3>
+                        
+                        <form method="POST" action="{{ url_for('services.submit_logistics_quote', service_type='freight_transport') }}">
+                            {{ form.hidden_tag() }}
+                            
+                            <!-- Customer Information -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Customer Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.customer_name.label(class="form-label text-gray") }}
+                                        {{ form.customer_name(class="form-control") }}
+                                        {% if form.customer_name.errors %}
+                                            <div class="text-danger small">{{ form.customer_name.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.customer_email.label(class="form-label text-gray") }}
+                                        {{ form.customer_email(class="form-control") }}
+                                        {% if form.customer_email.errors %}
+                                            <div class="text-danger small">{{ form.customer_email.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.customer_phone.label(class="form-label text-gray") }}
+                                        {{ form.customer_phone(class="form-control") }}
+                                        {% if form.customer_phone.errors %}
+                                            <div class="text-danger small">{{ form.customer_phone.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.company_name.label(class="form-label text-gray") }}
+                                        {{ form.company_name(class="form-control") }}
+                                        {% if form.company_name.errors %}
+                                            <div class="text-danger small">{{ form.company_name.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pickup Information -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Pickup Information</h5>
+                                <div class="mb-3">
+                                    {{ form.pickup_address.label(class="form-label text-gray") }}
+                                    {{ form.pickup_address(class="form-control", rows="3") }}
+                                    {% if form.pickup_address.errors %}
+                                        <div class="text-danger small">{{ form.pickup_address.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.pickup_city.label(class="form-label text-gray") }}
+                                        {{ form.pickup_city(class="form-control") }}
+                                        {% if form.pickup_city.errors %}
+                                            <div class="text-danger small">{{ form.pickup_city.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.pickup_state.label(class="form-label text-gray") }}
+                                        {{ form.pickup_state(class="form-control") }}
+                                        {% if form.pickup_state.errors %}
+                                            <div class="text-danger small">{{ form.pickup_state.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Delivery Information -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Delivery Information</h5>
+                                <div class="mb-3">
+                                    {{ form.delivery_address.label(class="form-label text-gray") }}
+                                    {{ form.delivery_address(class="form-control", rows="3") }}
+                                    {% if form.delivery_address.errors %}
+                                        <div class="text-danger small">{{ form.delivery_address.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.delivery_city.label(class="form-label text-gray") }}
+                                        {{ form.delivery_city(class="form-control") }}
+                                        {% if form.delivery_city.errors %}
+                                            <div class="text-danger small">{{ form.delivery_city.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form.delivery_state.label(class="form-label text-gray") }}
+                                        {{ form.delivery_state(class="form-control") }}
+                                        {% if form.delivery_state.errors %}
+                                            <div class="text-danger small">{{ form.delivery_state.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Freight Details -->
+                            <div class="mb-4">
+                                <h5 class="text-success mb-3">Freight Details</h5>
+                                <div class="mb-3">
+                                    {{ form.package_description.label(class="form-label text-gray") }}
+                                    {{ form.package_description(class="form-control", rows="4", placeholder="Describe your freight (type of goods, quantity, packaging, etc.)") }}
+                                    {% if form.package_description.errors %}
+                                        <div class="text-danger small">{{ form.package_description.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        {{ form.package_weight.label(class="form-label text-gray") }}
+                                        {{ form.package_weight(class="form-control", placeholder="0.0") }}
+                                        {% if form.package_weight.errors %}
+                                            <div class="text-danger small">{{ form.package_weight.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        {{ form.freight_type.label(class="form-label text-gray") }}
+                                        {{ form.freight_type(class="form-control") }}
+                                        {% if form.freight_type.errors %}
+                                            <div class="text-danger small">{{ form.freight_type.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        {{ form.urgency_level.label(class="form-label text-gray") }}
+                                        {{ form.urgency_level(class="form-control") }}
+                                        {% if form.urgency_level.errors %}
+                                            <div class="text-danger small">{{ form.urgency_level.errors[0] }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        {{ form.insurance_required(class="form-check-input") }}
+                                        {{ form.insurance_required.label(class="form-check-label text-gray") }}
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.special_requirements.label(class="form-label text-gray") }}
+                                    {{ form.special_requirements(class="form-control", rows="3", placeholder="Any special handling requirements, fragile items, hazardous materials, etc.") }}
+                                    {% if form.special_requirements.errors %}
+                                        <div class="text-danger small">{{ form.special_requirements.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-success flex-grow-1">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Quote Request
+                                </button>
+                                <a href="{{ url_for('services.logistics') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-surface-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h3 class="text-white mb-3">What Happens Next?</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <i class="fas fa-paper-plane fa-2x text-success"></i>
+                            </div>
+                            <h6 class="text-white">1. Submit Request</h6>
+                            <p class="text-gray small">Your quote request is sent to our logistics team</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <i class="fas fa-calculator fa-2x text-success"></i>
+                            </div>
+                            <h6 class="text-white">2. Quote Calculation</h6>
+                            <p class="text-gray small">We calculate the best price for your freight needs</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="p-3">
+                            <div class="mb-3">
+                                <i class="fas fa-phone fa-2x text-success"></i>
+                            </div>
+                            <h6 class="text-white">3. Contact You</h6>
+                            <p class="text-gray small">We contact you within 24 hours with your quote</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+
+{% block title %}Add Vehicle - Admin - GM Services{% endblock %}
+
+{% block content %}
+<!-- Admin Header -->
+<section class="py-4 bg-surface-100">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="text-white mb-1">Add New Vehicle</h2>
+                <p class="text-gray mb-0">Add a new vehicle to the inventory</p>
+            </div>
+            <a href="{{ url_for('services.admin_vehicles') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Vehicles
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Add Vehicle Form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            <!-- Basic Information -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-car me-2"></i>Basic Information</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="make_id" class="form-label text-gray">Vehicle Make *</label>
+                                        <select class="form-select" id="make_id" name="make_id" required onchange="filterModels()">
+                                            <option value="">Select Make</option>
+                                            {% for make in makes %}
+                                                <option value="{{ make.id }}">{{ make.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="model_id" class="form-label text-gray">Vehicle Model *</label>
+                                        <select class="form-select" id="model_id" name="model_id" required>
+                                            <option value="">Select Model</option>
+                                            {% for model in models %}
+                                                <option value="{{ model.id }}" data-make="{{ model.make_id }}">{{ model.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="year" class="form-label text-gray">Year *</label>
+                                        <input type="number" class="form-control" id="year" name="year" 
+                                               min="1990" max="2025" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="trim" class="form-label text-gray">Trim Level</label>
+                                        <input type="text" class="form-control" id="trim" name="trim" 
+                                               placeholder="e.g., LX, EX, Limited">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="condition" class="form-label text-gray">Condition *</label>
+                                        <select class="form-select" id="condition" name="condition" required>
+                                            <option value="">Select Condition</option>
+                                            <option value="new">New</option>
+                                            <option value="used">Used</option>
+                                            <option value="certified">Certified Pre-Owned</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="mileage" class="form-label text-gray">Mileage (km)</label>
+                                        <input type="number" class="form-control" id="mileage" name="mileage" 
+                                               min="0" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Vehicle Identification -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-id-card me-2"></i>Vehicle Identification</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="vin" class="form-label text-gray">VIN (Vehicle Identification Number)</label>
+                                        <input type="text" class="form-control" id="vin" name="vin" maxlength="17">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="stock_number" class="form-label text-gray">Stock Number</label>
+                                        <input type="text" class="form-control" id="stock_number" name="stock_number">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Engine & Performance -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-cogs me-2"></i>Engine & Performance</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="engine" class="form-label text-gray">Engine</label>
+                                        <input type="text" class="form-control" id="engine" name="engine" 
+                                               placeholder="e.g., 2.4L 4-Cylinder">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="transmission" class="form-label text-gray">Transmission</label>
+                                        <select class="form-select" id="transmission" name="transmission">
+                                            <option value="">Select Transmission</option>
+                                            <option value="Manual">Manual</option>
+                                            <option value="Automatic">Automatic</option>
+                                            <option value="CVT">CVT</option>
+                                            <option value="Semi-Automatic">Semi-Automatic</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="drivetrain" class="form-label text-gray">Drivetrain</label>
+                                        <select class="form-select" id="drivetrain" name="drivetrain">
+                                            <option value="">Select Drivetrain</option>
+                                            <option value="FWD">FWD (Front-Wheel Drive)</option>
+                                            <option value="RWD">RWD (Rear-Wheel Drive)</option>
+                                            <option value="AWD">AWD (All-Wheel Drive)</option>
+                                            <option value="4WD">4WD (Four-Wheel Drive)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="fuel_type" class="form-label text-gray">Fuel Type</label>
+                                        <select class="form-select" id="fuel_type" name="fuel_type">
+                                            <option value="">Select Fuel Type</option>
+                                            <option value="Gasoline">Gasoline</option>
+                                            <option value="Diesel">Diesel</option>
+                                            <option value="Electric">Electric</option>
+                                            <option value="Hybrid">Hybrid</option>
+                                            <option value="Plug-in Hybrid">Plug-in Hybrid</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="fuel_economy_city" class="form-label text-gray">Fuel Economy - City (L/100km)</label>
+                                        <input type="number" class="form-control" id="fuel_economy_city" name="fuel_economy_city" 
+                                               step="0.1" min="0">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="fuel_economy_highway" class="form-label text-gray">Fuel Economy - Highway (L/100km)</label>
+                                        <input type="number" class="form-control" id="fuel_economy_highway" name="fuel_economy_highway" 
+                                               step="0.1" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Colors -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-palette me-2"></i>Colors</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="exterior_color" class="form-label text-gray">Exterior Color</label>
+                                        <input type="text" class="form-control" id="exterior_color" name="exterior_color">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="interior_color" class="form-label text-gray">Interior Color</label>
+                                        <input type="text" class="form-control" id="interior_color" name="interior_color">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pricing -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-dollar-sign me-2"></i>Pricing</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="selling_price" class="form-label text-gray">Selling Price (₦) *</label>
+                                        <input type="number" class="form-control" id="selling_price" name="selling_price" 
+                                               min="0" step="1000" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="msrp" class="form-label text-gray">MSRP (₦)</label>
+                                        <input type="number" class="form-control" id="msrp" name="msrp" 
+                                               min="0" step="1000">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="cost_price" class="form-label text-gray">Cost Price (₦)</label>
+                                        <input type="number" class="form-control" id="cost_price" name="cost_price" 
+                                               min="0" step="1000">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Features -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-list me-2"></i>Features</h5>
+                                <div class="mb-3">
+                                    <label for="features" class="form-label text-gray">Vehicle Features (one per line)</label>
+                                    <textarea class="form-control" id="features" name="features" rows="6"
+                                              placeholder="Enter vehicle features, one per line. For example:&#10;Air Conditioning&#10;Power Windows&#10;Bluetooth Connectivity&#10;Backup Camera&#10;Leather Seats"></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Description -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-file-alt me-2"></i>Description</h5>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label text-gray">Vehicle Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4"
+                                              placeholder="Enter a detailed description of the vehicle..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Photos -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-camera me-2"></i>Vehicle Photos</h5>
+                                <div class="mb-3">
+                                    <label for="photos" class="form-label text-gray">Upload Photos (up to 20 photos)</label>
+                                    <input type="file" class="form-control" id="photos" name="photos" 
+                                           multiple accept="image/*" onchange="previewImages()">
+                                    <div class="form-text text-gray">Supported formats: JPG, PNG, GIF. Maximum file size: 5MB each.</div>
+                                </div>
+                                <div id="imagePreview" class="row"></div>
+                            </div>
+                            
+                            <!-- Location -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-map-marker-alt me-2"></i>Location</h5>
+                                <div class="mb-3">
+                                    <label for="location" class="form-label text-gray">Dealership Location</label>
+                                    <input type="text" class="form-control" id="location" name="location" 
+                                           placeholder="e.g., Lagos Mainland, Abuja Central">
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Buttons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('services.admin_vehicles') }}" class="btn btn-outline-secondary me-md-2">
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-save me-2"></i>Add Vehicle
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Filter models based on selected make
+function filterModels() {
+    const makeSelect = document.getElementById('make_id');
+    const modelSelect = document.getElementById('model_id');
+    const selectedMake = makeSelect.value;
+    
+    // Clear model options
+    modelSelect.innerHTML = '<option value="">Select Model</option>';
+    
+    if (selectedMake) {
+        // Show only models for selected make
+        const allOptions = document.querySelectorAll('#model_id option[data-make]');
+        allOptions.forEach(option => {
+            if (option.dataset.make === selectedMake) {
+                modelSelect.appendChild(option.cloneNode(true));
+            }
+        });
+    }
+}
+
+// Preview uploaded images
+function previewImages() {
+    const input = document.getElementById('photos');
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    
+    if (input.files) {
+        const files = Array.from(input.files);
+        
+        if (files.length > 20) {
+            alert('Maximum 20 photos allowed');
+            input.value = '';
+            return;
+        }
+        
+        files.forEach((file, index) => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-3 col-6 mb-3';
+                    col.innerHTML = `
+                        <div class="position-relative">
+                            <img src="${e.target.result}" class="img-fluid rounded" style="height: 150px; width: 100%; object-fit: cover;">
+                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" 
+                                    onclick="removeImage(${index})" title="Remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                    preview.appendChild(col);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+}
+
+// Remove image from preview (note: this is just UI, actual removal would need more complex handling)
+function removeImage(index) {
+    const preview = document.getElementById('imagePreview');
+    const images = preview.children;
+    if (images[index]) {
+        images[index].remove();
+    }
+}
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('input[required], select[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
+    // Validate photo count
+    const photos = document.getElementById('photos').files;
+    if (photos.length > 20) {
+        e.preventDefault();
+        alert('Maximum 20 photos allowed');
+        return;
+    }
+    
+    // Validate photo sizes
+    for (let photo of photos) {
+        if (photo.size > 5 * 1024 * 1024) { // 5MB
+            e.preventDefault();
+            alert(`Photo "${photo.name}" is too large. Maximum size is 5MB.`);
+            return;
+        }
+    }
+});
+
+// Remove invalid class on input
+document.querySelectorAll('input, select, textarea').forEach(field => {
+    field.addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+});
+</script>
+{% endblock %}

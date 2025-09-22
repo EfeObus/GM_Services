@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+
+{% block title %}New Vehicle Registration - GM Services{% endblock %}
+
+{% block extra_css %}
+<style>
+    .registration-form {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .form-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 10px;
+        border-left: 4px solid #28a745;
+    }
+    
+    .section-title {
+        color: #FFD700;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .required {
+        color: #dc3545;
+    }
+    
+    .pricing-info {
+        background: rgba(40, 167, 69, 0.1);
+        border: 1px solid #28a745;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .document-checklist {
+        background: rgba(255, 193, 7, 0.1);
+        border: 1px solid #FFC107;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .form-check-label {
+        color: #E0E0E0;
+    }
+    
+    .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section py-4">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-plus-circle text-success me-3"></i>New Vehicle <span class="text-gold">Registration</span>
+            </h1>
+            <p class="lead text-gray mb-4">Complete your new vehicle registration with official documentation</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="registration-form">
+                    <form method="POST" id="registrationForm">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Vehicle Information Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-car me-2"></i>Vehicle Information
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.vehicle_make.id }}" class="form-label text-white">
+                                        Vehicle Make <span class="required">*</span>
+                                    </label>
+                                    {{ form.vehicle_make() }}
+                                    {% if form.vehicle_make.errors %}
+                                        <div class="error-message">{{ form.vehicle_make.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.vehicle_model.id }}" class="form-label text-white">
+                                        Vehicle Model <span class="required">*</span>
+                                    </label>
+                                    {{ form.vehicle_model() }}
+                                    {% if form.vehicle_model.errors %}
+                                        <div class="error-message">{{ form.vehicle_model.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.vehicle_year.id }}" class="form-label text-white">
+                                        Vehicle Year <span class="required">*</span>
+                                    </label>
+                                    {{ form.vehicle_year() }}
+                                    {% if form.vehicle_year.errors %}
+                                        <div class="error-message">{{ form.vehicle_year.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.vehicle_color.id }}" class="form-label text-white">
+                                        Vehicle Color <span class="required">*</span>
+                                    </label>
+                                    {{ form.vehicle_color() }}
+                                    {% if form.vehicle_color.errors %}
+                                        <div class="error-message">{{ form.vehicle_color.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.engine_number.id }}" class="form-label text-white">
+                                        Engine Number <span class="required">*</span>
+                                    </label>
+                                    {{ form.engine_number() }}
+                                    {% if form.engine_number.errors %}
+                                        <div class="error-message">{{ form.engine_number.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.chassis_number.id }}" class="form-label text-white">
+                                        Chassis Number (VIN) <span class="required">*</span>
+                                    </label>
+                                    {{ form.chassis_number() }}
+                                    {% if form.chassis_number.errors %}
+                                        <div class="error-message">{{ form.chassis_number.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.vehicle_purpose.id }}" class="form-label text-white">
+                                    Vehicle Purpose <span class="required">*</span>
+                                </label>
+                                {{ form.vehicle_purpose() }}
+                                {% if form.vehicle_purpose.errors %}
+                                    <div class="error-message">{{ form.vehicle_purpose.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Owner Information Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-user me-2"></i>Owner Information
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.owner_name.id }}" class="form-label text-white">
+                                        Full Name <span class="required">*</span>
+                                    </label>
+                                    {{ form.owner_name() }}
+                                    {% if form.owner_name.errors %}
+                                        <div class="error-message">{{ form.owner_name.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.owner_phone.id }}" class="form-label text-white">
+                                        Phone Number <span class="required">*</span>
+                                    </label>
+                                    {{ form.owner_phone() }}
+                                    {% if form.owner_phone.errors %}
+                                        <div class="error-message">{{ form.owner_phone.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.owner_email.id }}" class="form-label text-white">
+                                    Email Address
+                                </label>
+                                {{ form.owner_email() }}
+                                {% if form.owner_email.errors %}
+                                    <div class="error-message">{{ form.owner_email.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{ form.owner_address.id }}" class="form-label text-white">
+                                    Address <span class="required">*</span>
+                                </label>
+                                {{ form.owner_address() }}
+                                {% if form.owner_address.errors %}
+                                    <div class="error-message">{{ form.owner_address.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.owner_state.id }}" class="form-label text-white">
+                                        State <span class="required">*</span>
+                                    </label>
+                                    {{ form.owner_state() }}
+                                    {% if form.owner_state.errors %}
+                                        <div class="error-message">{{ form.owner_state.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.owner_lga.id }}" class="form-label text-white">
+                                        Local Government Area <span class="required">*</span>
+                                    </label>
+                                    {{ form.owner_lga() }}
+                                    {% if form.owner_lga.errors %}
+                                        <div class="error-message">{{ form.owner_lga.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Document Checklist Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-file-alt me-2"></i>Document Checklist
+                            </h3>
+                            <div class="document-checklist">
+                                <p class="text-warning mb-3">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Please confirm availability of the following documents:
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            {{ form.purchase_receipt(class="form-check-input") }}
+                                            {{ form.purchase_receipt.label(class="form-check-label") }}
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            {{ form.customs_papers(class="form-check-input") }}
+                                            {{ form.customs_papers.label(class="form-check-label") }}
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            {{ form.insurance_certificate(class="form-check-input") }}
+                                            {{ form.insurance_certificate.label(class="form-check-label") }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check mb-2">
+                                            {{ form.roadworthiness_certificate(class="form-check-input") }}
+                                            {{ form.roadworthiness_certificate.label(class="form-check-label") }}
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            {{ form.driver_license(class="form-check-input") }}
+                                            {{ form.driver_license.label(class="form-check-label") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Options Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-cogs me-2"></i>Service Options
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.service_center.id }}" class="form-label text-white">
+                                        Preferred Service Center <span class="required">*</span>
+                                    </label>
+                                    {{ form.service_center() }}
+                                    {% if form.service_center.errors %}
+                                        <div class="error-message">{{ form.service_center.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.processing_priority.id }}" class="form-label text-white">
+                                        Processing Priority <span class="required">*</span>
+                                    </label>
+                                    {{ form.processing_priority() }}
+                                    {% if form.processing_priority.errors %}
+                                        <div class="error-message">{{ form.processing_priority.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="pricing-info">
+                                <h5 class="text-success">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Pricing Information
+                                </h5>
+                                <ul class="text-white mb-0">
+                                    <li><strong>Standard (7-14 days):</strong> ₦45,000 - Documentation processing, FRSC compliance, number plate production</li>
+                                    <li><strong>Express (3-5 days):</strong> ₦65,000 - Expedited processing with priority handling</li>
+                                    <li><strong>Same Day Service:</strong> ₦85,000 - Complete processing within business hours</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information Section -->
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-phone me-2"></i>Contact Information
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.contact_phone.id }}" class="form-label text-white">
+                                        Contact Phone <span class="required">*</span>
+                                    </label>
+                                    {{ form.contact_phone() }}
+                                    {% if form.contact_phone.errors %}
+                                        <div class="error-message">{{ form.contact_phone.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="{{ form.contact_email.id }}" class="form-label text-white">
+                                        Contact Email
+                                    </label>
+                                    {{ form.contact_email() }}
+                                    {% if form.contact_email.errors %}
+                                        <div class="error-message">{{ form.contact_email.errors[0] }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="form-check mb-3">
+                                {{ form.pickup_required(class="form-check-input") }}
+                                {{ form.pickup_required.label(class="form-check-label text-white") }}
+                            </div>
+                            
+                            <div class="mb-3" id="pickupAddressGroup" style="display: none;">
+                                <label for="{{ form.pickup_address.id }}" class="form-label text-white">
+                                    Pickup Address
+                                </label>
+                                {{ form.pickup_address() }}
+                                {% if form.pickup_address.errors %}
+                                    <div class="error-message">{{ form.pickup_address.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="form-section">
+                            <div class="form-check mb-3">
+                                {{ form.terms_accepted(class="form-check-input") }}
+                                <label for="{{ form.terms_accepted.id }}" class="form-check-label text-white">
+                                    I accept the <a href="#" class="text-gold">terms and conditions</a> <span class="required">*</span>
+                                </label>
+                                {% if form.terms_accepted.errors %}
+                                    <div class="error-message">{{ form.terms_accepted.errors[0] }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            {{ form.submit(class="btn btn-success btn-lg px-5") }}
+                            <a href="{{ url_for('services.license_plates') }}" class="btn btn-outline-light btn-lg px-5 ms-3">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle state-LGA relationship
+    const stateSelect = document.getElementById('{{ form.owner_state.id }}');
+    const lgaSelect = document.getElementById('{{ form.owner_lga.id }}');
+    
+    stateSelect.addEventListener('change', function() {
+        const state = this.value;
+        if (state) {
+            fetch(`{{ url_for('services.get_lgas', state='') }}${state}`)
+                .then(response => response.json())
+                .then(data => {
+                    lgaSelect.innerHTML = '<option value="">Select LGA</option>';
+                    data.lgas.forEach(lga => {
+                        const option = document.createElement('option');
+                        option.value = lga;
+                        option.textContent = lga;
+                        lgaSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching LGAs:', error));
+        } else {
+            lgaSelect.innerHTML = '<option value="">Select LGA</option>';
+        }
+    });
+    
+    // Handle pickup address visibility
+    const pickupRequired = document.getElementById('{{ form.pickup_required.id }}');
+    const pickupAddressGroup = document.getElementById('pickupAddressGroup');
+    
+    pickupRequired.addEventListener('change', function() {
+        if (this.checked) {
+            pickupAddressGroup.style.display = 'block';
+        } else {
+            pickupAddressGroup.style.display = 'none';
+        }
+    });
+    
+    // Initialize pickup address visibility
+    if (pickupRequired.checked) {
+        pickupAddressGroup.style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

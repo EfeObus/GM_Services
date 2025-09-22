@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block title %}Property Rental Booking - GM Services{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0">
+                        <i class="fas fa-home me-2"></i>
+                        Property Rental Booking Request
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_name.label(class="form-label") }}
+                                {{ form.customer_name(class="form-control") }}
+                                {% if form.customer_name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_email.label(class="form-label") }}
+                                {{ form.customer_email(class="form-control") }}
+                                {% if form.customer_email.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_email.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_phone.label(class="form-label") }}
+                                {{ form.customer_phone(class="form-control") }}
+                                {% if form.customer_phone.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.customer_phone.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.property_category.label(class="form-label") }}
+                                {{ form.property_category(class="form-control") }}
+                                {% if form.property_category.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.property_category.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.preferred_area.label(class="form-label") }}
+                                {{ form.preferred_area(class="form-control") }}
+                                {% if form.preferred_area.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.preferred_area.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.preferred_state.label(class="form-label") }}
+                                {{ form.preferred_state(class="form-control") }}
+                                {% if form.preferred_state.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.preferred_state.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                {{ form.bedrooms.label(class="form-label") }}
+                                {{ form.bedrooms(class="form-control") }}
+                                {% if form.bedrooms.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.bedrooms.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.bathrooms.label(class="form-label") }}
+                                {{ form.bathrooms(class="form-control") }}
+                                {% if form.bathrooms.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.bathrooms.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                {{ form.budget_range_max.label(class="form-label") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">₦</span>
+                                    {{ form.budget_range_max(class="form-control") }}
+                                </div>
+                                {% if form.budget_range_max.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.budget_range_max.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.start_date.label(class="form-label") }}
+                                {{ form.start_date(class="form-control", type="date") }}
+                                {% if form.start_date.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.start_date.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.end_date.label(class="form-label") }}
+                                {{ form.end_date(class="form-control", type="date") }}
+                                {% if form.end_date.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.end_date.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.furnished(class="form-check-input") }}
+                                {{ form.furnished.label(class="form-check-label") }}
+                                {% if form.furnished.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.furnished.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.parking(class="form-check-input") }}
+                                {{ form.parking.label(class="form-check-label") }}
+                                {% if form.parking.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.parking.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.air_conditioning(class="form-check-input") }}
+                                {{ form.air_conditioning.label(class="form-check-label") }}
+                                {% if form.air_conditioning.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.air_conditioning.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3 form-check">
+                                {{ form.security(class="form-check-input") }}
+                                {{ form.security.label(class="form-check-label") }}
+                                {% if form.security.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.security.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            {{ form.terms_accepted(class="form-check-input") }}
+                            {{ form.terms_accepted.label(class="form-check-label") }}
+                            <a href="{{ url_for('services.rental_terms', rental_type='property') }}" target="_blank" class="text-primary ms-1">
+                                <i class="fas fa-external-link-alt"></i> View Terms & Conditions
+                            </a>
+                            {% if form.terms_accepted.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.terms_accepted.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg text-dark">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit Booking Request
+                            </button>
+                            <a href="{{ url_for('services.rentals') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Back to Rentals
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Set minimum date to today for rental dates
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    const startDate = document.getElementById('start_date');
+    const endDate = document.getElementById('end_date');
+    
+    if (startDate) {
+        startDate.min = today;
+        startDate.addEventListener('change', function() {
+            if (endDate) {
+                endDate.min = this.value;
+                if (endDate.value && endDate.value < this.value) {
+                    endDate.value = this.value;
+                }
+            }
+        });
+    }
+    
+    if (endDate) {
+        endDate.min = today;
+    }
+});
+</script>
+{% endblock %}

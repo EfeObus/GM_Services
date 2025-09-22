@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}Maintenance Request - GM Services{% endblock %}
+
+{% block content %}
+<!-- Maintenance Request Hero -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-tools text-danger me-3"></i>Maintenance <span class="text-gold">Request</span>
+            </h1>
+            <p class="lead text-gray mb-4">
+                Request professional automotive maintenance and repair services.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Request Form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Service Request Form</h3>
+                        
+                        <form method="POST">
+                            <!-- Vehicle Information -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-car me-2"></i>Vehicle Information</h5>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vehicle_make" class="form-label text-gray">Vehicle Make *</label>
+                                        <input type="text" class="form-control" id="vehicle_make" name="vehicle_make" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vehicle_model" class="form-label text-gray">Vehicle Model *</label>
+                                        <input type="text" class="form-control" id="vehicle_model" name="vehicle_model" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="vehicle_year" class="form-label text-gray">Year *</label>
+                                        <input type="number" class="form-control" id="vehicle_year" name="vehicle_year" 
+                                               min="1990" max="2025" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="license_plate" class="form-label text-gray">License Plate</label>
+                                        <input type="text" class="form-control" id="license_plate" name="license_plate">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="mileage" class="form-label text-gray">Current Mileage (km)</label>
+                                        <input type="number" class="form-control" id="mileage" name="mileage" min="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Service Details -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-wrench me-2"></i>Service Details</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="service_type" class="form-label text-gray">Service Type *</label>
+                                        <select class="form-select" id="service_type" name="service_type" required>
+                                            <option value="">Select Service Type</option>
+                                            {% for service_type in service_types %}
+                                                <option value="{{ service_type }}">{{ service_type }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="service_category" class="form-label text-gray">Service Category *</label>
+                                        <select class="form-select" id="service_category" name="service_category" required>
+                                            <option value="">Select Category</option>
+                                            <option value="routine">Routine Maintenance</option>
+                                            <option value="repair">Repair</option>
+                                            <option value="emergency">Emergency</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="priority" class="form-label text-gray">Priority</label>
+                                        <select class="form-select" id="priority" name="priority">
+                                            <option value="normal">Normal</option>
+                                            <option value="high">High</option>
+                                            <option value="emergency">Emergency</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label text-gray">Problem Description *</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4" 
+                                              placeholder="Please describe the issue or service needed in detail..." required></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Scheduling -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-calendar me-2"></i>Preferred Scheduling</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="preferred_date" class="form-label text-gray">Preferred Date</label>
+                                        <input type="date" class="form-control" id="preferred_date" name="preferred_date" 
+                                               min="{{ today }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="preferred_time" class="form-label text-gray">Preferred Time</label>
+                                        <select class="form-select" id="preferred_time" name="preferred_time">
+                                            <option value="">Any Time</option>
+                                            <option value="morning">Morning (8AM - 12PM)</option>
+                                            <option value="afternoon">Afternoon (12PM - 5PM)</option>
+                                            <option value="evening">Evening (5PM - 8PM)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-phone me-2"></i>Contact Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="contact_phone" class="form-label text-gray">Phone Number *</label>
+                                        <input type="tel" class="form-control" id="contact_phone" name="contact_phone" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="contact_email" class="form-label text-gray">Email Address</label>
+                                        <input type="email" class="form-control" id="contact_email" name="contact_email">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pickup Service -->
+                            <div class="mb-4">
+                                <h5 class="text-white mb-3"><i class="fas fa-truck me-2"></i>Pickup Service</h5>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="pickup_required" name="pickup_required" onchange="togglePickupAddress()">
+                                    <label class="form-check-label text-gray" for="pickup_required">
+                                        I need vehicle pickup and delivery service
+                                    </label>
+                                </div>
+                                <div class="mb-3" id="pickup_address_group" style="display: none;">
+                                    <label for="pickup_address" class="form-label text-gray">Pickup Address</label>
+                                    <textarea class="form-control" id="pickup_address" name="pickup_address" rows="3" 
+                                              placeholder="Enter your complete address for vehicle pickup..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="{{ url_for('services.automobile') }}" class="btn btn-outline-secondary me-md-2">
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Service Information -->
+                <div class="gm-card mt-4">
+                    <div class="gm-card-body">
+                        <h5 class="text-white mb-3">What Happens Next?</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-check-circle text-success fa-2x mb-2"></i>
+                                    <h6 class="text-white">1. Request Received</h6>
+                                    <p class="text-gray small">We'll review your request and assign a technician.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-phone text-warning fa-2x mb-2"></i>
+                                    <h6 class="text-white">2. Contact & Schedule</h6>
+                                    <p class="text-gray small">Our team will call to confirm details and schedule service.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-tools text-danger fa-2x mb-2"></i>
+                                    <h6 class="text-white">3. Service Completed</h6>
+                                    <p class="text-gray small">Professional service with quality guarantee.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Set minimum date to today
+document.getElementById('preferred_date').min = new Date().toISOString().split('T')[0];
+
+// Toggle pickup address field
+function togglePickupAddress() {
+    const checkbox = document.getElementById('pickup_required');
+    const addressGroup = document.getElementById('pickup_address_group');
+    const addressField = document.getElementById('pickup_address');
+    
+    if (checkbox.checked) {
+        addressGroup.style.display = 'block';
+        addressField.required = true;
+    } else {
+        addressGroup.style.display = 'none';
+        addressField.required = false;
+        addressField.value = '';
+    }
+}
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const requiredFields = this.querySelectorAll('input[required], select[required], textarea[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+    
+    if (!isValid) {
+        e.preventDefault();
+        alert('Please fill in all required fields.');
+    }
+});
+
+// Remove invalid class on input
+document.querySelectorAll('input, select, textarea').forEach(field => {
+    field.addEventListener('input', function() {
+        this.classList.remove('is-invalid');
+    });
+});
+</script>
+{% endblock %}

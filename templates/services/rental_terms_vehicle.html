@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Vehicle Rental Terms & Conditions - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-car text-warning me-3"></i>Vehicle Rental <span class="text-gold">Terms & Conditions</span>
+            </h1>
+            <p class="lead text-gray mb-4">Please read our terms and conditions carefully before booking.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="text-white mb-4">Vehicle Rental Agreement</h3>
+                                
+                                <div class="accordion" id="termsAccordion">
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#rental-terms">
+                                                1. Rental Terms and Duration
+                                            </button>
+                                        </h2>
+                                        <div id="rental-terms" class="accordion-collapse collapse show" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Minimum rental period is 24 hours (1 day)</li>
+                                                    <li>Daily rates apply for rentals up to 7 days</li>
+                                                    <li>Weekly and monthly rates available for longer rentals</li>
+                                                    <li>Late return fees apply after grace period of 30 minutes</li>
+                                                    <li>Early return does not qualify for refund</li>
+                                                    <li>Reservations must be made at least 24 hours in advance</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#driver-requirements">
+                                                2. Driver Requirements
+                                            </button>
+                                        </h2>
+                                        <div id="driver-requirements" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Valid Nigerian driver's license required (minimum 2 years)</li>
+                                                    <li>International driving permit accepted for foreign nationals</li>
+                                                    <li>Minimum age: 21 years (25 years for luxury vehicles)</li>
+                                                    <li>Maximum age: 70 years</li>
+                                                    <li>Additional drivers must be registered and meet requirements</li>
+                                                    <li>Driver record verification may be required</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#payment-terms">
+                                                3. Payment and Security Deposit
+                                            </button>
+                                        </h2>
+                                        <div id="payment-terms" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Security deposit required at pickup (₦50,000 - ₦500,000 depending on vehicle)</li>
+                                                    <li>Payment methods: Cash, Bank Transfer, Card</li>
+                                                    <li>Full payment due at pickup or advance payment required</li>
+                                                    <li>Security deposit refunded within 7-14 days after return</li>
+                                                    <li>Deductions from deposit for damages, cleaning, or violations</li>
+                                                    <li>No refund for cancelled bookings less than 24 hours</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#vehicle-condition">
+                                                4. Vehicle Condition and Inspection
+                                            </button>
+                                        </h2>
+                                        <div id="vehicle-condition" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Pre-rental inspection mandatory for both parties</li>
+                                                    <li>All existing damages must be documented</li>
+                                                    <li>Vehicle returned in same condition as received</li>
+                                                    <li>Interior and exterior cleaning required</li>
+                                                    <li>Fuel level must match pickup level</li>
+                                                    <li>Post-rental inspection within 24 hours</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#insurance-coverage">
+                                                5. Insurance and Liability
+                                            </button>
+                                        </h2>
+                                        <div id="insurance-coverage" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Basic insurance included in rental fee</li>
+                                                    <li>Comprehensive insurance available at additional cost</li>
+                                                    <li>Renter liable for damages up to insurance excess</li>
+                                                    <li>Third-party liability coverage included</li>
+                                                    <li>Theft protection with GPS tracking</li>
+                                                    <li>Personal belongings not covered</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#prohibited-use">
+                                                6. Prohibited Uses
+                                            </button>
+                                        </h2>
+                                        <div id="prohibited-use" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Commercial use without prior arrangement</li>
+                                                    <li>Racing, rallying, or competitive driving</li>
+                                                    <li>Driving under influence of alcohol or drugs</li>
+                                                    <li>Off-road driving (unless specified)</li>
+                                                    <li>Smoking inside the vehicle</li>
+                                                    <li>Transporting illegal substances</li>
+                                                    <li>Exceeding passenger capacity</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#breakdown-support">
+                                                7. Breakdown and Emergency Support
+                                            </button>
+                                        </h2>
+                                        <div id="breakdown-support" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>24/7 emergency support hotline</li>
+                                                    <li>Free roadside assistance for mechanical failures</li>
+                                                    <li>Replacement vehicle if available</li>
+                                                    <li>Customer responsible for user-caused damage</li>
+                                                    <li>Immediate notification required for accidents</li>
+                                                    <li>Police report required for theft or major damage</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#cancellation-policy">
+                                                8. Cancellation Policy
+                                            </button>
+                                        </h2>
+                                        <div id="cancellation-policy" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Free cancellation up to 48 hours before pickup</li>
+                                                    <li>50% charge for cancellations 24-48 hours before</li>
+                                                    <li>No refund for cancellations less than 24 hours</li>
+                                                    <li>Weather-related cancellations subject to review</li>
+                                                    <li>Force majeure events exempt from charges</li>
+                                                    <li>Modification fees may apply for changes</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5 p-4 bg-warning bg-opacity-10 rounded">
+                                    <h5 class="text-warning mb-3"><i class="fas fa-exclamation-triangle me-2"></i>Important Notes</h5>
+                                    <ul class="text-gray mb-0">
+                                        <li>All rentals subject to vehicle availability</li>
+                                        <li>GM Services reserves the right to refuse service</li>
+                                        <li>Terms may be updated periodically</li>
+                                        <li>Disputes subject to Nigerian law</li>
+                                        <li>By booking, you accept these terms in full</li>
+                                    </ul>
+                                </div>
+
+                                <div class="text-center mt-5">
+                                    <p class="text-gray mb-4">By proceeding with your booking, you acknowledge that you have read, understood, and agree to these terms and conditions.</p>
+                                    <div class="d-flex gap-3 justify-content-center">
+                                        <a href="{{ url_for('services.rentals') }}" class="btn btn-outline-warning">
+                                            <i class="fas fa-arrow-left me-2"></i>Back to Rentals
+                                        </a>
+                                        <a href="{{ url_for('services.rental_booking_form', rental_type='vehicle') }}" class="btn btn-warning">
+                                            <i class="fas fa-check me-2"></i>I Agree - Proceed to Book
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

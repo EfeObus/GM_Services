@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Request {{ service_name }} - GM Services{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-file-alt me-3"></i>Request {{ service_name }}
+            </h1>
+            <p class="lead text-gray">Fill out the form below to request our professional document services</p>
+        </div>
+    </div>
+</section>
+
+<!-- Request Form Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">{{ service_name }} Request Form</h3>
+                        
+                        {% if current_user.is_authenticated %}
+                        <form method="POST" action="{{ url_for('services.document_request_service_post', service_type=service_type) }}">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label text-gray">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="urgency" class="form-label text-gray">Urgency Level</label>
+                                    <select class="form-select" id="urgency" name="urgency" required>
+                                        <option value="low">Low - Within 2 weeks</option>
+                                        <option value="medium" selected>Medium - Within 1 week</option>
+                                        <option value="high">High - Within 3 days</option>
+                                        <option value="urgent">Urgent - Within 24 hours</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="state" class="form-label text-gray">State</label>
+                                    <select class="form-select" id="state" name="state" required>
+                                        <option value="">Select State</option>
+                                        <option value="Lagos">Lagos</option>
+                                        <option value="Abuja">Abuja</option>
+                                        <option value="Kano">Kano</option>
+                                        <option value="Rivers">Rivers</option>
+                                        <option value="Oyo">Oyo</option>
+                                        <!-- Add more states as needed -->
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="city" class="form-label text-gray">City</label>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="document_type" class="form-label text-gray">Document Type</label>
+                                <select class="form-select" id="document_type" name="document_type" required>
+                                    <option value="">Select Document Type</option>
+                                    {% if service_type == 'visa' %}
+                                    <option value="tourist_visa">Tourist Visa</option>
+                                    <option value="business_visa">Business Visa</option>
+                                    <option value="student_visa">Student Visa</option>
+                                    <option value="work_visa">Work Visa</option>
+                                    <option value="transit_visa">Transit Visa</option>
+                                    {% elif service_type == 'legal' %}
+                                    <option value="contract">Contract</option>
+                                    <option value="agreement">Agreement</option>
+                                    <option value="power_of_attorney">Power of Attorney</option>
+                                    <option value="affidavit">Affidavit</option>
+                                    <option value="will">Will/Testament</option>
+                                    {% elif service_type == 'notarization' %}
+                                    <option value="affidavit">Affidavit</option>
+                                    <option value="statutory_declaration">Statutory Declaration</option>
+                                    <option value="certified_copy">Certified Copy</option>
+                                    <option value="oath_administration">Oath Administration</option>
+                                    {% elif service_type == 'certification' %}
+                                    <option value="educational_certificate">Educational Certificate</option>
+                                    <option value="professional_certificate">Professional Certificate</option>
+                                    <option value="birth_certificate">Birth Certificate</option>
+                                    <option value="marriage_certificate">Marriage Certificate</option>
+                                    {% endif %}
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="deadline" class="form-label text-gray">Required Completion Date</label>
+                                <input type="date" class="form-control" id="deadline" name="deadline" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label text-gray">Detailed Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" 
+                                    placeholder="Please provide detailed information about your document requirements..." required></textarea>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="special_instructions" class="form-label text-gray">Special Instructions</label>
+                                <textarea class="form-control" id="special_instructions" name="special_instructions" rows="3" 
+                                    placeholder="Any specific instructions or requirements (optional)"></textarea>
+                            </div>
+                            
+                            <!-- Service-specific additional fields -->
+                            {% if service_type == 'visa' %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="destination_country" class="form-label text-gray">Destination Country</label>
+                                    <input type="text" class="form-control" id="destination_country" name="destination_country" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="travel_date" class="form-label text-gray">Intended Travel Date</label>
+                                    <input type="date" class="form-control" id="travel_date" name="travel_date">
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Note:</strong> Our team will contact you within 24 hours to confirm your requirements and provide a detailed quote.
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-file-alt me-2"></i>Submit Document Request
+                                </button>
+                                <a href="{{ url_for('services.document_services') }}" class="btn btn-outline-light">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Document Services
+                                </a>
+                            </div>
+                        </form>
+                        
+                        {% else %}
+                        <div class="text-center">
+                            <h4 class="text-white mb-3">Please Login to Continue</h4>
+                            <p class="text-gray mb-4">You need to be logged in to request our document services.</p>
+                            <div class="d-flex gap-3 justify-content-center">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                </a>
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light">
+                                    <i class="fas fa-user-plus me-2"></i>Register
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Features -->
+<section class="py-5 bg-dark-alt">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="text-white">Why Choose Our {{ service_name }}?</h3>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                    <h6 class="text-white">Fast Processing</h6>
+                    <p class="text-gray">Quick turnaround times</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                    <h6 class="text-white">Secure Handling</h6>
+                    <p class="text-gray">Confidential and secure</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-user-tie fa-2x text-warning mb-2"></i>
+                    <h6 class="text-white">Expert Team</h6>
+                    <p class="text-gray">Experienced professionals</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="feature-item text-center">
+                    <i class="fas fa-headset fa-2x text-info mb-2"></i>
+                    <h6 class="text-white">24/7 Support</h6>
+                    <p class="text-gray">Always available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.bg-dark-alt {
+    background-color: #0a0a0a !important;
+}
+
+.feature-item {
+    transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-3px);
+}
+</style>
+{% endblock %}

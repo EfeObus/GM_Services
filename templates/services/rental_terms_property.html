@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Property Rental Terms & Conditions - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold text-white mb-4">
+                <i class="fas fa-home text-warning me-3"></i>Property Rental <span class="text-gold">Terms & Conditions</span>
+            </h1>
+            <p class="lead text-gray mb-4">Please read our terms and conditions carefully before booking.</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="text-white mb-4">Property Rental Agreement</h3>
+                                
+                                <div class="accordion" id="termsAccordion">
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#rental-terms">
+                                                1. Rental Terms and Duration
+                                            </button>
+                                        </h2>
+                                        <div id="rental-terms" class="accordion-collapse collapse show" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Minimum rental period: 1 month for residential, 1 week for commercial</li>
+                                                    <li>Short-term rentals available for vacation properties</li>
+                                                    <li>Rent payable in advance (monthly/quarterly)</li>
+                                                    <li>Notice period: 30 days for termination</li>
+                                                    <li>Automatic renewal unless notice given</li>
+                                                    <li>Early termination subject to penalty</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#tenant-requirements">
+                                                2. Tenant Requirements
+                                            </button>
+                                        </h2>
+                                        <div id="tenant-requirements" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Valid identification and proof of income</li>
+                                                    <li>Employment verification or business registration</li>
+                                                    <li>Reference checks from previous landlords</li>
+                                                    <li>Credit assessment may be required</li>
+                                                    <li>Guarantor required for some properties</li>
+                                                    <li>Minimum age: 21 years</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#payment-deposits">
+                                                3. Payment and Deposits
+                                            </button>
+                                        </h2>
+                                        <div id="payment-deposits" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Security deposit: 2-6 months rent (refundable)</li>
+                                                    <li>First month's rent payable at signing</li>
+                                                    <li>Agency fee: 10% of annual rent</li>
+                                                    <li>Legal fee: 5% of annual rent</li>
+                                                    <li>Caution fee: ₦100,000 - ₦500,000 (refundable)</li>
+                                                    <li>Bank transfer preferred for all payments</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#property-condition">
+                                                4. Property Condition and Maintenance
+                                            </button>
+                                        </h2>
+                                        <div id="property-condition" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Property inspection before occupation</li>
+                                                    <li>Inventory check for furnished properties</li>
+                                                    <li>Tenant responsible for minor repairs</li>
+                                                    <li>Major repairs: landlord's responsibility</li>
+                                                    <li>Property must be maintained in good condition</li>
+                                                    <li>Exit inspection required at lease end</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#utilities-services">
+                                                5. Utilities and Services
+                                            </button>
+                                        </h2>
+                                        <div id="utilities-services" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Electricity and water consumption billed separately</li>
+                                                    <li>Internet and cable TV: tenant's responsibility</li>
+                                                    <li>Security services where applicable</li>
+                                                    <li>Waste management and cleaning included</li>
+                                                    <li>Generator maintenance (if applicable)</li>
+                                                    <li>Swimming pool and gym access fees</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#occupancy-rules">
+                                                6. Occupancy Rules and Restrictions
+                                            </button>
+                                        </h2>
+                                        <div id="occupancy-rules" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Maximum occupancy limits must be observed</li>
+                                                    <li>Subletting requires written permission</li>
+                                                    <li>Business use subject to zoning regulations</li>
+                                                    <li>Pet policy varies by property</li>
+                                                    <li>Noise restrictions during quiet hours</li>
+                                                    <li>Smoking policy as specified</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#modifications-improvements">
+                                                7. Modifications and Improvements
+                                            </button>
+                                        </h2>
+                                        <div id="modifications-improvements" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>No structural modifications without approval</li>
+                                                    <li>Painting and décor changes permitted</li>
+                                                    <li>Fixtures and fittings remain with property</li>
+                                                    <li>Professional installation required for major changes</li>
+                                                    <li>Property must be restored if requested</li>
+                                                    <li>Damage from unauthorized changes chargeable</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#termination-eviction">
+                                                8. Termination and Eviction
+                                            </button>
+                                        </h2>
+                                        <div id="termination-eviction" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>30-day written notice required</li>
+                                                    <li>Breach of terms may result in immediate termination</li>
+                                                    <li>Non-payment of rent: 7-day grace period</li>
+                                                    <li>Property handover inspection</li>
+                                                    <li>Security deposit refund within 30 days</li>
+                                                    <li>Deductions for damages or unpaid bills</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="accordion-item bg-surface-100">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed bg-surface-200 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#insurance-liability">
+                                                9. Insurance and Liability
+                                            </button>
+                                        </h2>
+                                        <div id="insurance-liability" class="accordion-collapse collapse" data-bs-parent="#termsAccordion">
+                                            <div class="accordion-body text-gray">
+                                                <ul>
+                                                    <li>Property insurance: landlord's responsibility</li>
+                                                    <li>Contents insurance recommended for tenant</li>
+                                                    <li>Public liability coverage advisable</li>
+                                                    <li>Tenant liable for damage caused by negligence</li>
+                                                    <li>Force majeure events covered</li>
+                                                    <li>Personal belongings not covered by landlord</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-5 p-4 bg-warning bg-opacity-10 rounded">
+                                    <h5 class="text-warning mb-3"><i class="fas fa-exclamation-triangle me-2"></i>Important Legal Information</h5>
+                                    <ul class="text-gray mb-0">
+                                        <li>All agreements subject to Nigerian tenancy law</li>
+                                        <li>Legal documentation required for all rentals</li>
+                                        <li>Government taxes and fees applicable</li>
+                                        <li>Dispute resolution through legal channels</li>
+                                        <li>Terms may vary by property type and location</li>
+                                    </ul>
+                                </div>
+
+                                <div class="text-center mt-5">
+                                    <p class="text-gray mb-4">By proceeding with your booking, you acknowledge that you have read, understood, and agree to these terms and conditions.</p>
+                                    <div class="d-flex gap-3 justify-content-center">
+                                        <a href="{{ url_for('services.rentals') }}" class="btn btn-outline-warning">
+                                            <i class="fas fa-arrow-left me-2"></i>Back to Rentals
+                                        </a>
+                                        <a href="{{ url_for('services.rental_booking_form', rental_type='property') }}" class="btn btn-warning">
+                                            <i class="fas fa-check me-2"></i>I Agree - Proceed to Book
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

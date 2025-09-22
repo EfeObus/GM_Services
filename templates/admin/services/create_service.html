@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Create Service - GM Services Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white">
+                <i class="fas fa-plus me-2"></i>Create New Service
+            </h1>
+            <p class="text-gray mb-0">Add a new service to GM Services offerings</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.all_services') }}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Back to Services
+            </a>
+        </div>
+    </div>
+
+    <!-- Create Service Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <form method="POST">
+                        <div class="row">
+                            <!-- Basic Information -->
+                            <div class="col-12">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-info-circle me-2"></i>Basic Information
+                                </h5>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label text-white">Service Name *</label>
+                                <input type="text" class="form-control bg-light text-dark" id="name" name="name" 
+                                       placeholder="Enter service name" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label text-white">Category *</label>
+                                <select class="form-select bg-light text-dark" id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="automobile">Automobile</option>
+                                    <option value="logistics">Logistics</option>
+                                    <option value="rental">Rental</option>
+                                    <option value="hotel">Hotel</option>
+                                    <option value="jewelry">Jewelry</option>
+                                    <option value="loan">Loan</option>
+                                    <option value="creative">Creative</option>
+                                    <option value="consultation">Consultation</option>
+                                    <option value="maintenance">Maintenance</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-12 mb-3">
+                                <label for="short_description" class="form-label text-white">Short Description</label>
+                                <textarea class="form-control bg-light text-dark" id="short_description" name="short_description" 
+                                          rows="2" placeholder="Brief description for listings (max 500 characters)"></textarea>
+                            </div>
+                            
+                            <div class="col-12 mb-4">
+                                <label for="description" class="form-label text-white">Full Description</label>
+                                <textarea class="form-control bg-light text-dark" id="description" name="description" 
+                                          rows="6" placeholder="Detailed description of the service"></textarea>
+                            </div>
+
+                            <!-- Pricing & Duration -->
+                            <div class="col-12">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-money-bill-wave me-2"></i>Pricing & Duration
+                                </h5>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="price" class="form-label text-white">Price</label>
+                                <input type="number" class="form-control bg-light text-dark" id="price" name="price" 
+                                       step="0.01" min="0" placeholder="0.00">
+                                <div class="form-text text-muted">Leave empty or 0 for free services</div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="currency" class="form-label text-white">Currency</label>
+                                <select class="form-select bg-light text-dark" id="currency" name="currency">
+                                    <option value="NGN" selected>NGN (Nigerian Naira)</option>
+                                    <option value="USD">USD (US Dollar)</option>
+                                    <option value="EUR">EUR (Euro)</option>
+                                    <option value="GBP">GBP (British Pound)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="duration" class="form-label text-white">Duration</label>
+                                <input type="text" class="form-control bg-light text-dark" id="duration" name="duration" 
+                                       placeholder="e.g., 2-3 business days">
+                            </div>
+
+                            <!-- Requirements -->
+                            <div class="col-12">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-list-check me-2"></i>Requirements & Options
+                                </h5>
+                            </div>
+                            
+                            <div class="col-12 mb-4">
+                                <label for="requirements" class="form-label text-white">Requirements</label>
+                                <textarea class="form-control bg-light text-dark" id="requirements" name="requirements" 
+                                          rows="4" placeholder="List any requirements, documents, or prerequisites for this service"></textarea>
+                            </div>
+
+                            <!-- Status Options -->
+                            <div class="col-12">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-toggle-on me-2"></i>Status Options
+                                </h5>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="is_active" name="is_active" checked>
+                                    <label class="form-check-label text-white" for="is_active">
+                                        Active Service
+                                    </label>
+                                    <div class="form-text text-muted">Service will be visible to customers</div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured">
+                                    <label class="form-check-label text-white" for="is_featured">
+                                        Featured Service
+                                    </label>
+                                    <div class="form-text text-muted">Service will be highlighted on homepage</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Submit Buttons -->
+                            <div class="col-12 mt-4">
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>Create Service
+                                    </button>
+                                    <a href="{{ url_for('admin.all_services') }}" class="btn btn-secondary">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Sidebar -->
+        <div class="col-lg-4">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-lightbulb me-2"></i>Service Creation Tips
+                    </h5>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-white">Service Name</h6>
+                        <p class="text-gray small">Choose a clear, descriptive name that customers will easily understand.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-white">Short Description</h6>
+                        <p class="text-gray small">This appears in service listings. Keep it concise and compelling.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-white">Full Description</h6>
+                        <p class="text-gray small">Provide detailed information about what the service includes, benefits, and process.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-white">Pricing</h6>
+                        <p class="text-gray small">Set competitive prices. Use 0 or leave empty for free services or quote-based pricing.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-white">Requirements</h6>
+                        <p class="text-gray small">List any documents, information, or conditions needed from customers.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gm-card mt-3">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-tags me-2"></i>Popular Categories
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-primary">Automobile</span>
+                        <span class="badge bg-success">Logistics</span>
+                        <span class="badge bg-info">Rental</span>
+                        <span class="badge bg-warning text-dark">Hotel</span>
+                        <span class="badge bg-danger">Jewelry</span>
+                        <span class="badge bg-secondary">Loan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

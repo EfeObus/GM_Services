@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Consultation Request Submitted - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <div class="mb-4">
+                <i class="fas fa-check-circle fa-5x text-success"></i>
+            </div>
+            <h1 class="display-4 fw-bold text-white mb-4">
+                Consultation Request <span class="text-success">Submitted</span>
+            </h1>
+            <p class="lead text-gray mb-4">Your jewelry consultation request has been successfully submitted!</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="gm-card">
+                    <div class="gm-card-body">
+                        <h3 class="text-white mb-4">Request Details</h3>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Request Number</h6>
+                                <p class="text-white">{{ request.request_number }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Consultation Type</h6>
+                                <p class="text-white">{{ request.consultation_type.replace('_', ' ').title() }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Customer Name</h6>
+                                <p class="text-white">{{ request.customer_name }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Contact Email</h6>
+                                <p class="text-white">{{ request.customer_email }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Jewelry Type</h6>
+                                <p class="text-white">{{ request.jewelry_type.replace('_', ' ').title() if request.jewelry_type else 'Not specified' }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Preferred Timeline</h6>
+                                <p class="text-white">{{ request.timeline.replace('_', ' ').title() if request.timeline else 'Not specified' }}</p>
+                            </div>
+                        </div>
+                        
+                        {% if request.description %}
+                        <div class="mb-4">
+                            <h6 class="text-warning">Description</h6>
+                            <p class="text-gray">{{ request.description }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Preferred Contact Method</h6>
+                                <p class="text-white">{{ request.preferred_contact_method.replace('_', ' ').title() if request.preferred_contact_method else 'Email' }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-warning">Submitted</h6>
+                                <p class="text-white">{{ request.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="gm-card mt-4">
+                    <div class="gm-card-body">
+                        <h4 class="text-white mb-3">What Happens Next?</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                                    <h6 class="text-white">1. Response</h6>
+                                    <p class="text-gray small">Our jewelry expert will contact you within 24-48 hours to discuss your requirements.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-calendar-alt fa-3x text-warning mb-3"></i>
+                                    <h6 class="text-white">2. Consultation</h6>
+                                    <p class="text-gray small">We'll schedule a consultation at your convenience to understand your vision.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="text-center">
+                                    <i class="fas fa-gem fa-3x text-warning mb-3"></i>
+                                    <h6 class="text-white">3. Creation</h6>
+                                    <p class="text-gray small">Our skilled artisans will bring your jewelry vision to life with precision and care.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('services.jewelry') }}" class="btn btn-warning btn-lg me-3">
+                        <i class="fas fa-gem me-2"></i>Back to Jewelry
+                    </a>
+                    <a href="{{ url_for('services.index') }}" class="btn btn-outline-warning btn-lg">
+                        <i class="fas fa-home me-2"></i>All Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Information -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="text-center">
+            <h4 class="text-white mb-3">Need to Make Changes?</h4>
+            <p class="text-gray mb-4">If you need to modify your consultation request or have urgent questions, please contact us directly.</p>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-3">
+                    <div class="text-center">
+                        <i class="fas fa-phone fa-2x text-warning mb-2"></i>
+                        <h6 class="text-white">Call Us</h6>
+                        <p class="text-gray">+234 (0) 800 JEWELRY</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="text-center">
+                        <i class="fas fa-envelope fa-2x text-warning mb-2"></i>
+                        <h6 class="text-white">Email Us</h6>
+                        <p class="text-gray">jewelry@gmservices.com</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="text-center">
+                        <i class="fab fa-whatsapp fa-2x text-warning mb-2"></i>
+                        <h6 class="text-white">WhatsApp</h6>
+                        <p class="text-gray">+234 (0) 900 JEWELRY</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

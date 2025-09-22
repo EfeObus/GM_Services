@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Rental Services - GM Services{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold text-white mb-4">
+                <i class="fas fa-key text-warning me-3"></i>Rental <span class="text-gold">Services</span>
+            </h1>
+            <p class="lead text-gray mb-4">Premium rental solutions for vehicles, equipment, and properties.</p>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://picsum.photos/800/400?random=50" alt="Rental Services" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-white mb-3">What We Rent</h2>
+            <p class="text-gray">Quality rentals for short-term and long-term needs</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=51" class="card-img-top" alt="Car Rentals">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-car text-warning me-2"></i>Vehicle Rentals</h5>
+                        <p class="text-gray">Cars, SUVs, and commercial vehicles for any occasion.</p>
+                        <ul class="text-gray small">
+                            <li>Economy to luxury cars</li>
+                            <li>Commercial vehicles</li>
+                            <li>Event transportation</li>
+                            <li>Long-term leasing</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦8,000/day</span>
+                            <div class="btn-group">
+                                <a href="{{ url_for('services.rental_terms', rental_type='vehicle') }}" class="btn btn-outline-warning btn-sm">Terms</a>
+                                <a href="{{ url_for('services.rental_booking_form', rental_type='vehicle') }}" class="btn btn-warning btn-sm">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=52" class="card-img-top" alt="Equipment Rentals">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-tools text-warning me-2"></i>Equipment Rentals</h5>
+                        <p class="text-gray">Construction and industrial equipment for projects.</p>
+                        <ul class="text-gray small">
+                            <li>Construction equipment</li>
+                            <li>Power generators</li>
+                            <li>Event equipment</li>
+                            <li>Office furniture</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦5,000/day</span>
+                            <div class="btn-group">
+                                <a href="{{ url_for('services.rental_terms', rental_type='equipment') }}" class="btn btn-outline-warning btn-sm">Terms</a>
+                                <a href="{{ url_for('services.rental_booking_form', rental_type='equipment') }}" class="btn btn-warning btn-sm">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="gm-card h-100">
+                    <img src="https://picsum.photos/400/250?random=53" class="card-img-top" alt="Property Rentals">
+                    <div class="gm-card-body">
+                        <h5 class="text-white"><i class="fas fa-home text-warning me-2"></i>Property Rentals</h5>
+                        <p class="text-gray">Residential and commercial properties for rent.</p>
+                        <ul class="text-gray small">
+                            <li>Apartments & houses</li>
+                            <li>Office spaces</li>
+                            <li>Event venues</li>
+                            <li>Short-term stays</li>
+                        </ul>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">From ₦150,000/month</span>
+                            <div class="btn-group">
+                                <a href="{{ url_for('services.rental_terms', rental_type='property') }}" class="btn btn-outline-warning btn-sm">Terms</a>
+                                <a href="{{ url_for('services.rental_booking_form', rental_type='property') }}" class="btn btn-warning btn-sm">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

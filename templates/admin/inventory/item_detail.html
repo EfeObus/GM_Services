@@ -1,0 +1,325 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.get_item_name() }} - Inventory Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-white">{{ item.get_item_name() }}</h1>
+            <p class="text-gray mb-0">Inventory details and stock management</p>
+        </div>
+        <div>
+            <a href="{{ url_for('admin.inventory_items') }}" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Back to Items
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Item Information -->
+        <div class="col-md-6 mb-4">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-info-circle me-2"></i>Item Information
+                    </h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong class="text-gray">Name:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <span class="text-white">{{ item.get_item_name() }}</span>
+                        </div>
+                    </div>
+                    
+                    {% if item.product %}
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong class="text-gray">SKU:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <span class="text-white">{{ item.product.sku }}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong class="text-gray">Category:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <span class="text-white">{{ item.product.category.name }}</span>
+                        </div>
+                    </div>
+                    {% elif item.jewelry_item %}
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong class="text-gray">SKU:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <span class="text-white">{{ item.jewelry_item.sku }}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong class="text-gray">Category:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <span class="text-white">{{ item.jewelry_item.category.name }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong class="text-gray">Location:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            <span class="badge bg-secondary">{{ item.location.name }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <strong class="text-gray">Status:</strong>
+                        </div>
+                        <div class="col-sm-8">
+                            {% if item.is_out_of_stock %}
+                                <span class="badge bg-danger">Out of Stock</span>
+                            {% elif item.is_low_stock %}
+                                <span class="badge bg-warning">Low Stock</span>
+                            {% else %}
+                                <span class="badge bg-success">In Stock</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Information -->
+        <div class="col-md-6 mb-4">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-boxes me-2"></i>Stock Information
+                    </h5>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <div class="text-center">
+                                <h3 class="text-white mb-1">{{ item.current_stock }}</h3>
+                                <small class="text-gray">Current Stock</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-center">
+                                <h3 class="text-success mb-1">{{ item.available_stock }}</h3>
+                                <small class="text-gray">Available</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <div class="text-center">
+                                <h3 class="text-warning mb-1">{{ item.reserved_stock }}</h3>
+                                <small class="text-gray">Reserved</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-center">
+                                <h3 class="text-danger mb-1">{{ item.reorder_point }}</h3>
+                                <small class="text-gray">Reorder Point</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if item.unit_cost %}
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <div class="text-center">
+                                <h4 class="text-info mb-1">₦{{ "{:,.2f}".format(item.unit_cost) }}</h4>
+                                <small class="text-gray">Unit Cost</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-center">
+                                <h4 class="text-info mb-1">₦{{ "{:,.2f}".format(item.total_value or 0) }}</h4>
+                                <small class="text-gray">Total Value</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock Adjustment Form -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-edit me-2"></i>Adjust Stock
+                    </h5>
+                    
+                    <form method="POST" action="{{ url_for('admin.adjust_stock', item_id=item.id) }}">
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label text-gray">Adjustment Type</label>
+                                <select name="adjustment_type" class="form-select bg-dark text-white border-secondary" required>
+                                    <option value="">Select type...</option>
+                                    <option value="increase">Increase Stock</option>
+                                    <option value="decrease">Decrease Stock</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label text-gray">Quantity</label>
+                                <input type="number" name="quantity" class="form-control bg-dark text-white border-secondary" 
+                                       min="1" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-gray">Notes</label>
+                            <textarea name="notes" class="form-control bg-dark text-white border-secondary" 
+                                      rows="3" placeholder="Reason for adjustment..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Adjust Stock
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Alerts -->
+        <div class="col-md-6">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-bell me-2"></i>Active Alerts
+                    </h5>
+                    
+                    {% if alerts %}
+                        {% for alert in alerts %}
+                        {% if alert.status == 'active' %}
+                        <div class="alert alert-{{ 'danger' if alert.alert_level == 'critical' else 'warning' }} mb-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ alert.alert_level.title() }} Stock Alert</strong><br>
+                                    <small>Stock: {{ alert.current_stock }} / Reorder: {{ alert.reorder_point }}</small><br>
+                                    <small>Created: {{ alert.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                                <form method="POST" action="{{ url_for('admin.acknowledge_alert', alert_id=alert.id) }}" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-dark">
+                                        Acknowledge
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-gray py-3">
+                            <i class="fas fa-check-circle fa-2x mb-2"></i>
+                            <p>No active alerts for this item.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Stock Movements -->
+    <div class="row">
+        <div class="col-12">
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-history me-2"></i>Recent Stock Movements
+                    </h5>
+                    
+                    {% if movements %}
+                        <div class="table-responsive">
+                            <table class="table table-dark table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Quantity</th>
+                                        <th>Stock Before</th>
+                                        <th>Stock After</th>
+                                        <th>User</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for movement in movements %}
+                                    <tr>
+                                        <td>{{ movement.movement_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ 'success' if movement.quantity > 0 else 'danger' }}">
+                                                {{ movement.movement_type.title() }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-{{ 'success' if movement.quantity > 0 else 'danger' }}">
+                                                {{ '+' if movement.quantity > 0 else '' }}{{ movement.quantity }}
+                                            </span>
+                                        </td>
+                                        <td>{{ movement.stock_before or 'N/A' }}</td>
+                                        <td>{{ movement.stock_after or 'N/A' }}</td>
+                                        <td>{{ movement.user.full_name }}</td>
+                                        <td>{{ movement.notes[:50] }}{{ '...' if movement.notes and movement.notes|length > 50 else '' }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center text-gray py-3">
+                            <i class="fas fa-history fa-2x mb-2"></i>
+                            <p>No stock movements recorded for this item.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Highlight critical alerts
+    document.querySelectorAll('.alert-danger').forEach(function(alert) {
+        alert.style.animation = 'pulse 2s infinite';
+    });
+    
+    // Validate stock adjustment form
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const adjustmentType = document.querySelector('select[name="adjustment_type"]').value;
+        const quantity = parseInt(document.querySelector('input[name="quantity"]').value);
+        const currentStock = {{ item.current_stock }};
+        
+        if (adjustmentType === 'decrease' && quantity > currentStock) {
+            if (!confirm(`Warning: You are trying to decrease stock by ${quantity}, but current stock is only ${currentStock}. This will result in 0 stock. Continue?`)) {
+                e.preventDefault();
+            }
+        }
+    });
+</script>
+
+<style>
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+</style>
+{% endblock %}

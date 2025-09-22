@@ -1,0 +1,451 @@
+{% extends "users/base.html" %}
+
+{% block title %}Loan Application Details - {{ application.application_number if hasattr(application, 'application_number') else 'App #' + application.id|string }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('users.loan_applications') }}" class="text-success">My Loans</a></li>
+                    <li class="breadcrumb-item active text-gray">{{ application.application_number if hasattr(application, 'application_number') else 'App #' + application.id|string }}</li>
+                </ol>
+            </nav>
+            <h2 class="text-white mb-1">
+                <i class="fas fa-file-contract text-success me-2"></i>Loan Application Details
+            </h2>
+            <p class="text-gray mb-0">{{ application.loan_type.name if application.loan_type else application.loan_type }}</p>
+        </div>
+        <div>
+            {% set status_colors = {
+                'submitted': 'bg-warning',
+                'pending': 'bg-warning',
+                'under_review': 'bg-info',
+                'assigned': 'bg-primary',
+                'approved': 'bg-success',
+                'rejected': 'bg-danger',
+                'disbursed': 'bg-success'
+            } %}
+            <span class="badge {{ status_colors.get(application.status, 'bg-secondary') }} fs-6">
+                {{ application.status_display if hasattr(application, 'status_display') else application.status.title() }}
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Application Summary -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-info-circle text-success me-2"></i>Application Summary
+                    </h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Application Number</label>
+                                <div class="text-white fw-bold">{{ application.application_number if hasattr(application, 'application_number') else 'App #' + application.id|string }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Loan Type</label>
+                                <div class="text-white">{{ application.loan_type.name if application.loan_type else application.loan_type }}</div>
+                            </div>
+                            {% if hasattr(application, 'requested_amount') %}
+                            <div class="mb-3">
+                                <label class="text-gray">Requested Amount</label>
+                                <div class="text-success fw-bold fs-5">₦{{ "{:,.0f}".format(application.requested_amount) }}</div>
+                            </div>
+                            {% else %}
+                            <div class="mb-3">
+                                <label class="text-gray">Loan Amount</label>
+                                <div class="text-success fw-bold fs-5">₦{{ "{:,.0f}".format(application.amount) }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            {% if hasattr(application, 'term_months') %}
+                            <div class="mb-3">
+                                <label class="text-gray">Loan Term</label>
+                                <div class="text-white">{{ application.term_months }} months</div>
+                            </div>
+                            {% endif %}
+                            <div class="mb-3">
+                                <label class="text-gray">Purpose</label>
+                                <div class="text-white">{{ application.purpose.title() }}</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-gray">Applied Date</label>
+                                <div class="text-white">{{ application.created_at.strftime('%d %B %Y at %I:%M %p') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if hasattr(application, 'purpose_description') and application.purpose_description %}
+                    <div class="mb-3">
+                        <label class="text-gray">Purpose Description</label>
+                        <div class="text-white">{{ application.purpose_description }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Application Status Details -->
+            {% if application.status == 'approved' %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-success mb-3">
+                        <i class="fas fa-check-circle me-2"></i>Loan Approved!
+                    </h5>
+                    
+                    <div class="alert alert-success">
+                        <h6 class="text-dark mb-2">Congratulations! Your loan has been approved.</h6>
+                        <p class="text-dark mb-0">Your loan will be disbursed to your registered bank account within 24 hours.</p>
+                    </div>
+                    
+                    {% if hasattr(application, 'approved_amount') %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-gray">Approved Amount</label>
+                            <div class="text-success fw-bold fs-4">₦{{ "{:,.0f}".format(application.approved_amount) }}</div>
+                        </div>
+                        {% if application.interest_rate %}
+                        <div class="col-md-6 mb-3">
+                            <label class="text-gray">Interest Rate</label>
+                            <div class="text-white fw-bold">{{ application.interest_rate }}% per annum</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if application.calculate_monthly_payment() %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-gray">Monthly Payment</label>
+                            <div class="text-warning fw-bold">₦{{ "{:,.0f}".format(application.calculate_monthly_payment()) }}</div>
+                        </div>
+                        {% if hasattr(application, 'approved_at') and application.approved_at %}
+                        <div class="col-md-6 mb-3">
+                            <label class="text-gray">Approved Date</label>
+                            <div class="text-white">{{ application.approved_at.strftime('%d %B %Y') }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% elif application.status == 'rejected' %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-danger mb-3">
+                        <i class="fas fa-times-circle me-2"></i>Application Rejected
+                    </h5>
+                    
+                    <div class="alert alert-danger">
+                        <h6 class="text-dark mb-2">Unfortunately, your loan application was not approved.</h6>
+                        {% if hasattr(application, 'rejection_reason') and application.rejection_reason %}
+                        <p class="text-dark mb-0"><strong>Reason:</strong> {{ application.rejection_reason }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mt-3">
+                        <p class="text-gray">You can apply for a new loan or contact our support team for guidance on improving your application.</p>
+                        <a href="{{ url_for('services.loans') }}" class="btn btn-success me-2">
+                            <i class="fas fa-plus me-1"></i>Apply Again
+                        </a>
+                        <a href="mailto:{{ config.SUPPORT_EMAIL if config else 'support@gmservices.com' }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-envelope me-1"></i>Contact Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% elif application.status == 'assigned' %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-user-check me-2"></i>Under Review
+                    </h5>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="text-dark mb-2">Your application is being reviewed by our loan team.</h6>
+                        <p class="text-dark mb-0">We'll notify you of any updates or if additional information is needed.</p>
+                    </div>
+                    
+                    {% if hasattr(application, 'assigned_staff') and application.assigned_staff %}
+                    <div class="mb-3">
+                        <label class="text-gray">Assigned Loan Officer</label>
+                        <div class="text-white">{{ application.assigned_staff.full_name }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Financial Information -->
+            {% if hasattr(application, 'monthly_income') %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-chart-line text-success me-2"></i>Financial Information
+                    </h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="text-gray">Monthly Income</label>
+                                <div class="text-success fw-bold">₦{{ "{:,.0f}".format(application.monthly_income) }}</div>
+                            </div>
+                            {% if hasattr(application, 'employment_type') %}
+                            <div class="mb-3">
+                                <label class="text-gray">Employment Type</label>
+                                <div class="text-white">{{ application.employment_type.title() }}</div>
+                            </div>
+                            {% elif hasattr(application, 'employment_status') %}
+                            <div class="mb-3">
+                                <label class="text-gray">Employment Status</label>
+                                <div class="text-white">{{ application.employment_status.title() }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            {% if hasattr(application, 'monthly_expenses') and application.monthly_expenses %}
+                            <div class="mb-3">
+                                <label class="text-gray">Monthly Expenses</label>
+                                <div class="text-white">₦{{ "{:,.0f}".format(application.monthly_expenses) }}</div>
+                            </div>
+                            {% endif %}
+                            {% if hasattr(application, 'debt_to_income_ratio') and application.debt_to_income_ratio %}
+                            <div class="mb-3">
+                                <label class="text-gray">Debt-to-Income Ratio</label>
+                                <div class="text-white">{{ application.debt_to_income_ratio }}%</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Documents -->
+            {% if hasattr(application, 'identity_document') and (application.identity_document or application.income_proof or application.bank_statement) %}
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-folder text-success me-2"></i>Submitted Documents
+                    </h5>
+                    
+                    <div class="row">
+                        {% if application.identity_document %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-id-card text-primary me-2"></i>
+                                <span class="text-white">Identity Document</span>
+                                <span class="badge bg-success ms-2">Uploaded</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if application.income_proof %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-money-check text-success me-2"></i>
+                                <span class="text-white">Income Proof</span>
+                                <span class="badge bg-success ms-2">Uploaded</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if application.bank_statement %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-university text-info me-2"></i>
+                                <span class="text-white">Bank Statement</span>
+                                <span class="badge bg-success ms-2">Uploaded</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if application.employment_letter %}
+                        <div class="col-md-6 mb-3">
+                            <div class="document-item p-3 border rounded">
+                                <i class="fas fa-briefcase text-warning me-2"></i>
+                                <span class="text-white">Employment Letter</span>
+                                <span class="badge bg-success ms-2">Uploaded</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-bolt text-warning me-2"></i>Quick Actions
+                    </h6>
+                    
+                    <div class="d-grid gap-2">
+                        {% if application.status in ['submitted', 'under_review', 'assigned'] %}
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-clock me-1"></i>Pending Review
+                        </button>
+                        {% endif %}
+                        
+                        <a href="{{ url_for('users.loan_applications') }}" class="btn btn-outline-success">
+                            <i class="fas fa-list me-1"></i>View All Applications
+                        </a>
+                        
+                        <a href="{{ url_for('services.loans') }}" class="btn btn-success">
+                            <i class="fas fa-plus me-1"></i>Apply for New Loan
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Timeline -->
+            <div class="gm-card mb-4">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-history text-info me-2"></i>Application Timeline
+                    </h6>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Application Submitted</h6>
+                                <small class="text-gray">{{ application.created_at.strftime('%d %b %Y, %I:%M %p') }}</small>
+                            </div>
+                        </div>
+                        
+                        {% if application.status in ['assigned', 'approved', 'rejected', 'disbursed'] %}
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Under Review</h6>
+                                {% if hasattr(application, 'assigned_at') and application.assigned_at %}
+                                <small class="text-gray">{{ application.assigned_at.strftime('%d %b %Y, %I:%M %p') }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if application.status in ['approved', 'disbursed'] %}
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Approved</h6>
+                                {% if hasattr(application, 'approved_at') and application.approved_at %}
+                                <small class="text-gray">{{ application.approved_at.strftime('%d %b %Y, %I:%M %p') }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% elif application.status == 'rejected' %}
+                        <div class="timeline-item rejected">
+                            <div class="timeline-marker bg-danger"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Rejected</h6>
+                                {% if hasattr(application, 'reviewed_at') and application.reviewed_at %}
+                                <small class="text-gray">{{ application.reviewed_at.strftime('%d %b %Y, %I:%M %p') }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if application.status == 'disbursed' %}
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="text-white mb-1">Disbursed</h6>
+                                {% if hasattr(application, 'disbursed_at') and application.disbursed_at %}
+                                <small class="text-gray">{{ application.disbursed_at.strftime('%d %b %Y, %I:%M %p') }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="gm-card">
+                <div class="gm-card-body">
+                    <h6 class="text-white mb-3">
+                        <i class="fas fa-headset text-success me-2"></i>Need Help?
+                    </h6>
+                    
+                    <p class="text-gray small mb-3">
+                        If you have questions about your loan application, our support team is here to help.
+                    </p>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="mailto:{{ config.SUPPORT_EMAIL if config else 'support@gmservices.com' }}" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-envelope me-1"></i>Email Support
+                        </a>
+                        <a href="tel:+2341234567890" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-phone me-1"></i>Call Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.document-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -23px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #333;
+}
+
+.timeline-item.completed .timeline-marker {
+    border-color: #198754;
+}
+
+.timeline-item.rejected .timeline-marker {
+    border-color: #dc3545;
+}
+
+.timeline-content h6 {
+    margin-bottom: 2px;
+}
+</style>
+{% endblock %}

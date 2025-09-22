@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Vehicle Management - Admin - GM Services{% endblock %}
+
+{% block content %}
+<!-- Admin Header -->
+<section class="py-4 bg-surface-100">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="text-white mb-1">Vehicle Management</h2>
+                <p class="text-gray mb-0">Manage vehicle inventory and listings</p>
+            </div>
+            <a href="{{ url_for('services.admin_add_vehicle') }}" class="btn btn-danger">
+                <i class="fas fa-plus me-2"></i>Add New Vehicle
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Vehicles Table -->
+<section class="py-5">
+    <div class="container">
+        <div class="gm-card">
+            <div class="gm-card-body">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Vehicle</th>
+                                <th>Year</th>
+                                <th>Condition</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Stock #</th>
+                                <th>Added</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vehicle in vehicles %}
+                                <tr>
+                                    <td>
+                                        {% if vehicle.images and vehicle.images|length > 0 %}
+                                            <img src="{{ vehicle.images[0] }}" alt="{{ vehicle.full_name }}" 
+                                                 class="rounded" style="width: 60px; height: 45px; object-fit: cover;">
+                                        {% else %}
+                                            <div class="bg-secondary rounded d-flex align-items-center justify-content-center" 
+                                                 style="width: 60px; height: 45px;">
+                                                <i class="fas fa-car text-gray"></i>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <strong class="text-white">{{ vehicle.model.make.name }} {{ vehicle.model.name }}</strong>
+                                            <br>
+                                            <small class="text-gray">{{ vehicle.trim or 'Base Model' }}</small>
+                                        </div>
+                                    </td>
+                                    <td class="text-white">{{ vehicle.year }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if vehicle.condition == 'new' else 'warning' }}">
+                                            {{ vehicle.condition|title }}
+                                        </span>
+                                    </td>
+                                    <td class="text-success">₦{{ "{:,.0f}".format(vehicle.selling_price) }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if vehicle.status == 'available' else 'secondary' }}">
+                                            {{ vehicle.status|title }}
+                                        </span>
+                                    </td>
+                                    <td class="text-gray">{{ vehicle.stock_number or 'N/A' }}</td>
+                                    <td class="text-gray">{{ vehicle.created_at.strftime('%Y-%m-%d') if vehicle.created_at else 'N/A' }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{{ url_for('services.automobile_vehicle_detail', vehicle_id=vehicle.id) }}" 
+                                               class="btn btn-sm btn-outline-primary" title="View">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" title="Delete" 
+                                                    onclick="confirmDelete({{ vehicle.id }}, '{{ vehicle.full_name }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="9" class="text-center text-gray py-4">
+                                        <i class="fas fa-car fa-3x mb-3"></i>
+                                        <br>
+                                        No vehicles found. <a href="{{ url_for('services.admin_add_vehicle') }}" class="text-danger">Add your first vehicle</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <i class="fas fa-car fa-2x text-primary mb-2"></i>
+                        <h4 class="text-white">{{ vehicles|length }}</h4>
+                        <p class="text-gray mb-0">Total Vehicles</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                        <h4 class="text-white">{{ vehicles|selectattr('status', 'equalto', 'available')|list|length }}</h4>
+                        <p class="text-gray mb-0">Available</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                        <h4 class="text-white">{{ vehicles|selectattr('condition', 'equalto', 'new')|list|length }}</h4>
+                        <p class="text-gray mb-0">New Vehicles</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="gm-card">
+                    <div class="gm-card-body text-center">
+                        <i class="fas fa-handshake fa-2x text-info mb-2"></i>
+                        <h4 class="text-white">{{ vehicles|selectattr('status', 'equalto', 'sold')|list|length }}</h4>
+                        <p class="text-gray mb-0">Sold</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-white">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-gray">
+                Are you sure you want to delete <strong id="vehicleName" class="text-white"></strong>?
+                <br><br>
+                This action cannot be undone.
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Vehicle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(vehicleId, vehicleName) {
+    document.getElementById('vehicleName').textContent = vehicleName;
+    document.getElementById('confirmDeleteBtn').onclick = function() {
+        // Here you would implement the delete functionality
+        alert('Delete functionality to be implemented');
+        const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+        modal.hide();
+    };
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+</script>
+{% endblock %}
